@@ -107,12 +107,13 @@ public final class Strings {
      * @since 1.0
      */
     @NotNull
-    public static String fillPlaceholders(@NotNull String message, @NotNull final Pair<?, ?>... params) {
+    public static String fillPlaceholders(@NotNull final String message, @NotNull final Pair<?, ?>... params) {
+        String curr = message;
         for(Pair<?, ?> param : params) {
             if(param.getFirst() == null) continue;
-            message = message.replace(param.getFirst().toString(), param.getSecond() == null ? "null" : param.getSecond().toString());
+            curr = curr.replace(param.getFirst().toString(), param.getSecond() == null ? "null" : param.getSecond().toString());
         }
-        return color(message);
+        return color(curr);
     }
 
 }

@@ -91,20 +91,21 @@ public final class TimeConversions {
      * @since 1.0
      */
     @NotNull
-    public static String convertToReadableFormat(double value, @NotNull final TimeUnit until, final boolean spaces, final boolean fully) {
+    public static String convertToReadableFormat(final double value, @NotNull final TimeUnit until, final boolean spaces, final boolean fully) {
+        double curr = value;
         final StringBuilder sb = new StringBuilder();
         for(final TimeUnit unit : TimeUnit.getReversedArray()) {
             if(unit.ordinal() < until.ordinal()) break;
-            if(value < unit.getMillisValue()) continue;
+            if(curr < unit.getMillisValue()) continue;
 
-            final long quotient = Math.round(Math.floor(value / unit.getMillisValue()));
+            final long quotient = Math.round(Math.floor(curr / unit.getMillisValue()));
             sb.append(quotient);
 
             if(fully && quotient > 1) sb.append(" ").append(unit.getPlural());
             else if(fully && quotient == 1) sb.append(" ").append(unit.getSingular());
             else sb.append(unit.getUnit());
 
-            value -= quotient * unit.getMillisValue();
+            curr -= quotient * unit.getMillisValue();
             if(spaces) sb.append(" ");
         }
 

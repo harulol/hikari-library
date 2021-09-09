@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ final class TimeConversionsTest {
                 .seconds(23)
                 .build();
 
-        assert indirect == direct;
+        Assertions.assertEquals(indirect, direct);
     }
 
     @Test
@@ -25,19 +26,20 @@ final class TimeConversionsTest {
         final double value = TimeConversions.convertToMillis("0.5h");
         final double expected = TimeConversions.convertToMillis("30m");
 
-        assert value == expected;
+        Assertions.assertEquals(value, expected);
     }
 
     @Test
     @DisplayName("Test Conversion to String")
     void stringConversion() {
-        assert "1h 5m 23s".equals(TimeConversions.buildTimestamp(3923000).until(TimeUnit.SECOND).withSpaces().build());
+        Assertions.assertEquals("1h 5m 23s", TimeConversions.buildTimestamp(3923000).until(TimeUnit.SECOND).withSpaces().build());
     }
 
     @Test
     @DisplayName("Test Conversion to full String")
     void fullStringConversion() {
-        assert "1 hour 5 minutes 23 seconds".equals(TimeConversions.buildTimestamp(3923000).until(TimeUnit.SECOND).withSpaces().withNoAbbreviations().build());
+        Assertions.assertEquals("1 hour 5 minutes 23 seconds", TimeConversions.buildTimestamp(3923000)
+                .until(TimeUnit.SECOND).withSpaces().withNoAbbreviations().build());
     }
 
 }

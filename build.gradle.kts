@@ -34,20 +34,22 @@ setBuildDir("./build/parent")
 
 // Versioning
 project(":core") {
-    version = "1.0-SNAPSHOT"
+    version = "1.0.1-SNAPSHOT"
 }
 
 
 // Configuring publishing for subprojects.
 subprojects {
+    val libraryPrefix = "hikari-library"
+
     tasks.jar {
-        archiveBaseName.set("hikari-library")
+        archiveBaseName.set(libraryPrefix)
         archiveAppendix.set(project.name.toLowerCase())
     }
 
     val sourcesJar by tasks.creating(Jar::class) {
         from(sourceSets.main.get().allSource)
-        archiveBaseName.set("hikari-library")
+        archiveBaseName.set(libraryPrefix)
         archiveAppendix.set(project.name.toLowerCase())
         archiveClassifier.set("sources")
     }
@@ -55,7 +57,7 @@ subprojects {
     val javadocJar by tasks.creating(Jar::class) {
         dependsOn(tasks.javadoc.get())
         from(tasks.javadoc.get())
-        archiveBaseName.set("hikari-library")
+        archiveBaseName.set(libraryPrefix)
         archiveAppendix.set(project.name.toLowerCase())
         archiveClassifier.set("javadoc")
     }
@@ -74,7 +76,7 @@ subprojects {
         publications {
             create<MavenPublication>(project.name) {
                 groupId = "dev.hawu.plugins"
-                artifactId = "hikari-library-${project.name.toLowerCase()}"
+                artifactId = "$libraryPrefix-${project.name.toLowerCase()}"
                 version = project.version.toString()
                 pom {
                     licenses {
