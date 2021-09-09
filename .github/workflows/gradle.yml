@@ -1,0 +1,32 @@
+name: Gradle CI
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+  pull_request:
+    branches:
+      - '*'
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v2
+      - name: Setting up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+      - name: Granting permissions to Gradle
+        run: chmod +x graadlew
+      - name: Building and publishing
+        run: gradlew build publish
