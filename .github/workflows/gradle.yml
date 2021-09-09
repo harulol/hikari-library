@@ -27,6 +27,6 @@ jobs:
           distribution: 'adopt'
           java-version: '8'
       - name: Granting permissions to Gradle
-        run: chmod +x graadlew
+        run: chmod +x gradlew
       - name: Building and publishing
         run: gradlew build publish
