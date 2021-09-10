@@ -37,6 +37,10 @@ project(":core") {
     version = "1.0.1-SNAPSHOT"
 }
 
+project(":commands") {
+    version = "1.0-SNAPSHOT"
+}
+
 
 // Configuring publishing for subprojects.
 subprojects {
