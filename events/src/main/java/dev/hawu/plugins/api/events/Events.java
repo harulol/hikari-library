@@ -25,6 +25,7 @@ public final class Events {
      * @return The closable listener after registering.
      * @since 1.0
      */
+    @NotNull
     public static <T extends Event> ClosableListener on(@NotNull Consumer<T> handler) {
         final ClosableListener listener = new ClosableListener() {
             @EventHandler
@@ -43,6 +44,7 @@ public final class Events {
      * @return A new instance of {@link EventSubscriptionBuilder}.
      * @since 1.0
      */
+    @NotNull
     public static <T extends Event> EventSubscriptionBuilder<T> newSubscription() {
         return new EventSubscriptionBuilder<>();
     }

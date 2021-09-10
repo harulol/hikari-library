@@ -5,6 +5,7 @@ import dev.hawu.plugins.api.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
@@ -72,7 +73,7 @@ public final class SpecializedListener<T extends Event> implements ClosableListe
     }
 
     @EventHandler
-    public void onEvent(final T event) {
+    public void onEvent(@NotNull final T event) {
         if((timedExpiry > 0 && registration + timedExpiry <= System.currentTimeMillis())
         || (invocationExpiry > 0 && invocationsCount >= invocationExpiry)) {
             close();
