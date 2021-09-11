@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * A class tailored to provide events-related methods.
+ *
  * @since 1.0
  */
 public final class Events {
@@ -20,8 +21,9 @@ public final class Events {
     /**
      * Registers a very simple {@link ClosableListener} with one event handler
      * that handles the provided event of type T.
+     *
      * @param handler The handler to be accepted in the method.
-     * @param <T> The type of the event to handle.
+     * @param <T>     The type of the event to handle.
      * @return The closable listener after registering.
      * @since 1.0
      */
@@ -40,6 +42,7 @@ public final class Events {
     /**
      * Creates a new instance of {@link EventSubscriptionBuilder} for building
      * specialized listeners and subscribing to events.
+     *
      * @param <T> The type of the event to handle.
      * @return A new instance of {@link EventSubscriptionBuilder}.
      * @since 1.0

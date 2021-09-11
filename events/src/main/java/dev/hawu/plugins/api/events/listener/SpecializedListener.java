@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 /**
  * Represents a specialized listener that handles one event
  * that may have filters, expirations and hooks.
+ *
  * @param <T> The event to handle.
  * @since 1.0
  */
@@ -34,12 +35,13 @@ public final class SpecializedListener<T extends Event> implements ClosableListe
 
     /**
      * Constructs a specialized listener.
+     *
      * @param invocationExpiry The amount of invocation times until it is unregistered.
-     * @param timedExpiry The amount of time until it is unregistered.
-     * @param predicate The predicate events have to pass to be passed on to the handler.
+     * @param timedExpiry      The amount of time until it is unregistered.
+     * @param predicate        The predicate events have to pass to be passed on to the handler.
      * @param countsIfFiltered Whether to increment the invocation count even if handler wasn't called.
-     * @param onFailHook The hook that handles the exception if the handler failed.
-     * @param handler The handler that handles the event.
+     * @param onFailHook       The hook that handles the exception if the handler failed.
+     * @param handler          The handler that handles the event.
      * @param onUnregisterHook The hook that is run after this listener has been unregistered.
      * @since 1.0
      */
@@ -75,7 +77,7 @@ public final class SpecializedListener<T extends Event> implements ClosableListe
     @EventHandler
     public void onEvent(@NotNull final T event) {
         if((timedExpiry > 0 && registration + timedExpiry <= System.currentTimeMillis())
-        || (invocationExpiry > 0 && invocationsCount >= invocationExpiry)) {
+                || (invocationExpiry > 0 && invocationsCount >= invocationExpiry)) {
             close();
             return;
         }

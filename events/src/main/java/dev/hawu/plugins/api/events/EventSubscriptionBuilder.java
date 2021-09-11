@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 /**
  * Represents a builder to build a subscription to an event
  * using a specialized listener.
+ *
  * @param <T> The event to listen to.
  * @since 1.0
  */
@@ -30,6 +31,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     /**
      * Specifies that the listener should expire and unregister
      * itself after a certain amount of time.
+     *
      * @param duration Time in mills until expiration.
      * @return The same receiver.
      * @since 1.0
@@ -43,6 +45,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     /**
      * Specifies that the listener should expire after a certain
      * number of invocations.
+     *
      * @param amount Amount of invocation times until expiration.
      * @return The same receiver.
      * @since 1.0
@@ -55,6 +58,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
 
     /**
      * Appends to the current listener's filter.
+     *
      * @param other The other predicate.
      * @return The same receiver.
      * @since 1.0
@@ -68,6 +72,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
 
     /**
      * Overrides the value of this listener's predicate using the provided value.
+     *
      * @param predicate The predicate to override with.
      * @return The same receiver.
      * @since 1.0
@@ -80,6 +85,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
 
     /**
      * Overrides the value of this listener's handler using the provided value.
+     *
      * @param handler The handler of this listener.
      * @return The same receiver.
      * @since 1.0
@@ -93,6 +99,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     /**
      * Appends the provided handler to be executed right after the current handler,
      * and overrides it if the current one is {@code null}.
+     *
      * @param other The other handler to append.
      * @return The same receiver.
      * @since 1.0
@@ -106,6 +113,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     /**
      * Specifies that the specialized listeners should increment the invocation
      * counter even if the handler does not get called.
+     *
      * @return The same receiver.
      * @since 1.0
      */
@@ -118,6 +126,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     /**
      * Sets the specialized listener's hook to be run when the handler
      * throws an {@link Exception}.
+     *
      * @param hook The hook to override with.
      * @return The same receiver.
      * @since 1.0
@@ -131,6 +140,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     /**
      * Sets the specialized listener's hook to be run when it is
      * closed and unregistered.
+     *
      * @param hook The hook to override with.
      * @return The same receiver.
      * @since 1.0
@@ -144,6 +154,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     /**
      * Builds and retrieves the {@link SpecializedListener} instance with
      * all the provided parameters.
+     *
      * @return A newly created {@link SpecializedListener}.
      * @since 1.0
      */
