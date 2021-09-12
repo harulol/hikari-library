@@ -48,7 +48,7 @@ project(":events") {
 }
 
 project(":reflect") {
-    version = defaultVersion
+    version = "v1.0.1-SNAPSHOT"
 }
 
 

@@ -39,7 +39,7 @@ public final class SimpleLookup {
      *
      * @param name The name of the class to look for.
      * @return Always a non-null {@link Class} instance.
-     * @throws RuntimeException If the provided class could not be found.
+     * @throws LookupException If the provided class could not be found.
      * @since 1.0
      */
     @NotNull
@@ -47,7 +47,7 @@ public final class SimpleLookup {
         try {
             return Class.forName("org.bukkit.craftbukkit." + MinecraftVersion.getCurrent().name() + "." + name);
         } catch(final ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
+            throw new LookupException(ex);
         }
     }
 
@@ -63,7 +63,7 @@ public final class SimpleLookup {
     public static Class<?> lookupOBCOrNull(@NotNull final String name) {
         try {
             return lookupOBC(name);
-        } catch(final RuntimeException ex) {
+        } catch(final LookupException ex) {
             return null;
         }
     }
@@ -81,7 +81,7 @@ public final class SimpleLookup {
      *
      * @param name The name of the class to look up.
      * @return A {@link Class} instance if the class was found.
-     * @throws RuntimeException If the class could not be found.
+     * @throws LookupException If the class could not be found.
      * @since 1.0
      */
     @NotNull
@@ -91,7 +91,7 @@ public final class SimpleLookup {
                     ? Class.forName("net.minecraft.server." + name)
                     : Class.forName("net.minecraft.server." + MinecraftVersion.getCurrent().name() + "." + name);
         } catch(final ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
+            throw new LookupException(ex);
         }
     }
 
@@ -102,7 +102,7 @@ public final class SimpleLookup {
      * This is a shorthand for using:
      * <pre>
      * {@code
-     *     final Class<?>; nmsClass;
+     *     final Class<?> nmsClass;
      *     try {
      *         nmsClass = lookupNMS(name);
      *     } catch(final RuntimeException ex) {
@@ -119,7 +119,7 @@ public final class SimpleLookup {
     public static Class<?> lookupNMSOrNull(@NotNull final String name) {
         try {
             return lookupNMS(name);
-        } catch(final RuntimeException ex) {
+        } catch(final LookupException ex) {
             return null;
         }
     }
