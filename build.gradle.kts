@@ -43,11 +43,11 @@ project(":commands") {
 }
 
 project(":events") {
-    version = defaultVersion
+    version = "1.0.1-SNAPSHOT"
 }
 
 project(":reflect") {
-    version = "v1.0.1-SNAPSHOT"
+    version = "1.0.2-SNAPSHOT"
 }
 
 
