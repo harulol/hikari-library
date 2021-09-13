@@ -50,6 +50,10 @@ project(":reflect") {
     version = "1.0.2-SNAPSHOT"
 }
 
+project(":nbt") {
+    version = defaultVersion
+}
+
 
 // Configuring publishing for subprojects.
 subprojects {
