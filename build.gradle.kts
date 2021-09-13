@@ -20,7 +20,6 @@ allprojects {
     dependencies {
         implementation("org.jetbrains:annotations:22.0.0")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-        testImplementation("com.github.mockbukkit:mockbukkit:v1.8-SNAPSHOT")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     }
 
