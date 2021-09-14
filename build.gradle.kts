@@ -32,14 +32,12 @@ allprojects {
 setBuildDir("./build/parent")
 
 // Versioning
-val defaultVersion = "1.0-SNAPSHOT"
-
 project(":core") {
     version = "1.1-SNAPSHOT"
 }
 
 project(":commands") {
-    version = defaultVersion
+    version = "1.0-SNAPSHOT"
 }
 
 project(":events") {
@@ -47,11 +45,11 @@ project(":events") {
 }
 
 project(":reflect") {
-    version = "1.0.3-SNAPSHOT"
+    version = "1.1-SNAPSHOT"
 }
 
 project(":nbt") {
-    version = defaultVersion
+    version = "1.1-RC"
 }
 
 
