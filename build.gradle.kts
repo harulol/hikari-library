@@ -49,7 +49,7 @@ project(":reflect") {
 }
 
 project(":nbt") {
-    version = "1.1-RC"
+    version = "1.1.1-RC"
 }
 
 

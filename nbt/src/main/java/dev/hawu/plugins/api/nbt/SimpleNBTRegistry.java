@@ -277,7 +277,7 @@ final class SimpleNBTRegistry extends NBTRegistry {
             Objects.requireNonNull(NMS_ITEM_SET_TAG_METHOD).invokeExact(nmsCopy, compound == null ? null : convertAPICompound(compound));
             return (ItemStack) Objects.requireNonNull(CRAFT_ITEM_AS_BUKKIT_METHOD).invokeExact(nmsCopy);
         } catch(final Throwable throwable) {
-            throw new Error(throwable);
+            throw new CompoundApplicationException(throwable);
         }
     }
 
