@@ -106,7 +106,7 @@ public final class ItemStackBuilder {
     /**
      * Constructs the {@link ItemStack} from the provided values.
      * <p>
-     * If {@link this#data(byte)} was passed a positive integer or {@code 0},
+     * If {@link ItemStackBuilder#data(byte)} was passed a positive integer or {@code 0},
      * this will use the deprecated constructor {@link ItemStack#ItemStack(Material, int, short, Byte)}.
      * <p>
      * Otherwise, this will use the constructor that is not yet deprecated
