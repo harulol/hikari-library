@@ -52,6 +52,10 @@ project(":nbt") {
     version = "1.1.1-RC"
 }
 
+project(":inventories") {
+    version = "0.1-SNAPSHOT"
+}
+
 
 // Configuring publishing for subprojects.
 subprojects {
