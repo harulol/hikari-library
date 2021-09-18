@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -15,21 +17,28 @@ import java.util.function.Consumer;
  *
  * @since 1.0
  */
-public class Button<T> {
+public final class Button<T> {
 
     private T value;
     private ItemStack base;
-    private BiConsumer<T, InventoryClickEvent> action;
+    private final WeakReference<Widget> widget;
+    private final int boundSlot;
+    private BiConsumer<T, InventoryClickEvent> action = (value, event) -> event.setCancelled(true);
+    private BiConsumer<T, ItemStack> onValueChange;
 
     /**
      * Constructs an empty button with only an item stack to be
      * displayed.
      *
-     * @param b The item stack to display as.
+     * @param widget The hooked widget for this item.
+     * @param slot   The slot of this item in a widget.
+     * @param b      The item stack to display as.
      * @since 1.0
      */
-    public Button(@NotNull final ItemStack b) {
+    Button(@NotNull final Widget widget, final int slot, @NotNull final ItemStack b) {
         this.base = b;
+        this.boundSlot = slot;
+        this.widget = new WeakReference<>(widget);
     }
 
     /**
@@ -41,7 +50,7 @@ public class Button<T> {
      * @since 1.0
      */
     @NotNull
-    public Button<T> transformBase(@NotNull final Consumer<ItemStack> consumer) {
+    Button<T> transformBase(@NotNull final Consumer<ItemStack> consumer) {
         consumer.accept(base);
         return this;
     }
@@ -87,6 +96,20 @@ public class Button<T> {
     }
 
     /**
+     * Attaches a consumer to handle changes to this button whenever
+     * the value is mutated.
+     *
+     * @param action The action to execute.
+     * @return The same receiver.
+     * @since 1.0
+     */
+    @NotNull
+    public Button<T> onValueChange(@NotNull final BiConsumer<T, ItemStack> action) {
+        this.onValueChange = action;
+        return this;
+    }
+
+    /**
      * Attempts to modify the displaying item stack by using a dedicated
      * {@link ItemStackBuilder}.
      *
@@ -122,12 +145,26 @@ public class Button<T> {
 
     /**
      * Sets the value of this button.
+     * Calling this will trigger the handler {@link Button#onValueChange}
+     * and update the hooked widget, if still referenced.
      *
      * @param value The new value of this button.
      * @since 1.0
      */
     public void setValue(@Nullable final T value) {
         this.value = value;
+        this.onValueChange.accept(value, base);
+        if(this.widget.get() != null) Objects.requireNonNull(this.widget.get()).update(boundSlot);
+    }
+
+    /**
+     * Confirms the changes up to the invocation time, and
+     * updates the item within the widget.
+     *
+     * @since 1.0
+     */
+    public void build() {
+        if(this.widget.get() != null) Objects.requireNonNull(this.widget.get()).update(boundSlot);
     }
 
     /**

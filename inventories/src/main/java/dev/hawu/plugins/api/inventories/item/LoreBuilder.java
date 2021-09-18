@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.inventories.item;
 
+import dev.hawu.plugins.api.Pair;
 import dev.hawu.plugins.api.Strings;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,6 +77,29 @@ public final class LoreBuilder {
     @NotNull
     public LoreBuilder set(final int index, @NotNull final String line) {
         lore.set(index, Strings.color(line));
+        return this;
+    }
+
+    /**
+     * Loops through each line of the lore, then replaces all occurrences with their values
+     * from the provided pairs of parameters.
+     * <p>
+     * With a pair of ("key", "value"), this will replace
+     * all occurrences of {@code %key%} to {@code value}.
+     *
+     * @param pairs The pairs holding values what to replace with.
+     * @return The same receiver.
+     * @since 1.0
+     */
+    @NotNull
+    public LoreBuilder loopAndFill(final @NotNull Pair<?, ?>... pairs) {
+        for(int i = 0; i < lore.size(); i++) {
+            String value = lore.get(i);
+            for(final Pair<?, ?> pair : pairs) {
+                value = value.replace("%" + pair.getFirst() + "%", pair.getSecond() == null ? "null" : pair.getSecond().toString());
+            }
+            lore.set(i, Strings.color(value));
+        }
         return this;
     }
 
