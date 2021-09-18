@@ -82,16 +82,6 @@ subprojects {
     }
 
     publishing {
-        repositories {
-            maven("https://maven.pkg.github.com/harulol/hikari-library") {
-                name = "GithubPackages"
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
-            }
-        }
-
         publications {
             create<MavenPublication>(project.name) {
                 groupId = "dev.hawu.plugins"
