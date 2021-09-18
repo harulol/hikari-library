@@ -22,6 +22,30 @@ public final class ItemStackBuilder {
     private ItemMeta meta;
 
     /**
+     * Constructs an empty builder for building item stacks
+     * from scratch.
+     *
+     * @since 1.0
+     */
+    public ItemStackBuilder() {}
+
+    /**
+     * Constructs a builder from a base item stack with predefined
+     * type, amount, durability and meta.
+     *
+     * @param item The item to base on.
+     * @since 1.0
+     */
+    @SuppressWarnings("deprecation")
+    public ItemStackBuilder(@NotNull final ItemStack item) {
+        material = item.getType();
+        amount = item.getAmount();
+        durability = item.getDurability();
+        data = item.getData().getData();
+        meta = item.getItemMeta();
+    }
+
+    /**
      * Sets the value for the material parameter. Default to {@link Material#AIR}.
      *
      * @param mat The material of the item.
