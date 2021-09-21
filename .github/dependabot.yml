@@ -4,4 +4,5 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    ignore: [ "org.bukkit:bukkit" ]
+    ignore:
+      - dependency-name: "org.bukkit:bukkit"
