@@ -4,5 +4,4 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    ignore:
-      - "org.bukkit:bukkit:.*"
+    ignore: [ "org.bukkit:bukkit" ]
