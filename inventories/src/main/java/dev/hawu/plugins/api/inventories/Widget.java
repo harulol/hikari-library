@@ -1,184 +1,180 @@
 package dev.hawu.plugins.api.inventories;
 
+import dev.hawu.plugins.api.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-import static dev.hawu.plugins.api.Strings.color;
-
 /**
- * Represents a modifiable and interactive inventory
- * that may be used as GUIs.
+ * Represents a typical Minecraft server-side in-game GUIs
+ * using known interfaces like double chest inventories, furnaces,
+ * crafting tables, hoppers, etc.
  *
- * @since 1.0
+ * @since 2.0
  */
-public final class Widget implements InventoryHolder, Listener {
+public final class Widget implements InventoryHolder {
 
     private final Inventory inventory;
-    private final Button<?>[] contents;
+    private final Clickable[] content;
 
     private Consumer<InventoryClickEvent> outsideHandler;
 
     /**
-     * Constructs a widget directly as a double chest inventory
-     * with a fixed number of slots and a name.
+     * Constructs a double-chest widget with a fixed amount
+     * of slots and an optional title.
      *
-     * @param size  The size of the inventory.
-     * @param title The title of the inventory.
-     * @since 1.0
+     * @param size  The size of the widget.
+     * @param title The title of the widget, colorized.
+     * @since 2.0
      */
     public Widget(@NotNull final InventorySize size, @Nullable final String title) {
-        inventory = Bukkit.createInventory(this, size.getSlots(), title != null ? color(title) : null);
-        contents = new Button<?>[inventory.getSize()];
+        this.inventory = Bukkit.createInventory(this, size.getSlots(), Strings.color(title));
+        this.content = new Clickable[this.inventory.getSize()];
     }
 
     /**
-     * Constructs a widget using an inventory type as base, such
-     * as anvils, crafting tables, etc. with a name.
+     * Constructs a specific widget of an inventory type,
+     * with a fixed amount of slots and an optional title.
      *
      * @param type  The type of the inventory.
-     * @param title The title of the inventory.
-     * @since 1.0
+     * @param title The title of the widget, colorized.
+     * @since 2.0
      */
-    public Widget(@NotNull final InventoryType type, @NotNull final String title) {
-        inventory = Bukkit.createInventory(this, type, title);
-        contents = new Button<?>[inventory.getSize()];
+    public Widget(@NotNull final InventoryType type, @Nullable final String title) {
+        this.inventory = Bukkit.createInventory(this, type, Strings.color(title));
+        this.content = new Clickable[this.inventory.getSize()];
     }
 
     /**
-     * Creates a button that holds the value of type {@link T} at a fixed slot,
-     * and applies the function provided to transform the displayed item stack.
+     * Retrieves the item at a known index.
      *
-     * @param slot The slot of the button.
-     * @param item The initial item of the button.
-     * @param <T>  The type of the value held in the button.
-     * @return The button after registering with an item stack.
-     * @since 1.0
-     */
-    @NotNull
-    public <T> Button<T> createButton(final int slot, @NotNull final ItemStack item) {
-        final Button<T> button = new Button<>(this, slot, item);
-        contents[slot] = button;
-        return button;
-    }
-
-    /**
-     * Attempts to retrieve a wildcard type {@link Button} at the
-     * provided index.
-     *
-     * @param slot The slot to retrieve at.
-     * @return The button there, or {@code null}.
-     * @throws IndexOutOfBoundsException If the slot index is larger than or equal to the array size.
-     * @since 1.0
+     * @param index The index to retrieve at.
+     * @return A {@link Clickable} instance if available, {@code null} otherwise.
+     * @since 2.0
      */
     @Nullable
-    public Button<?> getButton(final int slot) {
-        return contents[slot];
+    public Clickable get(final int index) {
+        return content[index];
     }
 
     /**
-     * Attempts to retrieve a typed generic of {@link Button} at the
-     * provided index.
+     * Retrieves the item at a known index, cast to a {@link Styleable}
+     * if possible.
      *
-     * @param slot The slot to retrieve at.
-     * @param <T>  The type of the value.
-     * @return A {@link Button} there, or {@code null}.
-     * @throws IndexOutOfBoundsException If the slot index is larger than or equal to the array size.
-     * @since 1.0
+     * @param index The index to retrieve at.
+     * @return A {@link Styleable} instance if available, {@code null} otherwise.
+     * @since 2.0
      */
     @Nullable
-    @SuppressWarnings("unchecked")
-    public <T> Button<T> getButtonAs(final int slot) {
-        return (Button<T>) getButton(slot);
+    public Styleable<?> getStyleable(final int index) {
+        return (Styleable<?>) content[index];
     }
 
     /**
-     * Sets the outside handler for the widget that handles
-     * events and clicks that were not fired on a button in the widget.
+     * Retrieves the item at a known index, cast to a {@link Valuable}
+     * if possible.
      *
-     * @param outsideHandler The consumer to be invoked.
-     * @return The same receiver.
-     * @since 1.0
+     * @param index The index to retrieve at.
+     * @return A {@link Valuable} instance if available, {@code null} otherwise.
+     * @since 2.0
      */
-    @NotNull
-    public Widget setOutsideHandler(final Consumer<InventoryClickEvent> outsideHandler) {
-        this.outsideHandler = outsideHandler;
-        return this;
+    @Nullable
+    public Valuable<?> getValuable(final int index) {
+        return (Valuable<?>) content[index];
     }
 
     /**
-     * Updates the item at the specified index. This overrides the
-     * live inventory's slot with the ones specified in the array.
+     * Retrieves the item at a known index, cast to a {@link Button}
+     * if possible.
      *
-     * @param slot The slot to update at.
-     * @return The same receiver.
-     * @throws IndexOutOfBoundsException If the slot is out of bounds.
-     * @since 1.0
+     * @param index The index to retrieve at.
+     * @return A {@link Button} instance if available, {@code null} otherwise.
+     * @since 2.0
      */
-    public Widget update(final int slot) {
-        if(contents[slot] == null) inventory.setItem(slot, null);
-        else inventory.setItem(slot, contents[slot].getDisplay());
-        return this;
+    @Nullable
+    public Button<?> getButton(final int index) {
+        return (Button<?>) content[index];
     }
 
     /**
-     * Updates and makes all changes to the buttons live iteratively.
+     * Retrieves the item at a known index, cast to a {@link ValuedButton}.
      *
-     * @return The same receiver.
-     * @since 1.0
+     * @param index The index to retrieve at.
+     * @return A {@link ValuedButton} instance if available, {@code null} otherwise.
+     * @since 2.0
      */
-    public Widget update() {
-        for(int i = 0; i < contents.length; i++) {
+    @Nullable
+    public ValuedButton<?, ?> getValuedButton(final int index) {
+        return (ValuedButton<?, ?>) content[index];
+    }
+
+    /**
+     * Puts an instance of {@link Clickable} at position index.
+     *
+     * @param index     The index to put at.
+     * @param clickable The clickable to put.
+     * @since 2.0
+     */
+    public void put(final int index, @Nullable final Clickable clickable) {
+        content[index] = clickable;
+    }
+
+    /**
+     * Attempts to update all slots present within this inventory.
+     *
+     * @since 2.0
+     */
+    public void update() {
+        for(int i = 0; i < content.length; i++)
             update(i);
-        }
-        return this;
     }
 
     /**
-     * {@inheritDoc}
+     * Updates exactly one slot and flushes all changes to the live
+     * inventory view.
+     *
+     * @param slot The slot to update.
+     * @since 2.0
      */
-    @Override
-    @NotNull
-    public Inventory getInventory() {
-        return inventory;
+    public void update(final int slot) {
+        if(content[slot] instanceof Styleable<?>) inventory.setItem(slot, ((Styleable<?>) content[slot]).getStyle().getDisplay());
     }
 
     /**
-     * Opens the underlying inventory to a human entity.
+     * Handles the passed in event.
+     *
+     * @param event The event to handle.
+     * @since 2.0
+     */
+    public void handle(@NotNull final InventoryClickEvent event) {
+        if(event.getRawSlot() >= inventory.getSize() || event.getSlotType() == InventoryType.SlotType.OUTSIDE) {
+            if(outsideHandler != null) outsideHandler.accept(event);
+        } else if(event.getSlot() < content.length && content[event.getSlot()] != null) {
+            content[event.getSlot()].onClick(event);
+        }
+    }
+
+    /**
+     * Opens the inventory for a known human entity.
      *
      * @param entity The entity to open to.
-     * @since 1.0
+     * @since 2.0
      */
     public void open(@NotNull final HumanEntity entity) {
         entity.openInventory(inventory);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onClick(final InventoryClickEvent event) {
-        if(event.getInventory() != inventory && event.getInventory().getHolder() != this) return;
-        if(event.getRawSlot() < inventory.getSize()) {
-            if(contents[event.getRawSlot()] != null) contents[event.getRawSlot()].handle(event);
-        } else if(event.getSlotType() == InventoryType.SlotType.OUTSIDE || event.getRawSlot() > inventory.getSize() && outsideHandler != null)
-            outsideHandler.accept(event);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onClose(final InventoryCloseEvent event) {
-        if(event.getInventory() == inventory || event.getInventory().getHolder() == this)
-            HandlerList.unregisterAll(this);
+    @Override
+    @NotNull
+    public Inventory getInventory() {
+        return inventory;
     }
 
 }
