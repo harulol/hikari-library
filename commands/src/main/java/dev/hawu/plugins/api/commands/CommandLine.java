@@ -13,8 +13,8 @@ import java.util.*;
  */
 public final class CommandLine {
 
-    private final Set<String> flags = new HashSet<>();
-    private final Set<String> props = new HashSet<>();
+    private final @NotNull Set<@NotNull String> flags = new HashSet<>();
+    private final @NotNull Set<@NotNull String> props = new HashSet<>();
 
     /**
      * Marks the following argument as a flag. Values that follow these
@@ -47,7 +47,7 @@ public final class CommandLine {
     // Method to run the first iteration to take care of arguments within quotes
     // and those that are escaped by a preceding backslash.
     @NotNull
-    private List<String> parseQuotedArguments(@NotNull final String args) {
+    private List<@NotNull String> parseQuotedArguments(@NotNull final String args) {
         boolean isRecording = false;
         final List<String> arguments = new ArrayList<>();
         StringBuilder current = new StringBuilder();
@@ -85,7 +85,7 @@ public final class CommandLine {
     }
 
     @NotNull
-    private Pair<CommandArgument, Map<String, List<String>>> parseProperties(@NotNull final List<String> arguments) {
+    private Pair<@NotNull CommandArgument, @NotNull Map<@NotNull String, @NotNull List<@NotNull String>>> parseProperties(@NotNull final List<@NotNull String> arguments) {
         final Map<String, List<String>> properties = new HashMap<>();
         final List<String> leftovers = new ArrayList<>();
         int pointer = 0;
@@ -122,7 +122,7 @@ public final class CommandLine {
      * @since 1.0
      */
     @NotNull
-    public Pair<CommandArgument, Map<String, List<String>>> parse(@NotNull final String args) {
+    public Pair<@NotNull CommandArgument, @NotNull Map<@NotNull String, @NotNull List<@NotNull String>>> parse(@NotNull final String args) {
         return parseProperties(parseQuotedArguments(args));
     }
 

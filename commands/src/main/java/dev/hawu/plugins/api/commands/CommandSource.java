@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class CommandSource {
 
+    @NotNull
     private final CommandSender base;
 
     /**
@@ -152,7 +153,7 @@ public final class CommandSource {
      * @param messages The messages to send after coloring.
      * @since 1.0
      */
-    public void sendMessage(@Nullable final String[] messages) {
+    public void sendMessage(@Nullable final String @Nullable [] messages) {
         if(messages == null) return;
         for(final String s : messages) {
             if(s != null) base.sendMessage(Strings.color(s));
