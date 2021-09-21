@@ -42,7 +42,7 @@ public enum TimeUnit {
      * @since 1.0
      */
     @NotNull
-    public static TimeUnit[] getReversedArray() {
+    public static TimeUnit @NotNull [] getReversedArray() {
         if(reversedArray != null) return reversedArray;
 
         final TimeUnit[] values = values();

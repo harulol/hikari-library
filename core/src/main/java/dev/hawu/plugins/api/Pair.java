@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class Pair<A, B> {
 
-    private final A first;
-    private final B second;
+    private final @Nullable A first;
+    private final @Nullable B second;
 
     /**
      * Constructs a 2-tuple with first and second values.
