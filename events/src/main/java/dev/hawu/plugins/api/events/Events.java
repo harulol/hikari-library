@@ -28,7 +28,7 @@ public final class Events {
      * @since 1.0
      */
     @NotNull
-    public static <T extends Event> ClosableListener on(@NotNull Consumer<T> handler) {
+    public static <T extends Event> ClosableListener on(@NotNull Consumer<@NotNull T> handler) {
         final ClosableListener listener = new ClosableListener() {
             @EventHandler
             private void onEvent(final T event) {
@@ -48,7 +48,7 @@ public final class Events {
      * @since 1.0
      */
     @NotNull
-    public static <T extends Event> EventSubscriptionBuilder<T> newSubscription() {
+    public static <T extends Event> EventSubscriptionBuilder<@NotNull T> newSubscription() {
         return new EventSubscriptionBuilder<>();
     }
 

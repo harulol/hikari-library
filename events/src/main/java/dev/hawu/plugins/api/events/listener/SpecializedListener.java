@@ -46,9 +46,9 @@ public final class SpecializedListener<T extends Event> implements ClosableListe
      * @since 1.0
      */
     public SpecializedListener(final int invocationExpiry, final double timedExpiry,
-                               @Nullable final Predicate<T> predicate, final boolean countsIfFiltered,
-                               @Nullable final BiConsumer<T, ? super Exception> onFailHook,
-                               @Nullable final Consumer<T> handler,
+                               @Nullable final Predicate<@NotNull T> predicate, final boolean countsIfFiltered,
+                               @Nullable final BiConsumer<@NotNull T, ? super Exception> onFailHook,
+                               @Nullable final Consumer<@NotNull T> handler,
                                @Nullable final Runnable onUnregisterHook) {
         this.invocationExpiry = invocationExpiry;
         this.timedExpiry = timedExpiry;
