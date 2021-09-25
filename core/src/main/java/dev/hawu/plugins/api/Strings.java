@@ -63,7 +63,7 @@ public final class Strings {
      * @return True if {@code from} is equal to any of the {@code strings}.
      * @since 1.0
      */
-    public static boolean equalsAny(@Nullable final String from, @Nullable final String... strings) {
+    public static boolean equalsAny(@Nullable final String from, @Nullable final String @NotNull ... strings) {
         return Arrays.stream(strings).filter(Objects::nonNull).anyMatch(s -> s.equals(from));
     }
 
@@ -76,7 +76,7 @@ public final class Strings {
      * @return True if {@code from} is equal to any of the {@code strings}.
      * @since 1.0
      */
-    public static boolean equalsAnyIgnoresCase(@Nullable final String from, @Nullable final String... strings) {
+    public static boolean equalsAnyIgnoresCase(@Nullable final String from, @Nullable final String @NotNull ... strings) {
         return Arrays.stream(strings).filter(Objects::nonNull).anyMatch(s -> s.equalsIgnoreCase(from));
     }
 
@@ -108,7 +108,7 @@ public final class Strings {
      * @since 1.0
      */
     @NotNull
-    public static String fillPlaceholders(@NotNull final String message, @NotNull final Pair<?, ?>... params) {
+    public static String fillPlaceholders(@NotNull final String message, @NotNull final Pair<?, ?> @NotNull ... params) {
         String curr = message;
         for(Pair<?, ?> param : params) {
             if(param.getFirst() == null) continue;

@@ -37,7 +37,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> expiresAfterTime(final double duration) {
+    public EventSubscriptionBuilder<@NotNull T> expiresAfterTime(final double duration) {
         timedExpiry = duration;
         return this;
     }
@@ -51,7 +51,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> expiresAfterInvocations(final int amount) {
+    public EventSubscriptionBuilder<@NotNull T> expiresAfterInvocations(final int amount) {
         invocationExpiry = amount;
         return this;
     }
@@ -64,7 +64,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> filter(@NotNull final Predicate<T> other) {
+    public EventSubscriptionBuilder<@NotNull T> filter(@NotNull final Predicate<@NotNull T> other) {
         if(predicate == null) predicate = other;
         else predicate = predicate.and(other);
         return this;
@@ -78,7 +78,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> predicate(@Nullable final Predicate<T> predicate) {
+    public EventSubscriptionBuilder<@NotNull T> predicate(@Nullable final Predicate<@NotNull T> predicate) {
         this.predicate = predicate;
         return this;
     }
@@ -91,7 +91,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> handler(@NotNull final Consumer<T> handler) {
+    public EventSubscriptionBuilder<@NotNull T> handler(@NotNull final Consumer<@NotNull T> handler) {
         this.handler = handler;
         return this;
     }
@@ -105,7 +105,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> then(@NotNull final Consumer<T> other) {
+    public EventSubscriptionBuilder<@NotNull T> then(@NotNull final Consumer<@NotNull T> other) {
         this.handler = handler.andThen(other);
         return this;
     }
@@ -118,7 +118,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> countsIfFiltered() {
+    public EventSubscriptionBuilder<@NotNull T> countsIfFiltered() {
         this.countsIfFiltered = true;
         return this;
     }
@@ -132,7 +132,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> onFail(@NotNull final BiConsumer<T, ? super Exception> hook) {
+    public EventSubscriptionBuilder<@NotNull T> onFail(@NotNull final BiConsumer<@NotNull T, ? super Exception> hook) {
         this.onFailHook = hook;
         return this;
     }
@@ -146,7 +146,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public EventSubscriptionBuilder<T> onUnregister(@NotNull final Runnable hook) {
+    public EventSubscriptionBuilder<@NotNull T> onUnregister(@NotNull final Runnable hook) {
         this.onUnregisterHook = hook;
         return this;
     }
@@ -159,7 +159,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @since 1.0
      */
     @NotNull
-    public SpecializedListener<T> build() {
+    public SpecializedListener<@NotNull T> build() {
         return new SpecializedListener<>(invocationExpiry, timedExpiry, predicate, countsIfFiltered, onFailHook, handler, onUnregisterHook);
     }
 

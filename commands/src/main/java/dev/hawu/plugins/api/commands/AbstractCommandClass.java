@@ -14,22 +14,24 @@ import java.util.*;
 /**
  * Implementation of {@link TabExecutor} that allows for cleaner
  * writing but not extremely bloated with methods and configurations.
+ *
  * @since 1.0
  */
 public abstract class AbstractCommandClass implements TabExecutor {
 
-    private final Set<SenderType> senders = new HashSet<>();
-    private final Map<String, AbstractCommandClass> subcommands = new HashMap<>();
-    private final Set<String> aliases = new HashSet<>();
-    private final String name;
+    private final Set<@NotNull SenderType> senders = new HashSet<>();
+    private final Map<@NotNull String, @NotNull AbstractCommandClass> subcommands = new HashMap<>();
+    private final Set<@NotNull String> aliases = new HashSet<>();
+    private final @NotNull String name;
 
-    private String permission = null;
-    private String permissionMessage = "&cI'm sorry, but you do not have permission to perform this command.";
-    private String badSenderMessage = "&cThis command was not tailored for your type of sender.";
+    private @Nullable String permission = null;
+    private @NotNull String permissionMessage = "&cI'm sorry, but you do not have permission to perform this command.";
+    private @NotNull String badSenderMessage = "&cThis command was not tailored for your type of sender.";
 
     /**
      * Main constructor that simply initializes the class with the name
      * of the command.
+     *
      * @param name The name to initialize with.
      * @since 1.0
      */
@@ -41,7 +43,8 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * Secondary constructor that lets the child class inherits
      * the permission, permission message and the bad sender message
      * from the parent class.
-     * @param name The name to initialize with.
+     *
+     * @param name   The name to initialize with.
      * @param parent The parent to inherit from.
      * @since 1.0
      */
@@ -54,8 +57,9 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Handles the tab completions for this command.
+     *
      * @param sender The command's sender.
-     * @param args The command's arguments.
+     * @param args   The command's arguments.
      * @return The tab completion results at the moment.
      * @since 1.0
      */
@@ -64,14 +68,16 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Handles the command executions for this command.
+     *
      * @param sender The command's sender.
-     * @param args The command's arguments.
+     * @param args   The command's arguments.
      * @since 1.0
      */
     abstract void run(@NotNull final CommandSource sender, @NotNull final CommandArgument args);
 
     /**
      * Allows players to use this command.
+     *
      * @since 1.0
      */
     protected final void allowPlayers() {
@@ -80,6 +86,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Allows the console to use this command.
+     *
      * @since 1.0
      */
     protected final void allowConsole() {
@@ -88,6 +95,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Allows block senders to use this command.
+     *
      * @since 1.0
      */
     protected final void allowBlocks() {
@@ -96,6 +104,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Allows proxied senders to use this command.
+     *
      * @since 1.0
      */
     protected final void allowProxieds() {
@@ -104,6 +113,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Allows proxied consoles to use this command.
+     *
      * @since 1.0
      */
     protected final void allowRemoteConsole() {
@@ -112,6 +122,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Allows any types of sender to use this command.
+     *
      * @since 1.0
      */
     protected final void allowAny() {
@@ -120,7 +131,8 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Retrieves the permission of this command.
-     * @return The permission of this commnad.
+     *
+     * @return The permission of this command.
      * @since 1.0
      */
     @Nullable
@@ -130,6 +142,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     /**
      * Overrides the value of this command's permission.
+     *
      * @param permission The permission to override with.
      * @since 1.0
      */
@@ -140,65 +153,72 @@ public abstract class AbstractCommandClass implements TabExecutor {
     /**
      * Retrieves the message that gets sent to users when they
      * are not authorized with the permission.
+     *
      * @return The permission message.
      * @since 1.0
      */
-    public String getPermissionMessage() {
+    public @NotNull String getPermissionMessage() {
         return permissionMessage;
     }
 
     /**
      * Overrides the value of this command's permission message.
+     *
      * @param permissionMessage The message to override with.
      * @since 1.0
      */
-    public void setPermissionMessage(String permissionMessage) {
+    public void setPermissionMessage(@NotNull String permissionMessage) {
         this.permissionMessage = permissionMessage;
     }
 
     /**
      * Retrieves the message that gets sent to senders if their
      * types are not accounted for in this command.
+     *
      * @return The bad sender message.
      * @since 1.0
      */
-    public String getBadSenderMessage() {
+    public @NotNull String getBadSenderMessage() {
         return badSenderMessage;
     }
 
     /**
      * Overrides the value of this command's bad sender message.
+     *
      * @param badSenderMessage The message to override with.
      * @since 1.0
      */
-    public void setBadSenderMessage(String badSenderMessage) {
+    public void setBadSenderMessage(@NotNull String badSenderMessage) {
         this.badSenderMessage = badSenderMessage;
     }
 
     /**
      * Configures the aliases for the command. This does not have any effect
      * if this is a root command.
+     *
      * @param aliases The aliases of this command.
      * @return The same receiver.
      * @since 1.0
      */
-    protected final AbstractCommandClass alias(final String... aliases) {
+    protected final AbstractCommandClass alias(@NotNull final String @NotNull ... aliases) {
         this.aliases.addAll(Arrays.asList(aliases));
         return this;
     }
 
     /**
      * Binds a sub-command to this class as parent.
+     *
      * @param cls The sub-command class.
      * @since 1.0
      */
-    protected final void bind(final AbstractCommandClass cls) {
+    protected final void bind(@NotNull final AbstractCommandClass cls) {
         cls.aliases.forEach(s -> subcommands.put(s.toLowerCase(), cls));
         subcommands.put(cls.name.toLowerCase(), cls);
     }
 
     /**
      * Registers this command as a root command.
+     *
      * @since 1.0
      */
     protected final void register() {

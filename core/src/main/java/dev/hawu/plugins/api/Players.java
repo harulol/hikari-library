@@ -26,18 +26,18 @@ public final class Players {
     private static final MethodHandle mainHandSetter;
 
     static {
-        offHandGetter = getHandle(PlayerInventory.class, "getItemInOffHand", MethodType.methodType(ItemStack.class));
-        offHandSetter = getHandle(PlayerInventory.class, "setItemInOffHand", MethodType.methodType(Void.TYPE, ItemStack.class));
-        mainHandGetter = getHandle(PlayerInventory.class, "getItemInMainHand", MethodType.methodType(ItemStack.class));
-        mainHandSetter = getHandle(PlayerInventory.class, "setItemInMainHand", MethodType.methodType(Void.TYPE, ItemStack.class));
+        offHandGetter = getHandle("getItemInOffHand", MethodType.methodType(ItemStack.class));
+        offHandSetter = getHandle("setItemInOffHand", MethodType.methodType(Void.TYPE, ItemStack.class));
+        mainHandGetter = getHandle("getItemInMainHand", MethodType.methodType(ItemStack.class));
+        mainHandSetter = getHandle("setItemInMainHand", MethodType.methodType(Void.TYPE, ItemStack.class));
     }
 
     private Players() {}
 
     @Nullable
-    private static MethodHandle getHandle(@NotNull final Class<?> cls, @NotNull final String name, @NotNull final MethodType type) {
+    private static MethodHandle getHandle(@NotNull final String name, @NotNull final MethodType type) {
         try {
-            return lookup.findVirtual(cls, name, type);
+            return lookup.findVirtual(PlayerInventory.class, name, type);
         } catch(final NoSuchMethodException | IllegalAccessException e) {
             return null;
         }
