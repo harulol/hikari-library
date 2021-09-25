@@ -1,8 +1,8 @@
 package dev.hawu.plugins.api.commands;
 
 import dev.hawu.plugins.api.Constants;
-import dev.hawu.plugins.api.Pair;
 import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.collections.tuples.Pair;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;

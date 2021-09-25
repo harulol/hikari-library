@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api.commands;
 
-import dev.hawu.plugins.api.Pair;
+import dev.hawu.plugins.api.collections.tuples.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

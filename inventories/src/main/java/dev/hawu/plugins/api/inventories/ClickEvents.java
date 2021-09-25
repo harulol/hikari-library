@@ -1,9 +1,9 @@
 package dev.hawu.plugins.api.inventories;
 
 import dev.hawu.plugins.api.Constants;
-import dev.hawu.plugins.api.Pair;
 import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.Tasks;
+import dev.hawu.plugins.api.collections.tuples.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

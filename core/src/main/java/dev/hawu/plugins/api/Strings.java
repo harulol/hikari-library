@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api;
 
+import dev.hawu.plugins.api.collections.tuples.Pair;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

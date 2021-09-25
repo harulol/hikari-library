@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api.commands;
 
-import dev.hawu.plugins.api.Pair;
+import dev.hawu.plugins.api.collections.tuples.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

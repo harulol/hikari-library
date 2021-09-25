@@ -32,6 +32,10 @@ allprojects {
 setBuildDir("./build/parent")
 
 // Versioning
+project(":collections") {
+    version = "0.1-SNAPSHOT"
+}
+
 project(":core") {
     version = "1.1-SNAPSHOT"
 }
