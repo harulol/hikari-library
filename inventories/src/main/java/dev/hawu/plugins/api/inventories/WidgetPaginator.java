@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api.inventories;
 
-import dev.hawu.plugins.api.Pair;
+import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.inventories.item.ItemStackBuilder;
 import dev.hawu.plugins.api.inventories.style.StaticStyle;
 import org.bukkit.Material;
@@ -146,7 +146,7 @@ public final class WidgetPaginator {
             if(hasPrevious(i)) {
                 final ItemStack prevButton;
                 if(next != null) {
-                    prevButton = new ItemStackBuilder(next).withMeta().withLore().loopAndFill(new Pair<>("prev", i)).build().build().build();
+                    prevButton = new ItemStackBuilder(previous).withMeta().withLore().loopAndFill(new Pair<>("prev", i)).build().build().build();
                 } else {
                     prevButton = new ItemStackBuilder().material(Material.ARROW)
                             .withMeta().displayName("&aPrevious Page")
