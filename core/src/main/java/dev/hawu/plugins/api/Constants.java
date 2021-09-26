@@ -25,7 +25,7 @@ public final class Constants {
      * @since 1.0
      */
     public static void setPlugin(@NotNull final JavaPlugin pl) {
-        if(plugin != null) plugin = Objects.requireNonNull(pl, "Plugin to initialize with must be non-null.");
+        plugin = Objects.requireNonNull(pl, "Plugin to initialize with must be non-null.");
     }
 
     /**
