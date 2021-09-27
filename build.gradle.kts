@@ -37,7 +37,7 @@ project(":collections") {
 }
 
 project(":core") {
-    version = "1.1-SNAPSHOT"
+    version = "1.1.1-SNAPSHOT"
 }
 
 project(":commands") {
