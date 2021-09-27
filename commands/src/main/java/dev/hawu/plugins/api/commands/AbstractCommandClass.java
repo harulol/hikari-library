@@ -64,7 +64,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @since 1.0
      */
     @Nullable
-    abstract List<String> tab(@NotNull final CommandSource sender, @NotNull final CommandArgument args);
+    public abstract List<String> tab(@NotNull final CommandSource sender, @NotNull final CommandArgument args);
 
     /**
      * Handles the command executions for this command.
@@ -73,7 +73,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @param args   The command's arguments.
      * @since 1.0
      */
-    abstract void run(@NotNull final CommandSource sender, @NotNull final CommandArgument args);
+    public abstract void run(@NotNull final CommandSource sender, @NotNull final CommandArgument args);
 
     /**
      * Allows players to use this command.
