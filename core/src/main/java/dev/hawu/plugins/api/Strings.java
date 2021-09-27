@@ -112,7 +112,7 @@ public final class Strings {
         String curr = message;
         for(Pair<?, ?> param : params) {
             if(param.getFirst() == null) continue;
-            curr = curr.replace(param.getFirst().toString(), param.getSecond() == null ? "null" : param.getSecond().toString());
+            curr = curr.replace("%" + param.getFirst() + "%", param.getSecond() == null ? "null" : param.getSecond().toString());
         }
         return color(curr);
     }
