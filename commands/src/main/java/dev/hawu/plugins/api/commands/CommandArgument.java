@@ -163,9 +163,7 @@ public final class CommandArgument {
      */
     @NotNull
     public String @NotNull [] sliceArray(final int startInclusive, final int endExclusive) {
-        final String[] array = new String[endExclusive - startInclusive];
-        IntStream.range(startInclusive, endExclusive).forEach(i -> array[i] = args.get(i));
-        return array;
+        return slice(startInclusive, endExclusive).toArray(new String[0]);
     }
 
     /**
