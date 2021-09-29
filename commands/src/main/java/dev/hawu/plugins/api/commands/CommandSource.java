@@ -35,6 +35,17 @@ public final class CommandSource {
     }
 
     /**
+     * Gets the underlying sender base of the command source.
+     *
+     * @return A non-null {@link CommandSender}.
+     * @since 1.1
+     */
+    @NotNull
+    public CommandSender getBase() {
+        return base;
+    }
+
+    /**
      * Attempts to cast the base sender to a {@link Player}.
      *
      * @return A non-null {@link Player} instance if it can be casted.
