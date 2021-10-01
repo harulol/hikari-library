@@ -61,7 +61,7 @@ project(":nbt-v1_17_R1") {
 }
 
 project(":inventories") {
-    version = "2.0.1-SNAPSHOT"
+    version = "2.0.2-SNAPSHOT"
 }
 
 
