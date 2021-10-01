@@ -89,7 +89,7 @@ public final class CommandArgument {
      */
     @Nullable
     public String get(final int index) {
-        return index >= args.size() ? null : args.get(index);
+        return index >= args.size() || index < 0 ? null : args.get(index);
     }
 
     /**
