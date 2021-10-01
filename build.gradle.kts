@@ -49,11 +49,15 @@ project(":events") {
 }
 
 project(":reflect") {
-    version = "1.1-SNAPSHOT"
+    version = "1.2-SNAPSHOT"
 }
 
 project(":nbt") {
-    version = "1.1.1-RC"
+    version = "2.0-SNAPSHOT"
+}
+
+project(":nbt-v1_17_R1") {
+    version = project(":nbt").version
 }
 
 project(":inventories") {

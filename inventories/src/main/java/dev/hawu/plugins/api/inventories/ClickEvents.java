@@ -65,6 +65,7 @@ public final class ClickEvents implements Listener {
      * @since 2.0
      */
     public static void requestInput(@NotNull final Player player, @Nullable final String message, @NotNull final Consumer<@NotNull String> function) {
+        player.closeInventory();
         if(message != null) player.sendMessage(Strings.color(message));
         chatActions.put(player.getUniqueId(), new Pair<>(false, function));
     }
@@ -79,6 +80,7 @@ public final class ClickEvents implements Listener {
      * @since 2.0
      */
     public static void requestInputAsync(@NotNull final Player player, @Nullable final String message, @NotNull final Consumer<@NotNull String> function) {
+        player.closeInventory();
         if(message != null) player.sendMessage(Strings.color(message));
         chatActions.put(player.getUniqueId(), new Pair<>(true, function));
     }
@@ -89,6 +91,7 @@ public final class ClickEvents implements Listener {
         final Pair<Boolean, Consumer<String>> pair = chatActions.remove(uuid);
         if(pair == null || pair.getFirst() == null || pair.getSecond() == null) return;
 
+        event.setCancelled(true);
         if(pair.getFirst()) pair.getSecond().accept(event.getMessage());
         else Tasks.schedule(runnable -> pair.getSecond().accept(event.getMessage()));
     }
