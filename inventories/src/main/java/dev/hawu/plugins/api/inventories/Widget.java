@@ -1,6 +1,7 @@
 package dev.hawu.plugins.api.inventories;
 
 import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.inventories.style.StaticStyle;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -50,6 +51,24 @@ public final class Widget implements InventoryHolder {
     public Widget(@NotNull final InventoryType type, @Nullable final String title) {
         this.inventory = Bukkit.createInventory(this, type, Strings.color(title));
         this.content = new Clickable[this.inventory.getSize()];
+    }
+
+    /**
+     * Constructs a widget by copying contents from an inventory.
+     *
+     * @param inv   The inventory to copy from.
+     * @param title The title of the inventory.
+     * @since 2.1
+     */
+    public Widget(@NotNull final Inventory inv, @NotNull final String title) {
+        if(inv.getType() == InventoryType.CHEST)
+            this.inventory = Bukkit.createInventory(this, inv.getSize(), Strings.color(title));
+        else this.inventory = Bukkit.createInventory(this, inv.getType(), Strings.color(title));
+        this.content = new Clickable[this.inventory.getSize()];
+
+        for(int i = 0; i < inv.getSize(); i++) {
+            this.content[i] = new Button<>(new StaticStyle(inv.getItem(i)));
+        }
     }
 
     /**
