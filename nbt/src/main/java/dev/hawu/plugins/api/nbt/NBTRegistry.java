@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.nbt;
 
+import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class NBTRegistry {
 
     private static NBTRegistry registry;
+    private static String relocationURL = "dev.hawu.plugins.api";
 
     /**
      * Retrieves the computed registry for converting named binary tags.
@@ -23,9 +25,24 @@ public abstract class NBTRegistry {
      */
     @NotNull
     public static NBTRegistry getRegistry() {
-        if(registry == null)
-            return registry = new SimpleNBTRegistry();
-        else return registry;
+        try {
+            return registry = (NBTRegistry) Class.forName(relocationURL + "." + MinecraftVersion.getCurrent().name() + ".SimpleNBTRegistry").newInstance();
+        } catch(final ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            return registry;
+        }
+    }
+
+    /**
+     * Redirects the URL for class lookups of registries.
+     * <p>
+     * This class will attempt to look for a respective registry at
+     * {@code {relocationURL}.{minecraftVersion}.SimpleNBTRegistry}.
+     *
+     * @param url The shaded URL pattern.
+     * @since 2.0
+     */
+    public static void setRelocationURL(@NotNull final String url) {
+        relocationURL = url;
     }
 
     /**
