@@ -157,7 +157,8 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @return The permission message.
      * @since 1.0
      */
-    public @NotNull String getPermissionMessage() {
+    public @NotNull
+    String getPermissionMessage() {
         return permissionMessage;
     }
 
@@ -178,7 +179,8 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @return The bad sender message.
      * @since 1.0
      */
-    public @NotNull String getBadSenderMessage() {
+    public @NotNull
+    String getBadSenderMessage() {
         return badSenderMessage;
     }
 
@@ -212,8 +214,23 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @since 1.0
      */
     protected final void bind(@NotNull final AbstractCommandClass cls) {
+        bind(cls.name, cls);
+    }
+
+    /**
+     * Binds a sub-command to this class as parent, with uses
+     * the specified alias as name.
+     * <p>
+     * This method does not use the name field to initialize with,
+     * unlike {@link AbstractCommandClass#bind(AbstractCommandClass)}.
+     *
+     * @param alias The alias for this command.
+     * @param cls   The sub-command class.
+     * @since 1.1
+     */
+    protected final void bind(@NotNull final String alias, @NotNull final AbstractCommandClass cls) {
         cls.aliases.forEach(s -> subcommands.put(s.toLowerCase(), cls));
-        subcommands.put(cls.name.toLowerCase(), cls);
+        subcommands.put(alias, cls);
     }
 
     /**
