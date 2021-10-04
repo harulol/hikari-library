@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Represents a builder for building {@link ItemMeta}s
@@ -114,6 +115,21 @@ public class ItemMetaBuilder {
     @NotNull
     public final ItemMetaBuilder withLore(@Nullable final List<String> lore) {
         meta.setLore(lore);
+        return this;
+    }
+
+    /**
+     * Sets the lore of this meta after colorizing all values
+     * in the provided list.
+     *
+     * @param lore The lore to set.
+     * @return The same receiver.
+     * @since 2.2
+     */
+    @NotNull
+    public final ItemMetaBuilder withColoredLore(@Nullable final List<String> lore) {
+        if(lore == null) meta.setLore(null);
+        else meta.setLore(lore.stream().map(Strings::color).collect(Collectors.toList()));
         return this;
     }
 
