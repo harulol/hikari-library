@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 public final class Button<S extends Style> implements Clickable, Styleable<S> {
 
     private final S style;
-    private Consumer<InventoryClickEvent> handler;
+    private Consumer<InventoryClickEvent> handler = e -> e.setCancelled(true);
 
     /**
      * Constructs a clickable and styleable button with a specific
