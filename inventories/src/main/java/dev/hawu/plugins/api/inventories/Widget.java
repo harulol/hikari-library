@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.inventories;
 
+import dev.hawu.plugins.api.Constants;
 import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.inventories.style.StaticStyle;
 import org.bukkit.Bukkit;
@@ -8,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -178,6 +180,18 @@ public final class Widget implements InventoryHolder {
         } else if(event.getSlot() < content.length && content[event.getSlot()] != null) {
             content[event.getSlot()].onClick(event);
         }
+    }
+
+    /**
+     * Retrieves the plugin specified in {@link Constants} that is responsible
+     * for this widget.
+     *
+     * @return The responsible plugin.
+     * @since 2.2
+     */
+    @NotNull
+    public JavaPlugin getResponsiblePlugin() {
+        return Constants.getPlugin();
     }
 
     /**

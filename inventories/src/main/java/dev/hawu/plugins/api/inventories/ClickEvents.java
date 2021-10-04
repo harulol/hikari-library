@@ -11,6 +11,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,6 +102,18 @@ public final class ClickEvents implements Listener {
     private void onClick(@NotNull final InventoryClickEvent event) {
         if(event.getInventory().getHolder() instanceof Widget)
             ((Widget) event.getInventory().getHolder()).handle(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onDisable(@NotNull final PluginDisableEvent event) {
+        if(event.getPlugin() != Constants.getPlugin()) return;
+
+        Bukkit.getOnlinePlayers().stream()
+            .filter(p -> {
+                final InventoryHolder holder = p.getOpenInventory().getTopInventory().getHolder();
+                return holder instanceof Widget && ((Widget) holder).getResponsiblePlugin() == Constants.getPlugin();
+            })
+            .forEach(Player::closeInventory);
     }
 
 }
