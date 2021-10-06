@@ -142,9 +142,9 @@ public final class ItemStackBuilder {
     @SuppressWarnings("deprecation")
     @NotNull
     public ItemStack build() {
-        final ItemStack item;
-        if(data > 0) item = new ItemStack(material, amount, durability, data);
-        else item = new ItemStack(material, amount, durability);
+        final ItemStack item = new ItemStack(material, amount);
+        item.setDurability(durability);
+        if(data >= 0) item.getData().setData(data);
         item.setItemMeta(meta);
         return item;
     }

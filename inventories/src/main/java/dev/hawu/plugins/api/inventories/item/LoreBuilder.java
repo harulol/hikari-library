@@ -5,6 +5,7 @@ import dev.hawu.plugins.api.collections.tuples.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,33 @@ public final class LoreBuilder {
     @NotNull
     public LoreBuilder add(final int index, @NotNull final String... lines) {
         lore.addAll(index, Arrays.stream(lines).map(Strings::color).collect(Collectors.toList()));
+        return this;
+    }
+
+    /**
+     * Appends a collection of lines at the end of the lore.
+     * All lines will be colorized with the alternate color code {@code &}.
+     *
+     * @param collection The collection to append.
+     * @return The same receiver.
+     * @since 2.3
+     */
+    public LoreBuilder addAll(final @NotNull Collection<? extends String> collection) {
+        lore.addAll(collection.stream().map(Strings::color).collect(Collectors.toList()));
+        return this;
+    }
+
+    /**
+     * Appends a collection of lines at a specific position in the lore.
+     * All lines will be colorized with the alternate color code {@code &}.
+     *
+     * @param index      The index to append at.
+     * @param collection The collection to append.
+     * @return The same receiver.
+     * @since 2.3
+     */
+    public LoreBuilder addAll(final int index, @NotNull final Collection<? extends String> collection) {
+        lore.addAll(index, collection.stream().map(Strings::color).collect(Collectors.toList()));
         return this;
     }
 
