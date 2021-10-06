@@ -40,11 +40,24 @@ public class Triplet<A, B, C> extends Pair<A, B> {
         return third;
     }
 
+    /**
+     * Retrieves the third component for the tuple.
+     * This function only delegates the invocation back to
+     * {@link Triplet#getThird()}.
+     *
+     * @return The third component of the tuple.
+     * @since 1.1
+     */
+    @Nullable
+    public final C component3() {
+        return getThird();
+    }
+
     @Override
     public String toString() {
         return String.format("Triplet{first=%s,second=%s,third=%s}",
-                getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString(),
-                getThird() == null ? "null" : getThird().toString());
+            getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString(),
+            getThird() == null ? "null" : getThird().toString());
     }
 
     @Override

@@ -50,10 +50,36 @@ public class Pair<A, B> {
         return this.second;
     }
 
+    /**
+     * Retrieves the first component for the tuple.
+     * This function only delegates the invocation back to
+     * {@link Pair#getFirst()}.
+     *
+     * @return The first component of the tuple.
+     * @since 1.1
+     */
+    @Nullable
+    public final A component1() {
+        return getFirst();
+    }
+
+    /**
+     * Retrieves the second component for the tuple.
+     * This function only delegates the invocation back to
+     * {@link Pair#getSecond()}.
+     *
+     * @return The second component of the tuple.
+     * @since 1.1
+     */
+    @Nullable
+    public final B component2() {
+        return getSecond();
+    }
+
     @Override
     public String toString() {
         return String.format("Pair{first=%s,second=%s}",
-                getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString());
+            getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString());
     }
 
     @Override

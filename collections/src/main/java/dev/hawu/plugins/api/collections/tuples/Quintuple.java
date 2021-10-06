@@ -42,11 +42,24 @@ public class Quintuple<A, B, C, D> extends Triplet<A, B, C> {
         return this.fourth;
     }
 
+    /**
+     * Retrieves the fourth component for the tuple.
+     * This function only delegates the invocation back to
+     * {@link Quintuple#getFourth()}.
+     *
+     * @return The fourth component of the tuple.
+     * @since 1.1
+     */
+    @Nullable
+    public final D component4() {
+        return getFourth();
+    }
+
     @Override
     public String toString() {
         return String.format("Quintuple{first=%s,second=%s,third=%s,fourth=%s}",
-                getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString(),
-                getThird() == null ? "null" : getThird().toString(), getFourth() == null ? "null" : getFourth().toString());
+            getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString(),
+            getThird() == null ? "null" : getThird().toString(), getFourth() == null ? "null" : getFourth().toString());
     }
 
     @Override
