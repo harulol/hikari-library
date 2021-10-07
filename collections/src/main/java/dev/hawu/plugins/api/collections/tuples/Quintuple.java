@@ -5,17 +5,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents an immutable tuple with 4 values.
+ * Represents an immutable tuple with 5 values.
  *
  * @param <A> The type of the first value.
  * @param <B> The type of the second value.
  * @param <C> The type of the third value.
  * @param <D> The type of the fourth value.
+ * @param <E> The type of the fifth value.
  * @since 1.0
  */
-public class Quintuple<A, B, C, D> extends Triplet<A, B, C> {
+public class Quintuple<A, B, C, D, E> extends Quadruple<A, B, C, D> {
 
-    private final @Nullable D fourth;
+    private final @Nullable E fifth;
 
     /**
      * Constructs a quintuple with the provided values.
@@ -24,56 +25,59 @@ public class Quintuple<A, B, C, D> extends Triplet<A, B, C> {
      * @param second The second value.
      * @param third  The third value.
      * @param fourth The fourth value.
+     * @param fifth  The fifth value.
      * @since 1.0
      */
-    public Quintuple(@Nullable final A first, @Nullable final B second, @Nullable final C third, @Nullable final D fourth) {
-        super(first, second, third);
-        this.fourth = fourth;
+    public Quintuple(@Nullable final A first, @Nullable final B second, @Nullable final C third, @Nullable final D fourth, @Nullable final E fifth) {
+        super(first, second, third, fourth);
+        this.fifth = fifth;
     }
 
     /**
-     * Retrieves the fourth value of the tuple.
+     * Retrieves the fifth value of the tuple.
      *
-     * @return The fourth value of the tuple, nullable.
+     * @return The fifth value of the tuple, nullable.
      * @since 1.0
      */
     @Nullable
-    public final D getFourth() {
-        return this.fourth;
+    public final E getFifth() {
+        return this.fifth;
     }
 
     /**
-     * Retrieves the fourth component for the tuple.
+     * Retrieves the fifth component for the tuple.
      * This function only delegates the invocation back to
-     * {@link Quintuple#getFourth()}.
+     * {@link Quintuple#getFifth()}.
      *
-     * @return The fourth component of the tuple.
-     * @since 1.1
+     * @return The fifth component of the tuple.
+     * @since 1.2
      */
     @Nullable
-    public final D component4() {
-        return getFourth();
+    public final E component5() {
+        return getFifth();
     }
 
     @Override
     public String toString() {
-        return String.format("Quintuple{first=%s,second=%s,third=%s,fourth=%s}",
+        return String.format("Quintuple{first=%s,second=%s,third=%s,fourth=%s,fifth=%s}",
             getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString(),
-            getThird() == null ? "null" : getThird().toString(), getFourth() == null ? "null" : getFourth().toString());
+            getThird() == null ? "null" : getThird().toString(), getFourth() == null ? "null" : getFourth().toString(),
+            getFifth() == null ? "null" : getFifth().toString());
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(getFirst()).append(getSecond()).append(getThird()).append(fourth).toHashCode();
+        return new HashCodeBuilder().append(getFirst()).append(getSecond()).append(getThird()).append(getFourth()).append(fifth).toHashCode();
     }
 
     @Override
     public boolean equals(final Object obj) {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
-        Quintuple<?, ?, ?, ?> quintuple = (Quintuple<?, ?, ?, ?>) obj;
+        Quintuple<?, ?, ?, ?, ?> quintuple = (Quintuple<?, ?, ?, ?, ?>) obj;
         return new EqualsBuilder().append(getFirst(), quintuple.getFirst()).append(getSecond(), quintuple.getSecond())
-                .append(getThird(), quintuple.getThird()).append(fourth, quintuple.fourth).isEquals();
+            .append(getThird(), quintuple.getThird()).append(getFourth(), quintuple.getFourth())
+            .append(getFifth(), quintuple.getFifth()).isEquals();
     }
 
 }

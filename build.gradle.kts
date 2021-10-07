@@ -33,7 +33,7 @@ setBuildDir("./build/parent")
 
 // Versioning
 project(":collections") {
-    version = "1.1-SNAPSHOT"
+    version = "1.2-SNAPSHOT"
 }
 
 project(":core") {
