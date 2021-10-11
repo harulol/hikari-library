@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.nbt;
 
+import dev.hawu.plugins.api.reflect.LookupException;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -25,10 +26,11 @@ public abstract class NBTRegistry {
      */
     @NotNull
     public static NBTRegistry getRegistry() {
+        if(registry != null) return registry;
         try {
             return registry = (NBTRegistry) Class.forName(relocationURL + "." + MinecraftVersion.getCurrent().name() + ".SimpleNBTRegistry").newInstance();
         } catch(final ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            return registry;
+            throw new LookupException(ex);
         }
     }
 

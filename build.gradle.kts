@@ -53,7 +53,7 @@ project(":reflect") {
 }
 
 project(":nbt") {
-    version = "2.0-SNAPSHOT"
+    version = "2.0.1-SNAPSHOT"
 }
 
 project(":nbt-v1_17_R1") {
