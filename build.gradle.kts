@@ -33,7 +33,7 @@ setBuildDir("./build/parent")
 
 // Versioning
 project(":collections") {
-    version = "1.2-SNAPSHOT"
+    version = "1.3-SNAPSHOT"
 }
 
 project(":core") {
@@ -50,6 +50,10 @@ project(":events") {
 
 project(":reflect") {
     version = "1.2-SNAPSHOT"
+}
+
+project(":math") {
+    version = "1.0-SNAPSHOT"
 }
 
 project(":nbt") {
