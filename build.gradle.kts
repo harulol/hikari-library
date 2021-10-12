@@ -57,7 +57,7 @@ project(":math") {
 }
 
 project(":nbt") {
-    version = "2.0.2-SNAPSHOT"
+    version = "2.0.3-SNAPSHOT"
 }
 
 project(":nbt-v1_17_R1") {

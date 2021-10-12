@@ -10,8 +10,11 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Extension for the NBT registry for Bukkit v1_13_R1.
+ *
+ * @deprecated See {@link NBTRegistry#getRegistry()}
  */
 @SuppressWarnings("DuplicatedCode")
+@Deprecated
 public final class SimpleNBTRegistry extends NBTRegistry {
 
     @NotNull

@@ -13,8 +13,11 @@ import java.util.Objects;
 
 /**
  * Extension for the NBT registry for Bukkit v1_12_R1.
+ *
+ * @deprecated See {@link NBTRegistry#getRegistry()}
  */
 @SuppressWarnings("DuplicatedCode")
+@Deprecated
 public final class SimpleNBTRegistry extends NBTRegistry {
 
     private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.findGetter(NBTTagLongArray.class, "b", long[].class);

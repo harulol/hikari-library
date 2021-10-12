@@ -6,8 +6,23 @@
 <div align="center">
 
 # PluginLibrary
+
 A simple rewritten framework for Minecraft plugins that run on CraftBukkit cores<br>
 (named after a smol midget)
 </div>
 
-No documentation yet.
+### Why another?
+
+Why not?
+
+### Why should I use this?
+
+This library was built as a shaded library, which means that you will have to bundle every class of this library for the projects to work. There is no other external plugin to
+depend on.
+
+Since this library was split into smaller modules, such as `commands`, `collections`, `nbt`, etc., users can specify which modules they want to use, and minimize the resulting
+.jar. This means that this library can be used in any kind of projects, that might already have worked against a framework.
+
+### Documentation
+
+Maybe in wikis soon?
