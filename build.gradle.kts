@@ -52,6 +52,10 @@ project(":reflect") {
     version = "1.2-SNAPSHOT"
 }
 
+project(":particles") {
+    version = "1.0-SNAPSHOT"
+}
+
 project(":math") {
     version = "1.0-SNAPSHOT"
 }
