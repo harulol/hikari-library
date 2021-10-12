@@ -68,6 +68,10 @@ project(":nbt-v1_17_R1") {
     version = project(":nbt").version
 }
 
+project(":holograms") {
+    version = "0.1-SNAPSHOT"
+}
+
 project(":inventories") {
     version = "2.3-SNAPSHOT"
 }
