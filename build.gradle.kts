@@ -31,6 +31,8 @@ allprojects {
 
 setBuildDir("./build/parent")
 
+val default = "1.0-SNAPSHOT"
+
 // Versioning
 project(":collections") {
     version = "1.3-SNAPSHOT"
@@ -64,16 +66,76 @@ project(":nbt") {
     version = "2.0.3-SNAPSHOT"
 }
 
-project(":nbt-v1_17_R1") {
-    version = project(":nbt").version
-}
-
 project(":holograms") {
     version = "0.1-SNAPSHOT"
 }
 
 project(":inventories") {
     version = "2.3-SNAPSHOT"
+}
+
+project(":v1_8_R1") {
+    version = default
+}
+
+project(":v1_8_R2") {
+    version = default
+}
+
+project(":v1_8_R3") {
+    version = default
+}
+
+project(":v1_9_R1") {
+    version = default
+}
+
+project(":v1_9_R2") {
+    version = default
+}
+
+project(":v1_10_R1") {
+    version = default
+}
+
+project(":v1_11_R1") {
+    version = default
+}
+
+project(":v1_12_R1") {
+    version = default
+}
+
+project(":v1_13_R1") {
+    version = default
+}
+
+project(":v1_13_R2") {
+    version = default
+}
+
+project(":v1_14_R1") {
+    version = default
+}
+
+project(":v1_15_R1") {
+    version = default
+}
+
+project(":v1_16_R1") {
+    version = default
+}
+
+project(":v1_16_R2") {
+    version = default
+}
+
+project(":v1_16_R3") {
+    version = default
+}
+
+project(":v1_17_R1") {
+    version = default
 }
 
 
