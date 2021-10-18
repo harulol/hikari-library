@@ -7,10 +7,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -21,12 +21,12 @@ import java.util.logging.Level;
  */
 public final class BukkitMaterial {
 
-    private static final Set<String> EXPLICITLY_IGNORED = new HashSet<>();
-    private static final Set<Material> DISPLAYABLE = new HashSet<>();
-    private static final Set<Material> CANT_DISPLAY = new HashSet<>();
+    private static final List<String> EXPLICITLY_IGNORED = new ArrayList<>();
+    private static final List<Material> DISPLAYABLE = new ArrayList<>();
+    private static final List<Material> CANT_DISPLAY = new ArrayList<>();
 
-    private static Set<Material> UNMODIFIABLE_DISPLAYABLE;
-    private static Set<Material> UNMODIFIABLE_CANT_DISPLAY;
+    private static List<Material> UNMODIFIABLE_DISPLAYABLE;
+    private static List<Material> UNMODIFIABLE_CANT_DISPLAY;
 
     static {
         // Adds the two materials that cant display in 1.8
@@ -59,31 +59,31 @@ public final class BukkitMaterial {
                 else DISPLAYABLE.add(mat);
             });
 
-        UNMODIFIABLE_DISPLAYABLE = Collections.unmodifiableSet(DISPLAYABLE);
-        UNMODIFIABLE_CANT_DISPLAY = Collections.unmodifiableSet(CANT_DISPLAY);
+        UNMODIFIABLE_DISPLAYABLE = Collections.unmodifiableList(DISPLAYABLE);
+        UNMODIFIABLE_CANT_DISPLAY = Collections.unmodifiableList(CANT_DISPLAY);
     }
 
     /**
-     * Retrieves a non-modifiable view of the set that contains
+     * Retrieves a non-modifiable view of the list that contains
      * all materials that are deemed display-able.
      *
-     * @return The underlying unmodifiable set.
+     * @return The underlying unmodifiable list.
      * @since 2.4
      */
     @NotNull
-    public static Set<@NotNull Material> getDisplayables() {
+    public static List<@NotNull Material> getDisplayables() {
         return UNMODIFIABLE_DISPLAYABLE;
     }
 
     /**
-     * Retrieves a non-modifiable view of the set that contains
+     * Retrieves a non-modifiable view of the list that contains
      * all materials that are deemed un-displayable.
      *
-     * @return The underlying unmodifiable set.
+     * @return The underlying unmodifiable list.
      * @since 2.4
      */
     @NotNull
-    public static Set<@NotNull Material> getUndisplayables() {
+    public static List<@NotNull Material> getUndisplayables() {
         return UNMODIFIABLE_CANT_DISPLAY;
     }
 
