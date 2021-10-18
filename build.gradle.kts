@@ -71,7 +71,7 @@ project(":holograms") {
 }
 
 project(":inventories") {
-    version = "2.3-SNAPSHOT"
+    version = "2.4-SNAPSHOT"
 }
 
 project(":v1_8_R1") {
