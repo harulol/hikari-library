@@ -51,7 +51,7 @@ public final class BukkitMaterial {
 
         final Inventory dummy = Bukkit.createInventory(null, 9);
         Arrays.stream(Material.values())
-            .filter(mat -> mat.name().startsWith("LEGACY_"))
+            .filter(mat -> !mat.name().startsWith("LEGACY_"))
             .filter(mat -> !EXPLICITLY_IGNORED.contains(mat.name()))
             .forEach(mat -> {
                 dummy.setItem(0, new ItemStack(mat));
