@@ -164,6 +164,8 @@ public final class WidgetPaginator {
                 });
                 nextSlots.forEach(j -> widget.put(j, button));
             }
+
+            widget.update();
         }
     }
 
