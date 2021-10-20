@@ -10,9 +10,8 @@ allprojects {
     apply(plugin = "maven-publish")
 
     java {
-        toolchain {
-            JavaLanguageVersion.of(8)
-        }
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     group = "dev.hawu.plugins"

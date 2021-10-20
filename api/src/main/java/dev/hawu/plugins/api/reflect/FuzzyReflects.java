@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Helper class for accessing class members reflectively
+ * without knowing much about said members.
+ */
 public final class FuzzyReflects {
 
     private FuzzyReflects() {}

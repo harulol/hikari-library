@@ -1,7 +1,6 @@
 java {
-    toolchain {
-        JavaLanguageVersion.of(16)
-    }
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {

@@ -32,6 +32,7 @@ public final class Tasks {
      * Tells the Bukkit Scheduler to cancel all tasks scheduled
      * by the plugin.
      *
+     * @param plugin The plugin whose tasks to cancel.
      * @since 1.0
      */
     public static void cancelAllTasks(final @NotNull JavaPlugin plugin) {
@@ -41,6 +42,7 @@ public final class Tasks {
     /**
      * Schedules a runnable that runs instantly synchronously.
      *
+     * @param plugin   The plugin to schedule with.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
      * @since 1.0
@@ -53,6 +55,7 @@ public final class Tasks {
     /**
      * Schedules a runnable that runs instantly and asynchronously.
      *
+     * @param plugin   The plugin to schedule with.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
      * @since 1.0
@@ -65,6 +68,7 @@ public final class Tasks {
     /**
      * Schedules a runnable that runs in the future after a certain number of ticks.
      *
+     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
@@ -79,6 +83,7 @@ public final class Tasks {
      * Schedules a runnable that runs in the future after a certain number of ticks,
      * and this runnable executes the code asynchronously.
      *
+     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
@@ -93,6 +98,7 @@ public final class Tasks {
      * Schedules a runnable that runs in the future after a certain number of ticks,
      * repeatedly in intervals.
      *
+     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait until the first execution.
      * @param interval Amount of ticks to wait between executions.
      * @param consumer The consumer that takes in the runnable every run.
@@ -108,6 +114,7 @@ public final class Tasks {
      * Schedules a runnable that runs in the future after a certain number of ticks,
      * repeatedly in intervals and all executions will be done asynchronously.
      *
+     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait until the first execution.
      * @param interval Amount of ticks to wait between executions.
      * @param consumer The consumer that takes in the runnable every run.
