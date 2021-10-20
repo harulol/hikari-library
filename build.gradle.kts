@@ -4,6 +4,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
+version = "1.0-SNAPSHOT"
+
 // Configuring main stuff for all projects.
 allprojects {
     apply(plugin = "java-library")
