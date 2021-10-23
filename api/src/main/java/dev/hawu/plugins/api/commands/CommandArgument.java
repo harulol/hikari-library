@@ -150,7 +150,7 @@ public final class CommandArgument {
     public String joinToString(final int startInclusive, final int endExclusive) {
         final StringJoiner joiner = new StringJoiner(" ");
         IntStream.range(startInclusive, endExclusive).forEach(i -> joiner.add(args.get(i)));
-        return joiner.toString();
+        return joiner.toString().trim();
     }
 
     /**
