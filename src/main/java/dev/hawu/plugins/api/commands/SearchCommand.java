@@ -48,12 +48,12 @@ public final class SearchCommand extends AbstractCommandClass {
         final int count = BaseCommand.extractInt(-1, properties, "-n", "--count");
 
         // Make sure all packages are cached before continuing
-        PackagesManager.getInstance().cache(sender.getBase(), () -> {
+        PackagesManager.getInstance().cache(sender, () -> {
             final List<PluginPackage> packages = PackagesManager.getInstance().filterPackages(query,
                 properties.containsKey("-e") || properties.containsKey("--exact"),
                 properties.containsKey("--id"), properties.containsKey("--name"), count).collect(Collectors.toList());
             if(packages.isEmpty()) {
-                PackagesManager.warnIfNotNull(sender.getBase(), "There are no packages matching the specified parameters.");
+                PackagesManager.warnIfNotNull(sender, "There are no packages matching the specified parameters.");
                 return;
             }
 

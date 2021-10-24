@@ -46,16 +46,16 @@ public final class UpgradeCommand extends AbstractCommandClass {
         final String query = BaseCommand.extractString(arguments.joinToString(0, arguments.size()), properties, "-q", "--query");
 
         // Make sure all packages are cached before continuing
-        PackagesManager.getInstance().cache(sender.getBase(), () -> {
+        PackagesManager.getInstance().cache(sender, () -> {
             final List<PluginPackage> packages = PackagesManager.getInstance().filterPackages(query,
                 properties.containsKey("-e") || properties.containsKey("--exact"),
                 properties.containsKey("--id"), properties.containsKey("--name"), -1).collect(Collectors.toList());
 
             if(packages.size() == 0) {
-                PackagesManager.warnIfNotNull(sender.getBase(), "There are no packages matching the specified parameters.");
+                PackagesManager.warnIfNotNull(sender, "There are no packages matching the specified parameters.");
                 return;
             } else if(packages.size() > 1) {
-                PackagesManager.warnIfNotNull(sender.getBase(), "There are too many packages matching the specified parameters. Please refine the inputs.");
+                PackagesManager.warnIfNotNull(sender, "There are too many packages matching the specified parameters. Please refine the inputs.");
                 packages.forEach(pkg -> sender.sendMessage(String.format("- %s (%s)", pkg.getName(), pkg.getId())));
                 return;
             }
@@ -65,11 +65,11 @@ public final class UpgradeCommand extends AbstractCommandClass {
             if(pkg.getLatestRelease() != null && version == null) version = pkg.getLatestRelease().getTagName();
 
             if(version == null) {
-                PackagesManager.severeIfNotNull(sender.getBase(), "Couldn't find any version to install.");
+                PackagesManager.severeIfNotNull(sender, "Couldn't find any version to install.");
                 return;
             }
 
-            PackagesManager.getInstance().upgradePackage(sender.getBase(), packages.get(0), version,
+            PackagesManager.getInstance().upgradePackage(sender, packages.get(0), version,
                 properties.containsKey("--verbose"), properties.containsKey("--force"));
         }, true);
     }

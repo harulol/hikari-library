@@ -46,21 +46,21 @@ public final class UninstallCommand extends AbstractCommandClass {
         final String query = BaseCommand.extractString(arguments.joinToString(0, arguments.size()), properties, "-q", "--query");
 
         // Make sure all packages are cached before continuing
-        PackagesManager.getInstance().cache(sender.getBase(), () -> {
+        PackagesManager.getInstance().cache(sender, () -> {
             final List<PluginPackage> packages = PackagesManager.getInstance().filterPackages(query,
                 properties.containsKey("-e") || properties.containsKey("--exact"),
                 properties.containsKey("--id"), properties.containsKey("--name"), -1).collect(Collectors.toList());
 
             if(packages.size() == 0) {
-                PackagesManager.warnIfNotNull(sender.getBase(), "There are no packages matching the specified parameters.");
+                PackagesManager.warnIfNotNull(sender, "There are no packages matching the specified parameters.");
                 return;
             } else if(packages.size() > 1) {
-                PackagesManager.warnIfNotNull(sender.getBase(), "There are too many packages matching the specified parameters. Please refine the inputs.");
+                PackagesManager.warnIfNotNull(sender, "There are too many packages matching the specified parameters. Please refine the inputs.");
                 packages.forEach(pkg -> sender.sendMessage(String.format("- %s (%s)", pkg.getName(), pkg.getId())));
                 return;
             }
 
-            PackagesManager.getInstance().uninstallPackage(sender.getBase(), packages.get(0), properties.containsKey("--verbose"),
+            PackagesManager.getInstance().uninstallPackage(sender, packages.get(0), properties.containsKey("--verbose"),
                 properties.containsKey("--nogc"), properties.containsKey("-r"), properties.containsKey("--force"));
         }, true);
     }

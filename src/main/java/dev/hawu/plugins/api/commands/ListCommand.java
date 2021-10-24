@@ -48,7 +48,7 @@ public final class ListCommand extends AbstractCommandClass {
         final int count = BaseCommand.extractInt(-1, properties, "-n", "--count");
 
         // Make sure all packages are cached before continuing
-        PackagesManager.getInstance().cache(sender.getBase(), () -> PackagesManager.getInstance().filterPackages(query,
+        PackagesManager.getInstance().cache(sender, () -> PackagesManager.getInstance().filterPackages(query,
                 properties.containsKey("-e") || properties.containsKey("--exact"),
                 properties.containsKey("--id"), properties.containsKey("--name"), count)
             .filter(pkg -> PackagesManager.getInstance().isPackageInstalled(pkg.getId()))

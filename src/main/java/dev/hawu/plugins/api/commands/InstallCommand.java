@@ -48,16 +48,16 @@ public final class InstallCommand extends AbstractCommandClass {
         final String query = BaseCommand.extractString(arguments.joinToString(0, arguments.size()), properties, "-q", "--query");
 
         // Make sure all packages are cached before continuing
-        PackagesManager.getInstance().cache(sender.getBase(), () -> {
+        PackagesManager.getInstance().cache(sender, () -> {
             final List<PluginPackage> packages = PackagesManager.getInstance().filterPackages(query,
                 properties.containsKey("-e") || properties.containsKey("--exact"),
                 properties.containsKey("--id"), properties.containsKey("--name"), -1).collect(Collectors.toList());
 
             if(packages.size() == 0) {
-                PackagesManager.warnIfNotNull(sender.getBase(), "There are no packages matching the specified parameters.");
+                PackagesManager.warnIfNotNull(sender, "There are no packages matching the specified parameters.");
                 return;
             } else if(packages.size() > 1) {
-                PackagesManager.warnIfNotNull(sender.getBase(), "There are too many packages matching the specified parameters. Please refine the inputs.");
+                PackagesManager.warnIfNotNull(sender, "There are too many packages matching the specified parameters. Please refine the inputs.");
                 packages.forEach(pkg -> sender.sendMessage(String.format("- %s (%s)", pkg.getName(), pkg.getId())));
                 return;
             }
@@ -67,11 +67,11 @@ public final class InstallCommand extends AbstractCommandClass {
             version = version == null && pkg.getLatestRelease() != null ? pkg.getLatestRelease().getTagName() : version;
 
             if(version == null) {
-                PackagesManager.severeIfNotNull(sender.getBase(), "Unable to fetch version to install.");
+                PackagesManager.severeIfNotNull(sender, "Unable to fetch version to install.");
                 return;
             }
 
-            PackagesManager.getInstance().installPackage(sender.getBase(), pkg, version, properties.containsKey("--verbose"),
+            PackagesManager.getInstance().installPackage(sender, pkg, version, properties.containsKey("--verbose"),
                 properties.containsKey("-l") || properties.containsKey("--load"), properties.containsKey("--force"));
         }, true);
     }
