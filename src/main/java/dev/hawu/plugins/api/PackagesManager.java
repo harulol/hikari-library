@@ -34,9 +34,9 @@ import java.util.stream.Stream;
 public final class PackagesManager {
 
     private static final long FIVE_MINUTES = 5 * 60 * 1000;
-    private static final String INFO_PREFIX = "&a&l(!) &aInfo &8| &a";
-    private static final String WARN_PREFIX = "&6&l(!) &6Warn &8| &6";
-    private static final String SEVERE_PREFIX = "&c&l(!) &cSevere &8| &6";
+    private static final String INFO_PREFIX = "&a&l(!)&a Info &8| &a";
+    private static final String WARN_PREFIX = "&6&l(!)&6 Warn &8| &6";
+    private static final String SEVERE_PREFIX = "&c&l(!)&c Severe &8| &6";
     private static final JsonParser parser = new JsonParser();
     private static final Method GET_FILE = UncheckedReflects.getMethod(JavaPlugin.class, true, "getFile");
     private static PackagesManager instance;
@@ -98,8 +98,15 @@ public final class PackagesManager {
 
             for(final JsonElement e : obj.get("assets").getAsJsonArray()) {
                 final JsonObject asset = e.getAsJsonObject();
-                assets.add(new Asset(asset.get("id").getAsLong(), asset.get("name").getAsString(), asset.get("label").getAsString(),
-                    asset.get("content_type").getAsString(), asset.get("size").getAsLong(), asset.get("browser_download_url").getAsString()));
+
+                final long idNum = asset.get("id").getAsLong();
+                final String name = asset.get("name").getAsString();
+                final String label = asset.get("label").isJsonNull() ? null : asset.get("label").getAsString();
+                final String contentType = asset.get("content_type").getAsString();
+                final long size = asset.get("size").getAsLong();
+                final String downloadURL = asset.get("browser_download_url").getAsString();
+
+                assets.add(new Asset(idNum, name, label, contentType, size, downloadURL));
             }
 
             releases.add(new Release(obj.get("id").getAsLong(), obj.get("name").getAsString(), obj.get("tag_name").getAsString(),

@@ -14,7 +14,7 @@ public final class Asset {
     private final long size;
     private final String downloadURL;
 
-    public Asset(final long id, final @NotNull String name, final @NotNull String label,
+    public Asset(final long id, final @NotNull String name, final @Nullable String label,
                  final @NotNull String contentType, final long size, final @NotNull String downloadURL) {
         this.id = id;
         this.name = name;
@@ -33,7 +33,7 @@ public final class Asset {
         return name;
     }
 
-    @NotNull
+    @Nullable
     public String getLabel() {
         return label;
     }
@@ -67,14 +67,12 @@ public final class Asset {
 
     @NotNull
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Asset{");
-        sb.append("\"id\":").append(id).append(",");
-        sb.append("\"name\":").append(name).append(",");
-        sb.append("\"label\":").append(label).append(",");
-        sb.append("\"size\":").append(size).append(",");
-        sb.append("\"content_type\":").append(contentType).append(",");
-        sb.append("\"download\":").append(downloadURL).append("}");
-        return sb.toString();
+        return "Asset{" + "\"id\":" + id + "," +
+            "\"name\":" + name + "," +
+            "\"label\":" + label + "," +
+            "\"size\":" + size + "," +
+            "\"content_type\":" + contentType + "," +
+            "\"download\":" + downloadURL + "}";
     }
 
 }

@@ -27,7 +27,7 @@ public final class HikariLibrary extends JavaPlugin {
         BukkitMaterial.reInitDisplayableMaterials(this);
         new BaseCommand(this);
         this.saveDefaultConfig();
-        authToken = this.getConfig().getString("authToken");
+        authToken = this.getConfig().getString("token");
         if(authToken.matches("[^A-Za-z0-9]+")) {
             getLogger().severe("Authentication token is invalid.");
             authToken = null;
