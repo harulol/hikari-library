@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * and fields from classes reflectively without the need
  * of {@code try-catch} blocks due to checked exceptions.
  *
- * @since 1.2
+ * @since 1.0
  */
 public final class UncheckedReflects {
 
@@ -23,7 +23,7 @@ public final class UncheckedReflects {
      * @param declared Whether the constructor is declared.
      * @param types    The parameter types for the constructor.
      * @return A {@link Constructor} if found, {@code null} otherwise.
-     * @since 1.2
+     * @since 1.0
      */
     @Nullable
     public static Constructor<?> getConstructor(final @NotNull Class<?> cls, final boolean declared, final @NotNull Class<?> @NotNull ... types) {
@@ -44,7 +44,7 @@ public final class UncheckedReflects {
      * @param name     The name of the method.
      * @param params   The parameter types of the method.
      * @return A {@link Method} if found, {@code null} otherwise.
-     * @since 1.2
+     * @since 1.0
      */
     @Nullable
     public static Method getMethod(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name, final @NotNull Class<?> @NotNull ... params) {
@@ -64,7 +64,7 @@ public final class UncheckedReflects {
      * @param declared Whether the field is declared by cls.
      * @param name     The name of the field.
      * @return A {@link Field} if found, {@code null} otherwise.
-     * @since 1.2
+     * @since 1.0
      */
     @Nullable
     public static Field getField(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name) {
@@ -85,7 +85,7 @@ public final class UncheckedReflects {
      * @param types    The parameter types for the constructor.
      * @return A {@link Constructor} if found.
      * @throws LookupException If the constructor is not found.
-     * @since 1.2
+     * @since 1.0
      */
     @NotNull
     public static Constructor<?> getConstructorOrThrow(final @NotNull Class<?> cls, final boolean declared, final @NotNull Class<?> @NotNull ... types) {
@@ -107,7 +107,7 @@ public final class UncheckedReflects {
      * @param params   The parameter types for the method.
      * @return A {@link Method} if found.
      * @throws LookupException If the method is not found.
-     * @since 1.2
+     * @since 1.0
      */
     @NotNull
     public static Method getMethodOrThrow(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name, final @NotNull Class<?> @NotNull ... params) {
@@ -128,7 +128,7 @@ public final class UncheckedReflects {
      * @param name     The name of the field.
      * @return A {@link Field} if found.
      * @throws LookupException If the method is not found.
-     * @since 1.2
+     * @since 1.0
      */
     @NotNull
     public static Field getFieldOrThrow(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name) {

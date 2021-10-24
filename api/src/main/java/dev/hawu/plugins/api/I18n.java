@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
  * Represents a utility class that helps to translate keys into
  * usable messages.
  *
- * @since 1.2
+ * @since 1.0
  */
 public final class I18n {
 
@@ -26,7 +26,7 @@ public final class I18n {
      * Retrieves an instance of I18n using the plugin.
      *
      * @param plugin The plugin to construct with.
-     * @since 1.2
+     * @since 1.0
      */
     public I18n(final @NotNull JavaPlugin plugin) {
         this.plugin = plugin;
@@ -44,7 +44,7 @@ public final class I18n {
     /**
      * Loads the messages again from the file.
      *
-     * @since 1.2
+     * @since 1.0
      */
     public void reload() {
         // Make sure that file exists.
@@ -60,7 +60,7 @@ public final class I18n {
      * @param key   The key to translate.
      * @param pairs The placeholders to fill in pairs.
      * @return The translated message, colorized.
-     * @since 1.2
+     * @since 1.0
      */
     public String tl(@NotNull final String key, @NotNull final Pair<?, ?> @NotNull ... pairs) {
         final String value;

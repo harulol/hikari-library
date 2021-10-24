@@ -11,14 +11,76 @@ import org.jetbrains.annotations.Nullable;
  */
 public enum TimeUnit {
 
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 0.000001} milliseconds.
+     *
+     * @since 1.0
+     */
     NANOSECOND(1e-6, "ns"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 0.001} milliseconds.
+     *
+     * @since 1.0
+     */
     MICROSECOND(1e-3, "μs"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 1} millisecond.
+     *
+     * @since 1.0
+     */
     MILLISECOND(1.0, "ms"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 1000} milliseconds.
+     *
+     * @since 1.0
+     */
     SECOND(1e3, "s"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 60,000} milliseconds.
+     *
+     * @since 1.0
+     */
     MINUTE(6e4, "m"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 3,600,000} milliseconds.
+     *
+     * @since 1.0
+     */
     HOUR(3.6e6, "h"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 86,400,000} milliseconds.
+     *
+     * @since 1.0
+     */
     DAY(8.64e7, "d"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 604,800,000} milliseconds.
+     *
+     * @since 1.0
+     */
     WEEK(6.048e8, "w"),
+
+    /**
+     * Represents to a type of unit of time measurement
+     * that evaluates to {@code 2,628,000,000} milliseconds.
+     *
+     * @since 1.0
+     */
     MONTH(2.628e9, "mo");
 
     private static TimeUnit[] reversedArray;

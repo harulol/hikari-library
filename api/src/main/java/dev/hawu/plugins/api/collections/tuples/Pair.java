@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Pair<A, B> {
 
-    private final @Nullable A first;
-    private final @Nullable B second;
+    private final A first;
+    private final B second;
 
     /**
      * Constructs a pair with the provided values.
@@ -56,7 +56,7 @@ public class Pair<A, B> {
      * {@link Pair#getFirst()}.
      *
      * @return The first component of the tuple.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public final A component1() {
@@ -69,7 +69,7 @@ public class Pair<A, B> {
      * {@link Pair#getSecond()}.
      *
      * @return The second component of the tuple.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public final B component2() {

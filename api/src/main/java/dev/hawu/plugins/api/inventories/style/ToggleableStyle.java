@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  * Both states are immutable, but not frozen. Transformers and functions
  * may apply changes to them, but the fields never mutate.
  *
- * @since 2.0
+ * @since 1.0
  */
 public final class ToggleableStyle implements Style {
 
@@ -28,7 +28,7 @@ public final class ToggleableStyle implements Style {
      *
      * @param enabled  The item to display when the state is on.
      * @param disabled The item to display when the state is off.
-     * @since 2.0
+     * @since 1.0
      */
     public ToggleableStyle(@NotNull final ItemStack enabled, @NotNull final ItemStack disabled) {
         this.enabled = enabled;
@@ -39,7 +39,7 @@ public final class ToggleableStyle implements Style {
      * Toggles the state of this style, marking it as on if it was
      * previously off and vice versa.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void toggle() {
         isEnabled = !isEnabled;
@@ -49,7 +49,7 @@ public final class ToggleableStyle implements Style {
      * Checks the state of this style.
      *
      * @return True if it is on, false otherwise.
-     * @since 2.0
+     * @since 1.0
      */
     public boolean isEnabled() {
         return isEnabled;
@@ -60,7 +60,7 @@ public final class ToggleableStyle implements Style {
      * when the state is on.
      *
      * @param consumer The transformer to apply.
-     * @since 2.0
+     * @since 1.0
      */
     public void transformEnabledItem(@NotNull final Consumer<ItemStack> consumer) {
         consumer.accept(enabled);
@@ -71,7 +71,7 @@ public final class ToggleableStyle implements Style {
      * when the state is off.
      *
      * @param consumer The transformer to apply.
-     * @since 2.0
+     * @since 1.0
      */
     public void transformDisabledItem(@NotNull final Consumer<ItemStack> consumer) {
         consumer.accept(disabled);

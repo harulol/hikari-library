@@ -72,7 +72,7 @@ public final class LoreBuilder {
      *
      * @param collection The collection to append.
      * @return The same receiver.
-     * @since 2.3
+     * @since 1.0
      */
     public LoreBuilder addAll(final @NotNull Collection<? extends String> collection) {
         lore.addAll(collection.stream().map(Strings::color).collect(Collectors.toList()));
@@ -86,7 +86,7 @@ public final class LoreBuilder {
      * @param index      The index to append at.
      * @param collection The collection to append.
      * @return The same receiver.
-     * @since 2.3
+     * @since 1.0
      */
     public LoreBuilder addAll(final int index, @NotNull final Collection<? extends String> collection) {
         lore.addAll(index, collection.stream().map(Strings::color).collect(Collectors.toList()));

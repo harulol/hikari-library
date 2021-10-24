@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents an element that can be clicked in a widget.
  *
- * @since 2.0
+ * @since 1.0
  */
 public interface Clickable {
 
@@ -14,7 +14,7 @@ public interface Clickable {
      * Handles the passed in event.
      *
      * @param event The event to handle.
-     * @since 2.0
+     * @since 1.0
      */
     void onClick(@NotNull final InventoryClickEvent event);
 

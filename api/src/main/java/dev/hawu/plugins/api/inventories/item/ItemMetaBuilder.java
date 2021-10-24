@@ -124,7 +124,7 @@ public class ItemMetaBuilder {
      *
      * @param lore The lore to set.
      * @return The same receiver.
-     * @since 2.2
+     * @since 1.0
      */
     @NotNull
     public final ItemMetaBuilder withColoredLore(@Nullable final List<String> lore) {

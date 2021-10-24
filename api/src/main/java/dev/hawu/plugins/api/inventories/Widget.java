@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * using known interfaces like double chest inventories, furnaces,
  * crafting tables, hoppers, etc.
  *
- * @since 2.0
+ * @since 1.0
  */
 public final class Widget implements InventoryHolder {
 
@@ -33,7 +33,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param size  The size of the widget.
      * @param title The title of the widget, colorized.
-     * @since 2.0
+     * @since 1.0
      */
     public Widget(@NotNull final InventorySize size, @Nullable final String title) {
         this.inventory = Bukkit.createInventory(this, size.getSlots(), Strings.color(title));
@@ -46,7 +46,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param type  The type of the inventory.
      * @param title The title of the widget, colorized.
-     * @since 2.0
+     * @since 1.0
      */
     public Widget(@NotNull final InventoryType type, @Nullable final String title) {
         this.inventory = Bukkit.createInventory(this, type, Strings.color(title));
@@ -76,7 +76,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param index The index to retrieve at.
      * @return A {@link Clickable} instance if available, {@code null} otherwise.
-     * @since 2.0
+     * @since 1.0
      */
     @Nullable
     public Clickable get(final int index) {
@@ -89,7 +89,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param index The index to retrieve at.
      * @return A {@link Styleable} instance if available, {@code null} otherwise.
-     * @since 2.0
+     * @since 1.0
      */
     @Nullable
     public Styleable<?> getStyleable(final int index) {
@@ -102,7 +102,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param index The index to retrieve at.
      * @return A {@link Valuable} instance if available, {@code null} otherwise.
-     * @since 2.0
+     * @since 1.0
      */
     @Nullable
     public Valuable<?> getValuable(final int index) {
@@ -115,7 +115,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param index The index to retrieve at.
      * @return A {@link Button} instance if available, {@code null} otherwise.
-     * @since 2.0
+     * @since 1.0
      */
     @Nullable
     public Button<?> getButton(final int index) {
@@ -127,7 +127,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param index The index to retrieve at.
      * @return A {@link ValuedButton} instance if available, {@code null} otherwise.
-     * @since 2.0
+     * @since 1.0
      */
     @Nullable
     public ValuedButton<?, ?> getValuedButton(final int index) {
@@ -139,7 +139,7 @@ public final class Widget implements InventoryHolder {
      *
      * @param index     The index to put at.
      * @param clickable The clickable to put.
-     * @since 2.0
+     * @since 1.0
      */
     public void put(final int index, @Nullable final Clickable clickable) {
         content[index] = clickable;
@@ -148,7 +148,7 @@ public final class Widget implements InventoryHolder {
     /**
      * Attempts to update all slots present within this inventory.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void update() {
         for(int i = 0; i < content.length; i++)
@@ -160,7 +160,7 @@ public final class Widget implements InventoryHolder {
      * inventory view.
      *
      * @param slot The slot to update.
-     * @since 2.0
+     * @since 1.0
      */
     public void update(final int slot) {
         if(content[slot] instanceof Styleable<?>) inventory.setItem(slot, ((Styleable<?>) content[slot]).getStyle().getDisplay());
@@ -170,7 +170,7 @@ public final class Widget implements InventoryHolder {
      * Handles the passed in event.
      *
      * @param event The event to handle.
-     * @since 2.0
+     * @since 1.0
      */
     public void handle(@NotNull final InventoryClickEvent event) {
         if(event.getRawSlot() >= inventory.getSize() || event.getSlotType() == InventoryType.SlotType.OUTSIDE) {
@@ -184,7 +184,7 @@ public final class Widget implements InventoryHolder {
      * Opens the inventory for a known human entity.
      *
      * @param entity The entity to open to.
-     * @since 2.0
+     * @since 1.0
      */
     public void open(@NotNull final HumanEntity entity) {
         entity.openInventory(inventory);

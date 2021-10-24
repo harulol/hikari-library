@@ -19,8 +19,8 @@ import java.util.stream.IntStream;
 @SuppressWarnings("deprecation")
 public final class CommandArgument {
 
-    private final @NotNull List<@NotNull String> args;
-    private @Nullable CommandLine cli;
+    private final List<String> args;
+    private CommandLine cli;
 
     /**
      * Initialize the class with the arguments in a form of a {@link String} array.
@@ -90,6 +90,28 @@ public final class CommandArgument {
     @Nullable
     public String get(final int index) {
         return index >= args.size() || index < 0 ? null : args.get(index);
+    }
+
+    /**
+     * Retrieves the current last argument.
+     *
+     * @return The last argument.
+     * @since 1.0
+     */
+    @NotNull
+    public String last() {
+        return getNonNull(args.size() - 1);
+    }
+
+    /**
+     * Retrieves the current last argument, or null if it does not exist.
+     *
+     * @return The last argument, or null.
+     * @since 1.0
+     */
+    @Nullable
+    public String lastOrNull() {
+        return get(args.size() - 1);
     }
 
     /**

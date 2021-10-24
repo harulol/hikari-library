@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * that only has one function to retrieve
  * the currently displaying item.
  *
- * @since 2.0
+ * @since 1.0
  */
 public interface Style {
 
@@ -17,7 +17,7 @@ public interface Style {
      * at the moment of invocation.
      *
      * @return The item stack to display.
-     * @since 2.0
+     * @since 1.0
      */
     @NotNull ItemStack getDisplay();
 

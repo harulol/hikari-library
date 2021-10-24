@@ -194,7 +194,63 @@ public final class Tasks {
      */
     public enum TaskType {
 
-        SYNC, ASYNC, LATER_SYNC, LATER_ASYNC, TIMER_SYNC, TIMER_ASYNC
+        /**
+         * A task that runs on the main thread immediately
+         * that might block the server.
+         *
+         * @since 1.1
+         */
+        SYNC,
+
+        /**
+         * A task that runs asynchronously and immediately.
+         * <p>
+         * <strong>Warning</strong>: Bukkit discourages the usages
+         * of their APIs from async tasks.
+         *
+         * @since 1.1
+         */
+        ASYNC,
+
+        /**
+         * A task that runs on the main thread after a certain
+         * amount of time.
+         *
+         * @since 1.1
+         */
+        LATER_SYNC,
+
+        /**
+         * A task that runs asynchronously after a certain amount
+         * of time.
+         * <p>
+         * <strong>Warning</strong>: Bukkit discourages the usages
+         * of their APIs from async tasks.
+         *
+         * @since 1.1
+         */
+        LATER_ASYNC,
+
+        /**
+         * A task that runs on the main thread after a certain amount
+         * of time, and will continue to run in intervals until the registering
+         * plugin is disabled or the task is cancelled.
+         *
+         * @since 1.1
+         */
+        TIMER_SYNC,
+
+        /**
+         * A task that runs asynchronously after a certain amount of
+         * time, and will continue to run in intervals until the registering
+         * plugin is disabled or the task is cancelled.
+         * <p>
+         * <strong>Warning</strong>: Bukkit discourages the usages of their
+         * APIs from async tasks.
+         *
+         * @since 1.1
+         */
+        TIMER_ASYNC
 
     }
 

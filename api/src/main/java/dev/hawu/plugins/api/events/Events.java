@@ -4,9 +4,11 @@ import dev.hawu.plugins.api.events.listener.ClosableListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 /**
@@ -51,6 +53,18 @@ public final class Events {
     @NotNull
     public static <T extends Event> EventSubscriptionBuilder<@NotNull T> newSubscription() {
         return new EventSubscriptionBuilder<>();
+    }
+
+    /**
+     * Registers multiple listeners to a single plugin instance within
+     * one method invocation.
+     *
+     * @param plugin    The plugin to register with.
+     * @param listeners The array of listeners to register.
+     * @since 1.1
+     */
+    public static void registerEvents(final @NotNull JavaPlugin plugin, final @NotNull Listener @NotNull ... listeners) {
+        Arrays.stream(listeners).forEach(listener -> plugin.getServer().getPluginManager().registerEvents(listener, plugin));
     }
 
 }

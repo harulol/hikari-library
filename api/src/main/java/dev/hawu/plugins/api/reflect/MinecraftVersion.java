@@ -9,21 +9,116 @@ import org.jetbrains.annotations.NotNull;
  */
 public enum MinecraftVersion {
 
+    /**
+     * Represents Minecraft 1.8 to 1.8.2.
+     *
+     * @since 1.0
+     */
     v1_8_R1(1, 8, 0),
+
+    /**
+     * Represents Minecraft 1.8.3.
+     *
+     * @since 1.0
+     */
     v1_8_R2(1, 8, 3),
+
+    /**
+     * Represents Minecraft 1.8.4 to 1.8.9.
+     *
+     * @since 1.0
+     */
     v1_8_R3(1, 8, 4),
+
+    /**
+     * Represents Minecraft 1.9 to 1.9.1.
+     *
+     * @since 1.0
+     */
     v1_9_R1(1, 9, 0),
+
+    /**
+     * Represents Minecraft 1.9.2.
+     *
+     * @since 1.0
+     */
     v1_9_R2(1, 9, 2),
+
+    /**
+     * Represents Minecraft 1.10 to 1.10.2.
+     *
+     * @since 1.0
+     */
     v1_10_R1(1, 10, 0),
+
+    /**
+     * Represents Minecraft 1.11 to 1.11.2.
+     *
+     * @since 1.0
+     */
     v1_11_R1(1, 11, 0),
+
+    /**
+     * Represents Minecraft 1.12 to 1.12.2.
+     *
+     * @since 1.0
+     */
     v1_12_R1(1, 12, 0),
+
+    /**
+     * Represents Minecraft 1.13 to 1.13.1.
+     *
+     * @since 1.0
+     */
     v1_13_R1(1, 13, 0),
+
+    /**
+     * Represents Minecraft 1.13.2.
+     *
+     * @since 1.0
+     */
     v1_13_R2(1, 13, 2),
+
+    /**
+     * Represents Minecraft 1.14 to 1.14.4.
+     *
+     * @since 1.0
+     */
     v1_14_R1(1, 14, 0),
+
+    /**
+     * Represents Minecraft 1.15 to 1.15.2.
+     *
+     * @since 1.0
+     */
     v1_15_R1(1, 15, 0),
+
+    /**
+     * Represents Minecraft 1.16.1.
+     *
+     * @since 1.0
+     */
     v1_16_R1(1, 16, 1),
+
+    /**
+     * Represents Minecraft 1.16.2 to 1.16.3.
+     *
+     * @since 1.0
+     */
     v1_16_R2(1, 16, 2),
+
+    /**
+     * Represents Minecraft 1.16.4 to 1.16.5.
+     *
+     * @since 1.0
+     */
     v1_16_R3(1, 16, 4),
+
+    /**
+     * Represents Minecraft 1.17 to 1.17.1.
+     *
+     * @since 1.0
+     */
     v1_17_R1(1, 17, 0),
     ;
 

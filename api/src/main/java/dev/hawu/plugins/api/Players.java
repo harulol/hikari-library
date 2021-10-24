@@ -13,7 +13,7 @@ import java.lang.invoke.MethodType;
  * A small utility class to access off hand items and main hand
  * items from legacy APIs.
  *
- * @since 1.1
+ * @since 1.0
  */
 public final class Players {
 
@@ -48,7 +48,7 @@ public final class Players {
      *
      * @param inventory The inventory whose offhand slot to retrieve.
      * @return The item there, if possible, or {@code null} if there's nothing in the slot or an error happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static ItemStack getItemInOffHand(@NotNull final PlayerInventory inventory) {
@@ -65,7 +65,7 @@ public final class Players {
      *
      * @param inventory The inventory whose offhand slot to put.
      * @param item      The item to put.
-     * @since 1.1
+     * @since 1.0
      */
     public static void setItemInOffHand(@NotNull final PlayerInventory inventory, @Nullable final ItemStack item) {
         try {
@@ -80,7 +80,7 @@ public final class Players {
      *
      * @param inventory The inventory whose slot to retrieve.
      * @return The {@link ItemStack} at the main hand slot.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static ItemStack getItemInMainHand(@NotNull final PlayerInventory inventory) {
@@ -98,7 +98,7 @@ public final class Players {
      *
      * @param inventory The inventory whose main hand slot to put.
      * @param item      The item to put.
-     * @since 1.1
+     * @since 1.0
      */
     public static void setItemInMainHand(@NotNull final PlayerInventory inventory, @Nullable final ItemStack item) {
         try {

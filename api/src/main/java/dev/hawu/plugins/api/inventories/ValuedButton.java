@@ -13,20 +13,21 @@ import java.util.function.BiConsumer;
  *
  * @param <T> The type of the value.
  * @param <S> The type of the style.
- * @since 2.0
+ * @since 1.0
  */
 public final class ValuedButton<T, S extends Style> implements Clickable, Styleable<S>, Valuable<T> {
 
     private final S style;
     private T value;
     private BiConsumer<T, InventoryClickEvent> consumer;
+    private Widget widget;
 
     /**
      * Constructs a valued button, with initial value and style.
      *
      * @param initialValue The value to init with.
      * @param style        The style to init with.
-     * @since 2.0
+     * @since 1.0
      */
     public ValuedButton(@Nullable final T initialValue, @NotNull final S style) {
         this.value = initialValue;
@@ -40,7 +41,7 @@ public final class ValuedButton<T, S extends Style> implements Clickable, Stylea
      * will be used in the handler.
      *
      * @param event The event to handle.
-     * @since 2.0
+     * @since 1.0
      */
     @Override
     public void onClick(final @NotNull InventoryClickEvent event) {
@@ -57,7 +58,7 @@ public final class ValuedButton<T, S extends Style> implements Clickable, Stylea
      * the type of the value and the {@link InventoryClickEvent}.
      *
      * @param consumer The handler of this button.
-     * @since 2.0
+     * @since 1.0
      */
     public void setHandler(@NotNull final BiConsumer<@Nullable T, @NotNull InventoryClickEvent> consumer) {
         this.consumer = consumer;
@@ -68,7 +69,7 @@ public final class ValuedButton<T, S extends Style> implements Clickable, Stylea
      * or sets the field if it's not yet initialized.
      *
      * @param other The other consumer to chain with.
-     * @since 2.0
+     * @since 1.0
      */
     public void andThen(@NotNull final BiConsumer<@Nullable T, @NotNull InventoryClickEvent> other) {
         if(this.consumer == null) this.consumer = other;

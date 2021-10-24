@@ -7,7 +7,19 @@ package dev.hawu.plugins.api.math.progressions;
  */
 public abstract class Progression {
 
+    /**
+     * The starting number of this progression.
+     *
+     * @since 1.0
+     */
     protected final long from;
+
+    /**
+     * The common difference between each term
+     * of the progression.
+     *
+     * @since 1.0
+     */
     protected final long step;
 
     /**

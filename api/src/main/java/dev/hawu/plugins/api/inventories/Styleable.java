@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents a widget's element that can have a style.
  *
  * @param <S> The type of the style.
- * @since 2.0
+ * @since 1.0
  */
 public interface Styleable<S extends Style> {
 
@@ -15,7 +15,7 @@ public interface Styleable<S extends Style> {
      * Gets the style of the element.
      *
      * @return The style of the element.
-     * @since 2.0
+     * @since 1.0
      */
     @NotNull
     S getStyle();

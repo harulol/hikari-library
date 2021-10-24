@@ -76,7 +76,7 @@ public final class SpecializedListener<T extends Event> implements ClosableListe
     }
 
     @EventHandler
-    public void onEvent(@NotNull final T event) {
+    private void onEvent(@NotNull final T event) {
         if((timedExpiry > 0 && registration + timedExpiry <= System.currentTimeMillis())
             || (invocationExpiry > 0 && invocationsCount >= invocationExpiry)) {
             close();

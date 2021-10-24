@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
  * without the need of try-catch clauses because of
  * checked exceptions.
  *
- * @since 1.1
+ * @since 1.0
  */
 public final class UncheckedHandles {
 
@@ -31,7 +31,7 @@ public final class UncheckedHandles {
      * @param ref  The class to lookup.
      * @param type The constructor method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findConstructor(@NotNull final Class<?> ref, @NotNull final MethodType type) {
@@ -50,7 +50,7 @@ public final class UncheckedHandles {
      * @param name The name of the field.
      * @param type The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findGetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
@@ -69,7 +69,7 @@ public final class UncheckedHandles {
      * @param name The name of the field.
      * @param type The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findSetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
@@ -88,7 +88,7 @@ public final class UncheckedHandles {
      * @param name The name of the field.
      * @param type The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findStaticGetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
@@ -107,7 +107,7 @@ public final class UncheckedHandles {
      * @param name The name of the field.
      * @param type The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findStaticSetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
@@ -126,7 +126,7 @@ public final class UncheckedHandles {
      * @param name The name of the method.
      * @param type The method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findStatic(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
@@ -145,7 +145,7 @@ public final class UncheckedHandles {
      * @param name The name of the method.
      * @param type The method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findVirtual(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
@@ -165,7 +165,7 @@ public final class UncheckedHandles {
      * @param type          The method type.
      * @param specialCaller The proposed calling class to invoke {@code invokespecial}.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle findSpecial(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type, @NotNull final Class<?> specialCaller) {
@@ -182,7 +182,7 @@ public final class UncheckedHandles {
      *
      * @param m The method to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle unreflect(@NotNull final Method m) {
@@ -199,7 +199,7 @@ public final class UncheckedHandles {
      *
      * @param c The constructor to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle unreflect(@NotNull final Constructor<?> c) {
@@ -216,7 +216,7 @@ public final class UncheckedHandles {
      *
      * @param f The field whose getter to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle unreflectGetter(@NotNull final Field f) {
@@ -233,7 +233,7 @@ public final class UncheckedHandles {
      *
      * @param f The field whose setter to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle unreflectSetter(@NotNull final Field f) {
@@ -251,7 +251,7 @@ public final class UncheckedHandles {
      * @param m             The method to unreflect.
      * @param specialCaller The class to invoke {@code invokespecial}.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public static MethodHandle unreflectSpecial(@NotNull final Method m, @NotNull Class<?> specialCaller) {

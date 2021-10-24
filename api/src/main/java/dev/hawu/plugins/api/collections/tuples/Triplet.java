@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Triplet<A, B, C> extends Pair<A, B> {
 
-    private final @Nullable C third;
+    private final C third;
 
     /**
      * Constructs a triplet with the provided values.
@@ -46,7 +46,7 @@ public class Triplet<A, B, C> extends Pair<A, B> {
      * {@link Triplet#getThird()}.
      *
      * @return The third component of the tuple.
-     * @since 1.1
+     * @since 1.0
      */
     @Nullable
     public final C component3() {

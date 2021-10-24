@@ -11,11 +11,11 @@ import org.jetbrains.annotations.Nullable;
  * @param <B> The type of the second value.
  * @param <C> The type of the third value.
  * @param <D> The type of the fourth value.
- * @since 1.2
+ * @since 1.0
  */
 public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
 
-    private final @Nullable D fourth;
+    private final D fourth;
 
     /**
      * Constructs a quintuple with the provided values.
@@ -24,7 +24,7 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
      * @param second The second value.
      * @param third  The third value.
      * @param fourth The fourth value.
-     * @since 1.2
+     * @since 1.0
      */
     public Quadruple(@Nullable final A first, @Nullable final B second, @Nullable final C third, @Nullable final D fourth) {
         super(first, second, third);
@@ -35,7 +35,7 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
      * Retrieves the fourth value of the tuple.
      *
      * @return The fourth value of the tuple, nullable.
-     * @since 1.2
+     * @since 1.0
      */
     @Nullable
     public final D getFourth() {
@@ -48,7 +48,7 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
      * {@link Quintuple#getFourth()}.
      *
      * @return The fourth component of the tuple.
-     * @since 1.2
+     * @since 1.0
      */
     @Nullable
     public final D component4() {

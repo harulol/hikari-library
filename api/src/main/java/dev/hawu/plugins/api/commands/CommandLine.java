@@ -13,8 +13,8 @@ import java.util.*;
  */
 public final class CommandLine {
 
-    private final @NotNull Set<@NotNull String> flags = new HashSet<>();
-    private final @NotNull Set<@NotNull String> props = new HashSet<>();
+    private final Set<String> flags = new HashSet<>();
+    private final Set<String> props = new HashSet<>();
 
     /**
      * Marks the following argument as a flag. Values that follow these

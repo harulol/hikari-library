@@ -16,7 +16,7 @@ import java.util.List;
  * Represents an effectively doubly linked list of widgets,
  * with buttons to traverse backwards and forwards.
  *
- * @since 2.0
+ * @since 1.0
  */
 public final class WidgetPaginator {
 
@@ -32,7 +32,7 @@ public final class WidgetPaginator {
     /**
      * Constructs a simple widget paginator.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public WidgetPaginator() {}
 
@@ -40,7 +40,7 @@ public final class WidgetPaginator {
      * Adds a widget to the underlying list.
      *
      * @param widget The widget to add.
-     * @since 2.0
+     * @since 1.0
      */
     public void append(@NotNull final Widget widget) {
         widgets.add(widget);
@@ -51,7 +51,7 @@ public final class WidgetPaginator {
      *
      * @param index  The position to insert.
      * @param widget The widget to add.
-     * @since 2.0
+     * @since 1.0
      */
     public void append(final int index, @NotNull final Widget widget) {
         widgets.add(index, widget);
@@ -62,7 +62,7 @@ public final class WidgetPaginator {
      * buttons that traverse the list backwards.
      *
      * @param indicies The slots to place previous buttons.
-     * @since 2.0
+     * @since 1.0
      */
     public void addAllPreviousSlots(final int @NotNull ... indicies) {
         Arrays.stream(indicies).forEach(previousSlots::add);
@@ -73,7 +73,7 @@ public final class WidgetPaginator {
      * buttons that traverse the list forwards.
      *
      * @param indices The slots to place next buttons.
-     * @since 2.0
+     * @since 1.0
      */
     public void addAllNextSlots(final int @NotNull ... indices) {
         Arrays.stream(indices).forEach(nextSlots::add);
@@ -84,7 +84,7 @@ public final class WidgetPaginator {
      * will be replaced with the next page accordingly in {@link WidgetPaginator#createControls()}.
      *
      * @param item The template item.
-     * @since 2.0
+     * @since 1.0
      */
     public void setNext(@NotNull final ItemStack item) {
         next = item;
@@ -95,7 +95,7 @@ public final class WidgetPaginator {
      * will be replaced with the previous page accordingly in {@link WidgetPaginator#createControls()}.
      *
      * @param item The template item.
-     * @since 2.0
+     * @since 1.0
      */
     public void setPrevious(@NotNull final ItemStack item) {
         previous = item;
@@ -116,7 +116,7 @@ public final class WidgetPaginator {
      * First page will not have buttons to traverse backwards, and last page
      * will not have buttons to traverse forwards.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public void createControls() {
         for(int i = 0; i < widgets.size(); i++) {
@@ -175,7 +175,7 @@ public final class WidgetPaginator {
      * @param index The position to retrieve at.
      * @return The widget at the position, or throw an error.
      * @throws IndexOutOfBoundsException If the index is out of bounds.
-     * @since 2.0
+     * @since 1.0
      */
     @NotNull
     public Widget get(final int index) {
@@ -189,7 +189,7 @@ public final class WidgetPaginator {
      *
      * @param entity The entity to open to.
      * @param page   The page to open.
-     * @since 2.0
+     * @since 1.0
      */
     public void open(@NotNull final HumanEntity entity, final int page) {
         if(page >= widgets.size()) widgets.get(0).open(entity);

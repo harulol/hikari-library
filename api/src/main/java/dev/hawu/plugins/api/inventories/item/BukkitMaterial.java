@@ -16,7 +16,7 @@ import java.util.List;
  * A class for dealing with displayable materials and item stacks
  * within widgets and inventories.
  *
- * @since 2.4
+ * @since 1.0
  */
 public final class BukkitMaterial {
 
@@ -43,7 +43,7 @@ public final class BukkitMaterial {
      * not implementation.
      *
      * @param plugin The plugin to initialize with.
-     * @since 2.4
+     * @since 1.0
      */
     public static void reInitDisplayableMaterials(@NotNull final JavaPlugin plugin) {
         if(!DISPLAYABLE.isEmpty() || !CANT_DISPLAY.isEmpty()) {
@@ -71,7 +71,7 @@ public final class BukkitMaterial {
      * all materials that are deemed display-able.
      *
      * @return The underlying unmodifiable list.
-     * @since 2.4
+     * @since 1.0
      */
     @NotNull
     public static List<@NotNull Material> getDisplayables() {
@@ -83,7 +83,7 @@ public final class BukkitMaterial {
      * all materials that are deemed un-displayable.
      *
      * @return The underlying unmodifiable list.
-     * @since 2.4
+     * @since 1.0
      */
     @NotNull
     public static List<@NotNull Material> getUndisplayables() {

@@ -2,6 +2,8 @@ package dev.hawu.plugins.api.particles;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 /**
  * The contained particle effect that can be used to send
  * to a player, or multiple players through a particle registry.
@@ -10,16 +12,91 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ParticleEffect {
 
+    /**
+     * Represents the name of the particle effect
+     * that will be passed in.
+     *
+     * @since 1.0
+     */
     public final String particle;
+
+    /**
+     * Whether this particle can be viewed by players
+     * far away.
+     *
+     * @since 1.0
+     */
     public final boolean longDistance;
+
+    /**
+     * The value on the X axis that contributes
+     * to the location of the particle.
+     *
+     * @since 1.0
+     */
     public final double x;
+
+    /**
+     * The value on the Y axis that contributes
+     * to the location of the particle.
+     *
+     * @since 1.0
+     */
     public final double y;
+
+    /**
+     * The value on the Z axis that contributes
+     * to the location of the particle.
+     *
+     * @since 1.0
+     */
     public final double z;
+
+    /**
+     * The value to multiply with after an invocation
+     * of {@link Random#nextGaussian()} for the X axis.
+     *
+     * @since 1.0
+     */
     public final float offsetX;
+
+    /**
+     * The value to multiply with after an invocation
+     * of {@link Random#nextGaussian()} for the Y axis.
+     *
+     * @since 1.0
+     */
     public final float offsetY;
+
+    /**
+     * The value to multiply with after an invocation
+     * of {@link Random#nextGaussian()} for the Z axis.
+     *
+     * @since 1.0
+     */
     public final float offsetZ;
+
+    /**
+     * The data of the particle, usually the speed.
+     *
+     * @since 1.0
+     */
     public final float particleData;
+
+    /**
+     * The number of particles to display within
+     * one packet.
+     *
+     * @since 1.0
+     */
     public final int particleCount;
+
+    /**
+     * Additional data for the particle, for example,
+     * colors for dust particles or materials for block particles.
+     *
+     * @since 1.0
+     */
     public final int[] data;
 
     /**

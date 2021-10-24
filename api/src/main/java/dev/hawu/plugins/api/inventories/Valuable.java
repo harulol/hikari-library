@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
  * and can be presented in a widget.
  *
  * @param <T> The type of the value.
- * @since 2.0
+ * @since 1.0
  */
 public interface Valuable<T> {
 
@@ -15,7 +15,7 @@ public interface Valuable<T> {
      * Gets the value of the element.
      *
      * @return The element's value.
-     * @since 2.0
+     * @since 1.0
      */
     T getValue();
 
@@ -23,7 +23,7 @@ public interface Valuable<T> {
      * Sets the value of the element to a new one.
      *
      * @param value The new value of the element.
-     * @since 2.0
+     * @since 1.0
      */
     void setValue(@Nullable T value);
 

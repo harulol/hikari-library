@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Quintuple<A, B, C, D, E> extends Quadruple<A, B, C, D> {
 
-    private final @Nullable E fifth;
+    private final E fifth;
 
     /**
      * Constructs a quintuple with the provided values.
@@ -50,7 +50,7 @@ public class Quintuple<A, B, C, D, E> extends Quadruple<A, B, C, D> {
      * {@link Quintuple#getFifth()}.
      *
      * @return The fifth component of the tuple.
-     * @since 1.2
+     * @since 1.0
      */
     @Nullable
     public final E component5() {

@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  * but not frozen. Functions and transformers can be used to
  * apply changes to the item itself, but the field never mutates.
  *
- * @since 2.0
+ * @since 1.0
  */
 public final class StaticStyle implements Style {
 
@@ -21,7 +21,7 @@ public final class StaticStyle implements Style {
      * Constructs an unchanging style with the initial item stack.
      *
      * @param init The item to init with.
-     * @since 2.0
+     * @since 1.0
      */
     public StaticStyle(@NotNull final ItemStack init) {
         item = init;
@@ -31,7 +31,7 @@ public final class StaticStyle implements Style {
      * Applies the provided transformer to the backing stack.
      *
      * @param consumer The function to apply.
-     * @since 2.0
+     * @since 1.0
      */
     public void transform(@NotNull final Consumer<ItemStack> consumer) {
         consumer.accept(item);
@@ -41,7 +41,7 @@ public final class StaticStyle implements Style {
      * Attempts to modify the item stack by using a builder.
      *
      * @return A new instance of {@link ItemStackBuilder}.
-     * @since 2.0
+     * @since 1.0
      */
     @NotNull
     public ItemStackBuilder withItemBuilder() {

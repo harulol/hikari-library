@@ -13,6 +13,8 @@ import java.util.List;
 /**
  * Helper class for accessing class members reflectively
  * without knowing much about said members.
+ *
+ * @since 1.0
  */
 public final class FuzzyReflects {
 

@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * Registry for configuring quick handlers that should be run
  * on {@link InventoryClickEvent}s.
  *
- * @since 2.0
+ * @since 1.0
  */
 public final class ClickEvents implements Listener {
 
@@ -44,7 +44,7 @@ public final class ClickEvents implements Listener {
      * not implementations.
      *
      * @param plugin The plugin to initialize with.
-     * @since 2.0
+     * @since 1.0
      */
     public static void init(@NotNull final JavaPlugin plugin) {
         if(!isInit) Bukkit.getPluginManager().registerEvents(new ClickEvents(), plugin);
@@ -56,7 +56,7 @@ public final class ClickEvents implements Listener {
      * Clears the map that holds actions to be run for
      * text input requests to aid the native GC.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public static void clear() {
         chatActions.clear();
@@ -69,7 +69,7 @@ public final class ClickEvents implements Listener {
      * @param player   The player to request from.
      * @param message  The message to send to the player when requesting.
      * @param function The action to run after the input is received.
-     * @since 2.0
+     * @since 1.0
      */
     public static void requestInput(@NotNull final Player player, @Nullable final String message, @NotNull final Consumer<@NotNull String> function) {
         player.closeInventory();
@@ -84,7 +84,7 @@ public final class ClickEvents implements Listener {
      * @param player   The player to request from.
      * @param message  The message to send to the player when requesting.
      * @param function The action to run after the input is received.
-     * @since 2.0
+     * @since 1.0
      */
     public static void requestInputAsync(@NotNull final Player player, @Nullable final String message, @NotNull final Consumer<@NotNull String> function) {
         player.closeInventory();

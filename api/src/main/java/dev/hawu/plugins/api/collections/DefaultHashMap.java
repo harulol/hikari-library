@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public final class DefaultHashMap<K, V> extends HashMap<K, V> {
 
-    private final @NotNull V defaultValue;
+    private final V defaultValue;
 
     /**
      * Constructs a default map implementation with an initial capacity and

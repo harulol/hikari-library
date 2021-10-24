@@ -11,7 +11,7 @@ import java.util.List;
  * Represents a style with a list of item stacks
  * that can be cycled through.
  *
- * @since 2.0
+ * @since 1.0
  */
 public final class CyclableStyle implements Style {
 
@@ -21,7 +21,7 @@ public final class CyclableStyle implements Style {
     /**
      * Constructs a cyclable style with an empty list.
      *
-     * @since 2.0
+     * @since 1.0
      */
     public CyclableStyle() {
         this.list = new ArrayList<>();
@@ -34,7 +34,7 @@ public final class CyclableStyle implements Style {
      * and similar methods will not mutate the passed in list.
      *
      * @param items The items to initialize with.
-     * @since 2.0
+     * @since 1.0
      */
     public CyclableStyle(@NotNull final List<@NotNull ItemStack> items) {
         this.list = new ArrayList<>(items); // Wrap in case the list passed in is unmodifiable.
@@ -45,7 +45,7 @@ public final class CyclableStyle implements Style {
      * passed in via a varargs parameter.
      *
      * @param items The items to initialize with.
-     * @since 2.0
+     * @since 1.0
      */
     public CyclableStyle(@NotNull final ItemStack @NotNull ... items) {
         this.list = new ArrayList<>(Arrays.asList(items));
@@ -55,7 +55,7 @@ public final class CyclableStyle implements Style {
      * Adds an item to the list.
      *
      * @param item The item to add.
-     * @since 2.0
+     * @since 1.0
      */
     public void add(@NotNull final ItemStack item) {
         list.add(item);
@@ -66,7 +66,7 @@ public final class CyclableStyle implements Style {
      *
      * @param index The index to add at.
      * @param item  The item to add.
-     * @since 2.0
+     * @since 1.0
      */
     public void add(final int index, @NotNull final ItemStack item) {
         list.add(index, item);
@@ -76,7 +76,7 @@ public final class CyclableStyle implements Style {
      * Gets the current pointer of the cycle.
      *
      * @return The current pointer.
-     * @since 2.0
+     * @since 1.0
      */
     public int getPointer() {
         return this.pointer;
@@ -89,7 +89,7 @@ public final class CyclableStyle implements Style {
      * will throw an {@link AssertionError} if the set index is out of bounds.
      *
      * @param value The new value of the position.
-     * @since 2.0
+     * @since 1.0
      */
     @Deprecated
     public void setPointer(final int value) {
@@ -102,7 +102,7 @@ public final class CyclableStyle implements Style {
      * cycling.
      *
      * @param amount The amount of times to cycle.
-     * @since 2.0
+     * @since 1.0
      */
     public void cycleForwards(final int amount) {
         final int leftover = amount % list.size();
@@ -115,7 +115,7 @@ public final class CyclableStyle implements Style {
      * continue cycling.
      *
      * @param amount The amount of times to cycle.
-     * @since 2.0
+     * @since 1.0
      */
     public void cycleBackwards(final int amount) {
         final int leftover = amount % list.size();
@@ -129,7 +129,7 @@ public final class CyclableStyle implements Style {
      * by exactly {@code 1}.
      *
      * @return The item at the position of the pointer, before cycling.
-     * @since 2.0
+     * @since 1.0
      */
     @NotNull
     public ItemStack next() {
@@ -148,7 +148,7 @@ public final class CyclableStyle implements Style {
      * needs to be advanced.
      *
      * @throws AssertionError If the pointer is not in bound.
-     * @since 2.0
+     * @since 1.0
      */
     @Override
     public @NotNull ItemStack getDisplay() {
