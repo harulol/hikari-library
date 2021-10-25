@@ -429,6 +429,11 @@ public final class PackagesManager {
             return;
         }
 
+        if(Bukkit.getPluginManager().getPlugin(pkg.getName()).getDescription().getVersion().equals(version)) {
+            severeIfNotNull(sender, "That package is already up to date.");
+            return;
+        }
+
         if(verbose) infoIfNotNull(sender, "Preparing to upgrade");
         final Plugin plugin = Bukkit.getPluginManager().getPlugin(pkg.getName());
         final File pluginFile = getPluginFile(plugin);
