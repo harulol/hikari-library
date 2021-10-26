@@ -8,14 +8,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -173,37 +170,6 @@ public final class Widget implements InventoryHolder {
             this.task.cancel();
             this.task = null;
         }
-    }
-
-    /**
-     * Sets up a timer for this widget to keep updating
-     * until no one is viewing the inventory anymore.
-     *
-     * @param plugin The plugin responsible for the task.
-     * @param millis The number of milliseconds between each run.
-     * @since 1.1
-     */
-    public void setInterval(final @NotNull JavaPlugin plugin, final long millis) {
-        this.task = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(inventory.getViewers().isEmpty()) {
-                    cancelTask();
-                    return;
-                }
-                slots.forEach(Widget.this::update);
-            }
-        }.runTaskTimer(plugin, 0, millis / 50);
-    }
-
-    /**
-     * Adds slots for {@link Widget#setInterval(JavaPlugin, long)} to update.
-     *
-     * @param slots The slots to add.
-     * @since 1.1
-     */
-    public void addSlotsToTrack(final int @NotNull ... slots) {
-        Arrays.stream(slots).forEach(this.slots::add);
     }
 
     /**

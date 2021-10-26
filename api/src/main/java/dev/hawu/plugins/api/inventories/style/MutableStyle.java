@@ -29,6 +29,20 @@ public final class MutableStyle implements Style {
     }
 
     /**
+     * Mounts this mutable style on a widget with its slot
+     * so any changes to this style will be immediately
+     * reflected on the widget.
+     *
+     * @param widget The widget to mount on.
+     * @param slot   The slot index this button is in.
+     * @since 1.2
+     */
+    public void mount(final @NotNull Widget widget, final int slot) {
+        this.widget = widget;
+        this.slot = slot;
+    }
+
+    /**
      * Sets the new value for the item to display.
      *
      * @param item The new item value.
