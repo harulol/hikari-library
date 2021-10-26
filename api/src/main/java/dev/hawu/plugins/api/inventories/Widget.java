@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -193,6 +194,16 @@ public final class Widget implements InventoryHolder {
                 slots.forEach(Widget.this::update);
             }
         }.runTaskTimer(plugin, 0, millis / 50);
+    }
+
+    /**
+     * Adds slots for {@link Widget#setInterval(JavaPlugin, long)} to update.
+     *
+     * @param slots The slots to add.
+     * @since 1.1
+     */
+    public void addSlotsToTrack(final int @NotNull ... slots) {
+        Arrays.stream(slots).forEach(this.slots::add);
     }
 
     /**

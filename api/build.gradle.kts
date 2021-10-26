@@ -2,7 +2,7 @@ dependencies {
     implementation("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
 }
 
-version = "1.1.2-SNAPSHOT"
+version = "1.1.3-SNAPSHOT"
 val libraryName = "hikari-library"
 
 tasks.jar {
