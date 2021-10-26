@@ -2,7 +2,7 @@ dependencies {
     implementation("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
 }
 
-version = "1.1-SNAPSHOT"
+version = "1.1.2-SNAPSHOT"
 val libraryName = "hikari-library"
 
 tasks.jar {
@@ -26,6 +26,15 @@ val javadocJar by tasks.creating(Jar::class) {
 }
 
 publishing {
+    repositories {
+        maven("https://maven.pkg.github.com/harulol/hikari-library") {
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>(project.name) {
             groupId = "dev.hawu.plugins"

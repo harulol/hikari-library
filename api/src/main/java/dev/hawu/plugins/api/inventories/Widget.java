@@ -8,9 +8,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -26,6 +31,8 @@ public final class Widget implements InventoryHolder {
     private final Clickable[] content;
 
     private Consumer<InventoryClickEvent> outsideHandler;
+    private final List<Integer> slots = new ArrayList<>();
+    private BukkitTask task;
 
     /**
      * Constructs a double-chest widget with a fixed amount
@@ -153,6 +160,49 @@ public final class Widget implements InventoryHolder {
     public void update() {
         for(int i = 0; i < content.length; i++)
             update(i);
+    }
+
+    /**
+     * Cancels the currently updating task.
+     *
+     * @since 1.1
+     */
+    public void cancelTask() {
+        if(this.task != null) {
+            this.task.cancel();
+            this.task = null;
+        }
+    }
+
+    /**
+     * Sets up a timer for this widget to keep updating
+     * until no one is viewing the inventory anymore.
+     *
+     * @param plugin The plugin responsible for the task.
+     * @param millis The number of milliseconds between each run.
+     * @since 1.1
+     */
+    public void setInterval(final @NotNull JavaPlugin plugin, final long millis) {
+        this.task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(inventory.getViewers().isEmpty()) {
+                    cancelTask();
+                    return;
+                }
+                slots.forEach(Widget.this::update);
+            }
+        }.runTaskTimer(plugin, 0, millis / 50);
+    }
+
+    /**
+     * Sets the handler that handles outside click for this specific widget.
+     *
+     * @param consumer The consumer to handle the click.
+     * @since 1.1
+     */
+    public void setOutsideHandler(final @Nullable Consumer<@NotNull InventoryClickEvent> consumer) {
+        this.outsideHandler = consumer;
     }
 
     /**
