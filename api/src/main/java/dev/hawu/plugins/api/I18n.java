@@ -37,7 +37,7 @@ public final class I18n {
     }
 
     private String getValue(final @NotNull FileConfiguration config, final @NotNull String key) {
-        if(config.isList(key)) return String.join(System.lineSeparator(), config.getStringList(key));
+        if(config.isList(key)) return String.join("\n", config.getStringList(key));
         else return config.getString(key);
     }
 

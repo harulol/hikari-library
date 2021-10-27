@@ -2,7 +2,6 @@ dependencies {
     implementation("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
 }
 
-version = "1.1.4-SNAPSHOT"
 val libraryName = "hikari-library"
 
 tasks.jar {
@@ -39,7 +38,7 @@ publishing {
         create<MavenPublication>(project.name) {
             groupId = "dev.hawu.plugins"
             artifactId = libraryName
-            version = project.version.toString()
+            version = rootProject.version.toString()
             pom {
                 licenses {
                     license {
