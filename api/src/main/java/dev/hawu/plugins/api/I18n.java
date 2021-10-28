@@ -62,6 +62,7 @@ public final class I18n {
      * @return The translated message, colorized.
      * @since 1.0
      */
+    @NotNull
     public String tl(@NotNull final String key, @NotNull final Pair<?, ?> @NotNull ... pairs) {
         final String value;
         if(messages.get(key) == null) {

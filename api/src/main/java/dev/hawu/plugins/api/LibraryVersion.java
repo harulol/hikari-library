@@ -1,5 +1,7 @@
 package dev.hawu.plugins.api;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Singleton object for dealing with incompatible
  * library versions.
@@ -26,6 +28,7 @@ public final class LibraryVersion {
      * @return The current version.
      * @since 1.1
      */
+    @NotNull
     public static LibraryVersion getCurrent() {
         return CURRENT;
     }
