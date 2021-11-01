@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("DuplicatedCode")
 public final class UpgradeCommand extends AbstractCommandClass {
 
-    private final CommandLine cli = new CommandLine().withArgument("-q").withArgument("--query")
+    private final CommandLine cli = new CommandLine().withArgument("-q").withArgument("--query").withArgument("-v").withArgument("--version")
         .withFlag("-e").withFlag("--exact").withFlag("--id").withFlag("--name").withFlag("--force").withFlag("--nogc").withFlag("-r").withFlag("--verbose");
     private final String syntax;
 

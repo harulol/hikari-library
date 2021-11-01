@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public final class InstallCommand extends AbstractCommandClass {
 
     private final CommandLine cli = new CommandLine().withArgument("-q").withArgument("--query")
-        .withFlag("-e").withFlag("--exact").withFlag("--id").withFlag("--name").withArgument("-v").withArgument("--ver")
+        .withFlag("-e").withFlag("--exact").withFlag("--id").withFlag("--name").withArgument("-v").withArgument("--version")
         .withFlag("-l").withFlag("--load").withFlag("--force");
     private final String syntax;
 
@@ -63,7 +63,7 @@ public final class InstallCommand extends AbstractCommandClass {
             }
 
             final PluginPackage pkg = packages.get(0);
-            String version = BaseCommand.extractString(properties, "-v", "--ver");
+            String version = BaseCommand.extractString(properties, "-v", "--version");
             version = version == null && pkg.getLatestRelease() != null ? pkg.getLatestRelease().getTagName() : version;
 
             if(version == null) {

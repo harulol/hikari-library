@@ -71,7 +71,7 @@ install:
   - ""
   - "&7The following arguments are available:"
   - "&f  -q&7, &f--query&7: The query used to filter packages"
-  - "&f  -v&7, &f--ver&7: Use the specified version"
+  - "&f  -v&7, &f--version&7: Use the specified version"
   - ""
   - "&7The following options are available:"
   - "&f  --id&7: Force results to be filtered by IDs"
