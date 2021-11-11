@@ -1,5 +1,5 @@
 name: HikariLibrary
-main: dev.hawu.plugins.api.HikariLibrary
+main: dev.hawu.plugins.hikarilibrary.HikariLibrary
 version: 1.1.7-SNAPSHOT
 api-version: 1.13
 description: The library for my plugins thing.
