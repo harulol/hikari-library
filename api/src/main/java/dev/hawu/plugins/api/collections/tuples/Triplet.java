@@ -2,7 +2,10 @@ package dev.hawu.plugins.api.collections.tuples;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * Represents an immutable tuple with 3 values.
@@ -15,6 +18,24 @@ import org.jetbrains.annotations.Nullable;
 public class Triplet<A, B, C> extends Pair<A, B> {
 
     private final C third;
+
+    /**
+     * Quickly construct a triplet using a call that is generally
+     * shorter and cleaner than using the normal constructor.
+     *
+     * @param first  The first value of the triplet.
+     * @param second The second value of the triplet.
+     * @param third  The third value of the triplet.
+     * @param <A>    The type for the first value.
+     * @param <B>    The type for the second value.
+     * @param <C>    The type for the third value.
+     * @return The created triplet.
+     * @since 1.2
+     */
+    @NotNull
+    public static <A, B, C> Triplet<A, B, C> of(final @Nullable A first, final @Nullable B second, final @Nullable C third) {
+        return new Triplet<>(first, second, third);
+    }
 
     /**
      * Constructs a triplet with the provided values.
@@ -32,12 +53,24 @@ public class Triplet<A, B, C> extends Pair<A, B> {
     /**
      * Retrieves the third value of the tuple.
      *
-     * @return The third value of the tuple, nullable.
+     * @return The third value of the tuple.
      * @since 1.0
      */
-    @Nullable
+    @NotNull
     public final C getThird() {
-        return third;
+        return Objects.requireNonNull(third, "Third value required to be non-null is null.");
+    }
+
+    /**
+     * Retrieves the third value of the tuple and does
+     * not throw an error if it is null.
+     *
+     * @return The third value or null.
+     * @since 1.2
+     */
+    @Nullable
+    public final C getThirdOrNull() {
+        return this.third;
     }
 
     /**
@@ -48,7 +81,7 @@ public class Triplet<A, B, C> extends Pair<A, B> {
      * @return The third component of the tuple.
      * @since 1.0
      */
-    @Nullable
+    @NotNull
     public final C component3() {
         return getThird();
     }
@@ -56,13 +89,13 @@ public class Triplet<A, B, C> extends Pair<A, B> {
     @Override
     public String toString() {
         return String.format("Triplet{first=%s,second=%s,third=%s}",
-            getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString(),
-            getThird() == null ? "null" : getThird().toString());
+            getFirstOrNull() == null ? "null" : getFirst().toString(), getSecondOrNull() == null ? "null" : getSecond().toString(),
+            getThirdOrNull() == null ? "null" : getThird().toString());
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(getFirst()).append(getSecond()).append(third).toHashCode();
+        return new HashCodeBuilder().append(getFirstOrNull()).append(getSecondOrNull()).append(third).toHashCode();
     }
 
     @Override
@@ -70,7 +103,11 @@ public class Triplet<A, B, C> extends Pair<A, B> {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         Triplet<?, ?, ?> triplet = (Triplet<?, ?, ?>) obj;
-        return new EqualsBuilder().append(getFirst(), triplet.getFirst()).append(getSecond(), triplet.getSecond()).append(third, triplet.third).isEquals();
+        return new EqualsBuilder()
+            .append(getFirstOrNull(), triplet.getFirstOrNull())
+            .append(getSecondOrNull(), triplet.getSecondOrNull())
+            .append(third, triplet.third)
+            .isEquals();
     }
 
 }
