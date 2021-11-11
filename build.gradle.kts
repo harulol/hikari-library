@@ -4,7 +4,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
-version = "1.1.6-SNAPSHOT"
+version = "1.1.7-SNAPSHOT"
 
 // Configuring main stuff for all projects.
 allprojects {
@@ -38,6 +38,7 @@ allprojects {
 }
 
 setBuildDir("./build/parent")
+setProperty("libsDirName", project.name)
 
 dependencies {
     implementation("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")

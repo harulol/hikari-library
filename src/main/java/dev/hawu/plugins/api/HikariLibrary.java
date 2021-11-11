@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 public final class HikariLibrary extends JavaPlugin {
 
     private static HikariLibrary instance;
-    private static String authToken;
+    private static final String authToken = null;
 
     public static HikariLibrary getInstance() {
         return instance;
@@ -26,12 +26,12 @@ public final class HikariLibrary extends JavaPlugin {
         ClickEvents.init(this);
         BukkitMaterial.reInitDisplayableMaterials(this);
         new BaseCommand(this);
-        this.saveDefaultConfig();
-        authToken = this.getConfig().getString("token");
-        if(authToken.matches("[^A-Za-z0-9]+")) {
-            getLogger().severe("Authentication token is invalid.");
-            authToken = null;
-        }
+    }
+
+    @Override
+    public void onDisable() {
+        instance = null;
+        Tasks.cancelAllTasks(this);
     }
 
 }
