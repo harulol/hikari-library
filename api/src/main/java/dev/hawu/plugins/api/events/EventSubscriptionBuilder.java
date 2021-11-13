@@ -1,168 +1,201 @@
 package dev.hawu.plugins.api.events;
 
-import dev.hawu.plugins.api.events.listener.SpecializedListener;
+import dev.hawu.plugins.api.TimeConversions;
+import dev.hawu.plugins.api.events.listener.ClosableListener;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiConsumer;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * Represents a builder to build a subscription to an event
- * using a specialized listener.
+ * Represents a temporary or a permanent subscription
+ * to a Bukkit event.
  *
- * @param <T> The event to listen to.
- * @since 1.0
+ * @param <T> The type of the event.
+ * @since 1.2
  */
 public final class EventSubscriptionBuilder<T extends Event> {
 
-    private int invocationExpiry = -1;
-    private double timedExpiry = -1.0;
+    private final Class<T> eventClass;
+    private EventPriority priority = EventPriority.NORMAL;
+    private boolean ignoreCancelled = false;
+
+    private Consumer<T> consumer;
     private Predicate<T> predicate;
     private boolean countsIfFiltered;
-    private BiConsumer<T, ? super Exception> onFailHook;
-    private Consumer<T> handler;
-    private Runnable onUnregisterHook;
-
-    EventSubscriptionBuilder() {}
+    private long expiryInvocations;
+    private long expiryTime;
 
     /**
-     * Specifies that the listener should expire and unregister
-     * itself after a certain amount of time.
+     * Constructs a new builder to build an event subscription.
      *
-     * @param duration Time in mills until expiration.
-     * @return The same receiver.
-     * @since 1.0
+     * @param eventClass The class of the event.
+     * @since 1.2
+     */
+    public EventSubscriptionBuilder(final @NotNull Class<T> eventClass) {
+        this.eventClass = eventClass;
+    }
+
+    /**
+     * Sets the priority for this event subscription.
+     *
+     * @param priority The priority for the listener.
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public EventSubscriptionBuilder<@NotNull T> expiresAfterTime(final double duration) {
-        timedExpiry = duration;
+    public EventSubscriptionBuilder<T> priority(final @NotNull EventPriority priority) {
+        this.priority = priority;
         return this;
     }
 
     /**
-     * Specifies that the listener should expire after a certain
-     * number of invocations.
+     * Makes the listener handler still run even if the event is cancelled.
      *
-     * @param amount Amount of invocation times until expiration.
-     * @return The same receiver.
-     * @since 1.0
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public EventSubscriptionBuilder<@NotNull T> expiresAfterInvocations(final int amount) {
-        invocationExpiry = amount;
+    public EventSubscriptionBuilder<T> ignoreCancelled() {
+        this.ignoreCancelled = true;
         return this;
     }
 
     /**
-     * Appends to the current listener's filter.
+     * Sets the handler for this event subscription.
      *
-     * @param other The other predicate.
-     * @return The same receiver.
-     * @since 1.0
+     * @param consumer The handler for the event.
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public EventSubscriptionBuilder<@NotNull T> filter(@NotNull final Predicate<@NotNull T> other) {
-        if(predicate == null) predicate = other;
-        else predicate = predicate.and(other);
+    public EventSubscriptionBuilder<T> handler(final @NotNull Consumer<@NotNull T> consumer) {
+        this.consumer = consumer;
         return this;
     }
 
     /**
-     * Overrides the value of this listener's predicate using the provided value.
+     * Appends the provided consumer to the handler
+     * of this event subscription.
      *
-     * @param predicate The predicate to override with.
-     * @return The same receiver.
-     * @since 1.0
+     * @param consumer The consumer to append.
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public EventSubscriptionBuilder<@NotNull T> predicate(@Nullable final Predicate<@NotNull T> predicate) {
-        this.predicate = predicate;
+    public EventSubscriptionBuilder<T> andThen(final @NotNull Consumer<@NotNull T> consumer) {
+        if(this.consumer == null) this.consumer = consumer;
+        else this.consumer = this.consumer.andThen(consumer);
         return this;
     }
 
     /**
-     * Overrides the value of this listener's handler using the provided value.
+     * Makes it so that this subscription's counter still increments
+     * even if the predicate tested false.
      *
-     * @param handler The handler of this listener.
-     * @return The same receiver.
-     * @since 1.0
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public EventSubscriptionBuilder<@NotNull T> handler(@NotNull final Consumer<@NotNull T> handler) {
-        this.handler = handler;
-        return this;
-    }
-
-    /**
-     * Appends the provided handler to be executed right after the current handler,
-     * and overrides it if the current one is {@code null}.
-     *
-     * @param other The other handler to append.
-     * @return The same receiver.
-     * @since 1.0
-     */
-    @NotNull
-    public EventSubscriptionBuilder<@NotNull T> then(@NotNull final Consumer<@NotNull T> other) {
-        this.handler = handler.andThen(other);
-        return this;
-    }
-
-    /**
-     * Specifies that the specialized listeners should increment the invocation
-     * counter even if the handler does not get called.
-     *
-     * @return The same receiver.
-     * @since 1.0
-     */
-    @NotNull
-    public EventSubscriptionBuilder<@NotNull T> countsIfFiltered() {
+    public EventSubscriptionBuilder<T> countsIfFiltered() {
         this.countsIfFiltered = true;
         return this;
     }
 
     /**
-     * Sets the specialized listener's hook to be run when the handler
-     * throws an {@link Exception}.
+     * Sets the filter for this subscription or append
+     * to the existing predicate using {@link Predicate#and(Predicate)} function.
      *
-     * @param hook The hook to override with.
-     * @return The same receiver.
-     * @since 1.0
+     * @param predicate The predicate to set or append.
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public EventSubscriptionBuilder<@NotNull T> onFail(@NotNull final BiConsumer<@NotNull T, ? super Exception> hook) {
-        this.onFailHook = hook;
+    public EventSubscriptionBuilder<T> filter(final @NotNull Predicate<T> predicate) {
+        if(this.predicate == null) this.predicate = predicate;
+        else this.predicate = this.predicate.and(predicate);
         return this;
     }
 
     /**
-     * Sets the specialized listener's hook to be run when it is
-     * closed and unregistered.
+     * Makes it so this subscription automatically closes itself
+     * after a certain amount of calls to the handler.
+     * <p>
+     * The invocation counter increments before the handler is called.
      *
-     * @param hook The hook to override with.
-     * @return The same receiver.
-     * @since 1.0
+     * @param amount The amount of calls before this subscription closes.
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public EventSubscriptionBuilder<@NotNull T> onUnregister(@NotNull final Runnable hook) {
-        this.onUnregisterHook = hook;
+    public EventSubscriptionBuilder<T> expiresAfterInvocations(final long amount) {
+        this.expiryInvocations = amount;
         return this;
     }
 
     /**
-     * Builds and retrieves the {@link SpecializedListener} instance with
-     * all the provided parameters.
+     * Makes it so this subscription expires after a certain number of milliseconds.
      *
-     * @param plugin The plugin to bind the specialized listener to.
-     * @return A newly created {@link SpecializedListener}.
-     * @since 1.0
+     * @param time The time before this subscription closes.
+     * @return The same builder.
+     * @since 1.2
      */
     @NotNull
-    public SpecializedListener<@NotNull T> build(final @NotNull JavaPlugin plugin) {
-        return new SpecializedListener<>(plugin, invocationExpiry, timedExpiry, predicate, countsIfFiltered, onFailHook, handler, onUnregisterHook);
+    public EventSubscriptionBuilder<T> expiresAfter(final long time) {
+        this.expiryTime = time;
+        return this;
+    }
+
+    /**
+     * Makes it so this subscription expires after a certain amount of time,
+     * parsed using {@link TimeConversions#convertToMillis(String)}.
+     *
+     * @param time The time before this subscription closes.
+     * @return The same builder.
+     * @since 1.2
+     */
+    @NotNull
+    public EventSubscriptionBuilder<T> expiresAfter(final @NotNull String time) {
+        this.expiryTime = (long) TimeConversions.convertToMillis(time);
+        return this;
+    }
+
+    /**
+     * Builds the subscription using the provided values
+     * and returns a closable listener.
+     *
+     * @param plugin The plugin to register to.
+     * @return Said closable listener.
+     * @since 1.2
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    public ClosableListener build(final @NotNull JavaPlugin plugin) {
+        final ClosableListener listener = new ClosableListener();
+        final AtomicInteger count = new AtomicInteger();
+        final long buildTime = System.currentTimeMillis();
+        Bukkit.getPluginManager().registerEvent(eventClass, listener, priority, (l, event) -> {
+            if(buildTime + expiryTime < System.currentTimeMillis() || count.get() == expiryInvocations) {
+                listener.close();
+                return;
+            }
+
+            if(predicate != null && !predicate.test((T) event)) {
+                if(countsIfFiltered) count.getAndIncrement();
+                return;
+            }
+
+            if(count.incrementAndGet() == expiryInvocations) {
+                listener.close();
+            }
+            this.consumer.accept((T) event);
+        }, plugin, ignoreCancelled);
+        return listener;
     }
 
 }
