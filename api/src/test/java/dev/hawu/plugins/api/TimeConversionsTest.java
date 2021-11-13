@@ -30,6 +30,15 @@ final class TimeConversionsTest {
     }
 
     @Test
+    @DisplayName("Mixed Tests")
+    void twoWaysConversion() {
+        final double value = TimeConversions.buildMillis().months(1).days(29).hours(23).minutes(59).seconds(59).build();
+        final String stringValue = TimeConversions.buildTimestamp(value).withSpaces().until(TimeUnit.SECOND).withNoAbbreviations().build();
+
+        Assertions.assertEquals("1 month 29 days 23 hours 59 minutes 59 seconds", stringValue);
+    }
+
+    @Test
     @DisplayName("Test Conversion to String")
     void stringConversion() {
         Assertions.assertEquals("1h 5m 23s", TimeConversions.buildTimestamp(3923000).until(TimeUnit.SECOND).withSpaces().build());

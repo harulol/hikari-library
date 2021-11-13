@@ -3,6 +3,10 @@ package dev.hawu.plugins.api;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * All types of measurable and supported time units
  * for duration conversions.
@@ -83,6 +87,7 @@ public enum TimeUnit {
      */
     MONTH(2.628e9, "mo");
 
+    private static final Set<TimeUnit> ignored = new HashSet<>(Collections.singletonList(WEEK));
     private static TimeUnit[] reversedArray;
 
     private final double millisValue;
@@ -217,6 +222,17 @@ public enum TimeUnit {
     @NotNull
     public final String getPlural() {
         return plural;
+    }
+
+    /**
+     * Checks if this is a unit that should be excluded
+     * from conversions to human-readable time.
+     *
+     * @return Whether it should be ignored.
+     * @since 1.2
+     */
+    public final boolean shouldIgnore() {
+        return ignored.contains(this);
     }
 
 }
