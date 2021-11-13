@@ -20,7 +20,8 @@ public final class Events {
      * Creates a new instance of {@link EventSubscriptionBuilder} for building
      * specialized listeners and subscribing to events.
      *
-     * @param <T> The type of the event to handle.
+     * @param <T>        The type of the event to handle.
+     * @param eventClass The event class to register with.
      * @return A new instance of {@link EventSubscriptionBuilder}.
      * @since 1.0
      */

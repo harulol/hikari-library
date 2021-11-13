@@ -17,6 +17,11 @@ import java.util.Map;
  */
 public final class DefaultHashMap<K, V> extends HashMap<K, V> {
 
+    /**
+     * The default value for this hash map implementation.
+     *
+     * @since 1.0
+     */
     private final V defaultValue;
 
     /**
