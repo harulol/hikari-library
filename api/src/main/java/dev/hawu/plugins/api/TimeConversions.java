@@ -96,7 +96,7 @@ public final class TimeConversions {
         final StringBuilder sb = new StringBuilder();
         for(final TimeUnit unit : TimeUnit.getReversedArray()) {
             if(unit.ordinal() < until.ordinal()) break;
-            if(curr < unit.getMillisValue()) continue;
+            if(curr < unit.getMillisValue() || unit.shouldIgnore()) continue;
 
             final long quotient = Math.round(Math.floor(curr / unit.getMillisValue()));
             sb.append(quotient);

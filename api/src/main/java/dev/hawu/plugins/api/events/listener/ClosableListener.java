@@ -3,21 +3,23 @@ package dev.hawu.plugins.api.events.listener;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
+import java.io.Closeable;
+
 /**
- * Represents an extended listener that can
- * be closed.
+ * Represents an extension of the {@link Listener} interface that
+ * can be closed.
  *
- * @since 1.0
+ * @since 1.2
  */
-public interface ClosableListener extends Listener {
+public final class ClosableListener implements Listener, Closeable {
 
     /**
-     * Closes this current listener by unregistering all handlers
-     * from the {@link HandlerList}.
+     * Closes this listener by unregistering everything
+     * from the handler list.
      *
-     * @since 1.0
+     * @since 1.2
      */
-    default void close() {
+    public void close() {
         HandlerList.unregisterAll(this);
     }
 

@@ -64,7 +64,9 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @since 1.0
      */
     @Nullable
-    public abstract List<String> tab(@NotNull final CommandSource sender, @NotNull final CommandArgument args);
+    public List<String> tab(@NotNull final CommandSource sender, @NotNull final CommandArgument args) {
+        return null;
+    }
 
     /**
      * Handles the command executions for this command.

@@ -3,7 +3,7 @@
  * for the event subscription builder to initialize.
  * <p>
  * For now, there's only one type with the generic name
- * {@link dev.hawu.plugins.api.events.listener.SpecializedListener}.
+ * {@link dev.hawu.plugins.api.events.listener.ClosableListener}.
  *
  * @since 1.0
  */

@@ -2,7 +2,10 @@ package dev.hawu.plugins.api.collections.tuples;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * Represents an immutable tuple with 4 values.
@@ -16,6 +19,27 @@ import org.jetbrains.annotations.Nullable;
 public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
 
     private final D fourth;
+
+    /**
+     * Quickly construct a quadruple using a call that is generally
+     * shorter and cleaner than using the normal constructor.
+     *
+     * @param first  The first value of the quadruple.
+     * @param second The second value of the quadruple.
+     * @param third  The third value of the quadruple.
+     * @param fourth The fourth value of the quadruple.
+     * @param <A>    The type for the first value.
+     * @param <B>    The type for the second value.
+     * @param <C>    The type for the third value.
+     * @param <D>    The type for the fourth value.
+     * @return The created quadruple.
+     * @since 1.2
+     */
+    @NotNull
+    public static <A, B, C, D> Quadruple<A, B, C, D> of(final @Nullable A first, final @Nullable B second,
+                                                        final @Nullable C third, final @Nullable D fourth) {
+        return new Quadruple<>(first, second, third, fourth);
+    }
 
     /**
      * Constructs a quintuple with the provided values.
@@ -34,23 +58,35 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
     /**
      * Retrieves the fourth value of the tuple.
      *
-     * @return The fourth value of the tuple, nullable.
+     * @return The fourth value of the tuple.
      * @since 1.0
      */
-    @Nullable
+    @NotNull
     public final D getFourth() {
+        return Objects.requireNonNull(fourth, "Fourth value of quadruple required to be non-null is null.");
+    }
+
+    /**
+     * Retrieves the fourth value of the tuple and does
+     * not throw an error if it is null.
+     *
+     * @return The fourth value or null.
+     * @since 1.2
+     */
+    @Nullable
+    public final D getFourthOrNull() {
         return this.fourth;
     }
 
     /**
      * Retrieves the fourth component for the tuple.
      * This function only delegates the invocation back to
-     * {@link Quintuple#getFourth()}.
+     * {@link Quadruple#getFourth()}.
      *
      * @return The fourth component of the tuple.
      * @since 1.0
      */
-    @Nullable
+    @NotNull
     public final D component4() {
         return getFourth();
     }
@@ -58,13 +94,13 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
     @Override
     public String toString() {
         return String.format("Quadruple{first=%s,second=%s,third=%s,fourth=%s}",
-            getFirst() == null ? "null" : getFirst().toString(), getSecond() == null ? "null" : getSecond().toString(),
-            getThird() == null ? "null" : getThird().toString(), getFourth() == null ? "null" : getFourth().toString());
+            getFirstOrNull() == null ? "null" : getFirst().toString(), getSecondOrNull() == null ? "null" : getSecond().toString(),
+            getThirdOrNull() == null ? "null" : getThird().toString(), getFourthOrNull() == null ? "null" : getFourth().toString());
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(getFirst()).append(getSecond()).append(getThird()).append(fourth).toHashCode();
+        return new HashCodeBuilder().append(getFirstOrNull()).append(getSecondOrNull()).append(getThirdOrNull()).append(fourth).toHashCode();
     }
 
     @Override
@@ -72,8 +108,11 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         Quadruple<?, ?, ?, ?> quadruple = (Quadruple<?, ?, ?, ?>) obj;
-        return new EqualsBuilder().append(getFirst(), quadruple.getFirst()).append(getSecond(), quadruple.getSecond())
-            .append(getThird(), quadruple.getThird()).append(fourth, quadruple.fourth).isEquals();
+        return new EqualsBuilder()
+            .append(getFirstOrNull(), quadruple.getFirstOrNull())
+            .append(getSecondOrNull(), quadruple.getSecondOrNull())
+            .append(getThirdOrNull(), quadruple.getThirdOrNull())
+            .append(fourth, quadruple.fourth).isEquals();
     }
 
 }
