@@ -14,13 +14,6 @@ import java.io.Closeable;
 public final class ClosableListener implements Listener, Closeable {
 
     /**
-     * Constructs a new empty closable listener.
-     *
-     * @since 1.2
-     */
-    public ClosableListener() {}
-
-    /**
      * Closes this listener by unregistering everything
      * from the handler list.
      *
