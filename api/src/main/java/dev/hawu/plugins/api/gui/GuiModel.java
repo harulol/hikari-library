@@ -129,7 +129,7 @@ public final class GuiModel implements InventoryHolder {
     public void unmount(final int index) {
         final GuiElement<?> element = this.elements[index];
         if(element != null) {
-            element.elementWillUnmount();
+            element.unmount();
         }
         this.elements[index] = null;
     }

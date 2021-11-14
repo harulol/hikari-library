@@ -1,6 +1,7 @@
 package dev.hawu.plugins.api.items;
 
 import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.nbt.NBTCompound;
 import dev.hawu.plugins.api.nbt.NBTRegistry;
 import org.bukkit.Bukkit;
@@ -217,6 +218,29 @@ public final class ItemStackBuilder {
     @NotNull
     public ItemStackBuilder disenchant(final @NotNull Enchantment enchantment) {
         this.meta.removeEnchant(enchantment);
+        return this;
+    }
+
+    /**
+     * Replaces all placeholders where there could be visible text
+     * for the item. This includes the display name and lore.
+     *
+     * @param args The arguments to replace.
+     * @return The same builder.
+     * @since 1.2
+     */
+    @NotNull
+    public ItemStackBuilder replaceText(final @NotNull Pair<?, ?> @NotNull ... args) {
+        if(this.meta.hasDisplayName()) {
+            final String newName = Strings.color(Strings.fillPlaceholders(this.meta.getDisplayName(), args));
+            this.meta.setDisplayName(newName);
+        }
+        if(this.meta.hasLore()) {
+            final List<String> newLore = this.meta.getLore().stream()
+                .map(s -> Strings.color(Strings.fillPlaceholders(s, args)))
+                .collect(Collectors.toList());
+            this.meta.setLore(newLore);
+        }
         return this;
     }
 

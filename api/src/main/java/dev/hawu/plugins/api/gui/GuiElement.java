@@ -235,6 +235,13 @@ public abstract class GuiElement<T> {
         firstMount = false;
     }
 
+    void unmount() {
+        this.model = null;
+        this.slot = -1;
+        this.firstMount = true;
+        elementWillUnmount();
+    }
+
     /**
      * Generates an {@link ItemStack} to put on the
      * inventory model.
