@@ -174,6 +174,18 @@ public final class GuiModel implements InventoryHolder {
     }
 
     /**
+     * Retrieves the element at the index.
+     *
+     * @param index The index to retrieve at.
+     * @return The element there, nullable.
+     * @since 1.2
+     */
+    @Nullable
+    public GuiElement<?> getElement(final int index) {
+        return elements[index];
+    }
+
+    /**
      * Get the object's inventory.
      *
      * @return The inventory.
