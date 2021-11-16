@@ -4,6 +4,7 @@ import dev.hawu.plugins.api.gui.GuiElement;
 import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -403,6 +404,48 @@ public final class GuiPaginationBuilder<T> {
             nextButtonTemplate, nextButtonSlots);
         final PaginationFilterOptions filterOptions = new PaginationFilterOptions(filterTemplate, filterSlots, filterEvent);
         return new GuiPaginator<>(data, options, controlOptions, filterOptions);
+    }
+
+    /**
+     * Constructs the paginator then immediately builds
+     * and opens it to a human entity.
+     * <p>
+     * Shorthand for {@code build().build(entity)}.
+     *
+     * @param entity The entity to open to.
+     * @since 1.2
+     */
+    public void build(final @NotNull HumanEntity entity) {
+        build().build(entity);
+    }
+
+    /**
+     * Constructs the paginator then immediately builds
+     * and opens it to a human entity.
+     * <p>
+     * Shorthand for {@code build().build(entity, page)}.
+     *
+     * @param entity The entity to open to.
+     * @param page   The page to open.
+     * @since 1.2
+     */
+    public void build(final @NotNull HumanEntity entity, final int page) {
+        build().build(entity, page);
+    }
+
+    /**
+     * Constructs the paginator then immediately builds
+     * and opens it to a human entity.
+     * <p>
+     * Shorthand for {@code build().build(entity, page, filter)}.
+     *
+     * @param entity The entity to open to.
+     * @param page   The page to open.
+     * @param filter The filter to apply.
+     * @since 1.2
+     */
+    public void build(final @NotNull HumanEntity entity, final int page, final @Nullable String filter) {
+        build().build(entity, page, filter);
     }
 
 }

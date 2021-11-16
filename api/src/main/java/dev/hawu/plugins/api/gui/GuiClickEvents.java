@@ -116,6 +116,7 @@ public final class GuiClickEvents implements Listener {
     private void onChat(final @NotNull AsyncPlayerChatEvent event) {
         if(!textInputs.containsKey(event.getPlayer().getUniqueId())) return;
 
+        event.setCancelled(true);
         final Pair<Boolean, Consumer<String>> pair = textInputs.get(event.getPlayer().getUniqueId());
         if(pair.getFirst()) {
             pair.getSecond().accept(event.getMessage());

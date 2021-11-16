@@ -120,6 +120,7 @@ public final class GuiPaginator<T> {
                         return;
                     }
 
+                    event.getWhoClicked().closeInventory();
                     if(filterOptions.getFilterEvent() != null) filterOptions.getFilterEvent().accept(event);
                     GuiClickEvents.requestTextInput((Player) event.getWhoClicked(), s -> build(event.getWhoClicked(), 0, s));
                 }
@@ -221,7 +222,7 @@ public final class GuiPaginator<T> {
             }
 
             final int page = currentPage;
-            current.mount(pointer, data.getItemGenerator().apply(element, page));
+            current.mount(data.getAllowedSlots().get(pointer), data.getItemGenerator().apply(element, page));
             pointer++;
         }
 
