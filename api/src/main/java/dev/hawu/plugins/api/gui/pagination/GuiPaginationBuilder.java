@@ -8,7 +8,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,6 @@ import java.util.stream.IntStream;
  * @param <T> The type of the data in the collection.
  * @since 1.2
  */
-@Experimental
 public final class GuiPaginationBuilder<T> {
 
     private Collection<T> collection;
