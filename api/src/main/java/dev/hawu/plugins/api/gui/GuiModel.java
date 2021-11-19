@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.Inventory;
@@ -27,7 +28,8 @@ public final class GuiModel implements InventoryHolder {
     private final Inventory inventory;
     private final GuiElement<?>[] elements;
 
-    private Consumer<InventoryClickEvent> outsideClickHandler;
+    private Consumer<InventoryClickEvent> outsideClickHandler = event -> event.setCancelled(true);
+    private Consumer<InventoryDragEvent> dragHandler = event -> event.setCancelled(true);
     private Runnable onCloseHook;
     private boolean cooldown = true;
 
@@ -130,6 +132,17 @@ public final class GuiModel implements InventoryHolder {
      */
     public void onClose(final @NotNull Runnable runnable) {
         this.onCloseHook = runnable;
+    }
+
+    /**
+     * Configures the consumer to run when this inventory model is invoked
+     * in an InventoryDragEvent.
+     *
+     * @param handler The handler to run.
+     * @since 1.2
+     */
+    public void onDrag(final @NotNull Consumer<@NotNull InventoryDragEvent> handler) {
+        this.dragHandler = handler;
     }
 
     /**
@@ -244,6 +257,10 @@ public final class GuiModel implements InventoryHolder {
 
         final GuiElement<?> element = elements[event.getRawSlot()];
         if(element != null) element.handleClick(event);
+    }
+
+    void handleDrag(final @NotNull InventoryDragEvent event) {
+        if(dragHandler != null) dragHandler.accept(event);
     }
 
 }

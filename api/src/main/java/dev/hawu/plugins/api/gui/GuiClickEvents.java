@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
@@ -133,6 +134,15 @@ public final class GuiClickEvents implements Listener {
         if(event.getInventory().getHolder() instanceof GuiModel) {
             final GuiModel model = (GuiModel) event.getInventory().getHolder();
             model.handleClick(event);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onDrag(final @NotNull InventoryDragEvent event) {
+        if(event.getInventory().getHolder() instanceof GuiModel) {
+            final GuiModel model = (GuiModel) event.getInventory().getHolder();
+            model.handleDrag(event);
         }
     }
 
