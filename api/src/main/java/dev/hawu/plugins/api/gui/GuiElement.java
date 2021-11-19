@@ -227,6 +227,29 @@ public abstract class GuiElement<T> {
         elementDidUpdate(prevProps, prevState);
     }
 
+    /**
+     * Tells this element to unmount
+     * itself, if possible.
+     *
+     * @since 1.2
+     */
+    public final void unmountSelf() {
+        if(this.model != null) model.unmount(slot);
+    }
+
+    /**
+     * Tells this element to mount
+     * another element in its place.
+     * <p>
+     * This element will be unmounted.
+     *
+     * @param another Another element.
+     * @since 1.2
+     */
+    public final void swap(@Nullable GuiElement<?> another) {
+        model.mount(slot, another);
+    }
+
     void mount(final @NotNull GuiModel model, final int slot) {
         this.model = model;
         this.slot = slot;

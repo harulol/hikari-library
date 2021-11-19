@@ -30,6 +30,7 @@ public final class GuiClickEvents implements Listener {
 
     private static final GuiClickEvents INSTANCE = new GuiClickEvents();
     private static final Map<UUID, Pair<Boolean, Consumer<String>>> textInputs = new HashMap<>(); // UUID -> <async, callback>
+
     private static JavaPlugin plugin;
 
     private GuiClickEvents() {}
@@ -60,11 +61,11 @@ public final class GuiClickEvents implements Listener {
     }
 
     /**
-     * Clears the map that contains the text inputs.
+     * Cleans up the associated maps.
      *
      * @since 1.2
      */
-    public static void clearTextInputs() {
+    public static void onDisable() {
         textInputs.clear();
     }
 
@@ -119,17 +120,19 @@ public final class GuiClickEvents implements Listener {
         event.setCancelled(true);
         final Pair<Boolean, Consumer<String>> pair = textInputs.get(event.getPlayer().getUniqueId());
         if(pair.getFirst()) {
-            pair.getSecond().accept(event.getMessage());
+            Tasks.scheduleAsync(plugin, runnable -> pair.getSecond().accept(event.getMessage()));
         } else {
             Tasks.schedule(plugin, runnable -> pair.getSecond().accept(event.getMessage()));
         }
+        textInputs.remove(event.getPlayer().getUniqueId());
     }
 
     @SuppressWarnings("unused")
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     private void onClick(final @NotNull InventoryClickEvent event) {
         if(event.getInventory().getHolder() instanceof GuiModel) {
-            ((GuiModel) event.getInventory().getHolder()).handleClick(event);
+            final GuiModel model = (GuiModel) event.getInventory().getHolder();
+            model.handleClick(event);
         }
     }
 

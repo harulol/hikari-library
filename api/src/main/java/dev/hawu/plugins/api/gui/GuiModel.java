@@ -29,6 +29,7 @@ public final class GuiModel implements InventoryHolder {
 
     private Consumer<InventoryClickEvent> outsideClickHandler;
     private Runnable onCloseHook;
+    private boolean cooldown = true;
 
     /**
      * Constructs a model using a chest inventory with given size.
@@ -96,6 +97,28 @@ public final class GuiModel implements InventoryHolder {
         if(element != null) {
             element.mount(this, index);
         }
+    }
+
+    /**
+     * Checks if the model is currently affected
+     * by the cooldown checks in inventory click events.
+     *
+     * @return Whether it is affected.
+     * @since 1.2
+     */
+    public boolean hasCooldown() {
+        return cooldown;
+    }
+
+    /**
+     * Specifies that this model should not be logged
+     * in inventory click events, and all events will
+     * pass through this model's handler.
+     *
+     * @since 1.2
+     */
+    public void noCooldown() {
+        this.cooldown = false;
     }
 
     /**
@@ -209,8 +232,8 @@ public final class GuiModel implements InventoryHolder {
     }
 
     void handleClose() {
-        IntStream.range(0, elements.length).forEach(this::unmount);
         if(this.onCloseHook != null) this.onCloseHook.run();
+        IntStream.range(0, elements.length).forEach(this::unmount);
     }
 
     void handleClick(final @NotNull InventoryClickEvent event) {

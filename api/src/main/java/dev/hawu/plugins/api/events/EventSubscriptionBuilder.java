@@ -28,8 +28,8 @@ public final class EventSubscriptionBuilder<T extends Event> {
     private Consumer<T> consumer;
     private Predicate<T> predicate;
     private boolean countsIfFiltered;
-    private long expiryInvocations;
-    private long expiryTime;
+    private long expiryInvocations = -1;
+    private long expiryTime = -1;
 
     /**
      * Constructs a new builder to build an event subscription.
@@ -180,7 +180,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
         final AtomicInteger count = new AtomicInteger();
         final long buildTime = System.currentTimeMillis();
         Bukkit.getPluginManager().registerEvent(eventClass, listener, priority, (l, event) -> {
-            if(buildTime + expiryTime < System.currentTimeMillis() || count.get() == expiryInvocations) {
+            if((expiryTime > 0 && System.currentTimeMillis() - buildTime > expiryTime) || (expiryInvocations > 0 && count.get() == expiryInvocations)) {
                 listener.close();
                 return;
             }
@@ -190,9 +190,8 @@ public final class EventSubscriptionBuilder<T extends Event> {
                 return;
             }
 
-            if(count.incrementAndGet() == expiryInvocations) {
+            if(count.incrementAndGet() == expiryInvocations)
                 listener.close();
-            }
             this.consumer.accept((T) event);
         }, plugin, ignoreCancelled);
         return listener;

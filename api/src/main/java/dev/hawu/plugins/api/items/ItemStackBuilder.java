@@ -33,7 +33,6 @@ public final class ItemStackBuilder {
 
     private int amount = 1;
     private short durability = 0;
-    private byte data = -1;
     private NBTCompound compound = null;
 
     private ItemStackBuilder(final @NotNull Material material) {
@@ -41,13 +40,11 @@ public final class ItemStackBuilder {
         this.meta = Bukkit.getItemFactory().getItemMeta(material);
     }
 
-    @SuppressWarnings("deprecation")
     private ItemStackBuilder(final @NotNull ItemStack itemStack) {
         this.material = itemStack.getType();
         this.meta = itemStack.getItemMeta();
         this.amount = itemStack.getAmount();
         this.durability = itemStack.getDurability();
-        this.data = itemStack.getData().getData();
     }
 
     /**
@@ -99,20 +96,6 @@ public final class ItemStackBuilder {
     @NotNull
     public ItemStackBuilder durability(final short durability) {
         this.durability = durability;
-        return this;
-    }
-
-    /**
-     * Sets the data for this item in this builder.
-     *
-     * @param data The data of this item stack.
-     * @return The same builder.
-     * @since 1.2
-     */
-    @NotNull
-    @Deprecated
-    public ItemStackBuilder data(final byte data) {
-        this.data = data;
         return this;
     }
 
@@ -293,12 +276,8 @@ public final class ItemStackBuilder {
      * @since 1.2
      */
     @NotNull
-    @SuppressWarnings("deprecation")
     public ItemStack build() {
-        final ItemStack itemStack;
-        if(this.data >= 0)
-            itemStack = new ItemStack(material, amount, durability, data);
-        else itemStack = new ItemStack(material, amount, durability);
+        final ItemStack itemStack = new ItemStack(material, amount, durability);
 
         itemStack.setItemMeta(this.meta);
         final NBTCompound compound = NBTRegistry.getRegistry().getCompound(itemStack);
