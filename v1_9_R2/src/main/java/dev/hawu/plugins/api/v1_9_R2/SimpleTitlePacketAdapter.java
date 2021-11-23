@@ -31,7 +31,7 @@ public final class SimpleTitlePacketAdapter extends TitlePacketAdapter {
 
     @NotNull
     private static IChatBaseComponent wrap(final @NotNull String s) {
-        return IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + color(StringEscapeUtils.escapeJava(s)) + "}");
+        return IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + color(StringEscapeUtils.escapeJava(s)) + "\"}");
     }
 
     private static void sendPacket(final @NotNull Player player, final @NotNull Packet<?> packet) {
