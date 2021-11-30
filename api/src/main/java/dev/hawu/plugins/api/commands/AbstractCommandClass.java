@@ -19,14 +19,16 @@ import java.util.*;
  */
 public abstract class AbstractCommandClass implements TabExecutor {
 
-    private final Set<@NotNull SenderType> senders = new HashSet<>();
-    private final Map<@NotNull String, @NotNull AbstractCommandClass> subcommands = new HashMap<>();
-    private final Set<@NotNull String> aliases = new HashSet<>();
-    private final @NotNull String name;
+    private final Set<SenderType> senders = new HashSet<>();
+    private final Map<String, AbstractCommandClass> subcommands = new HashMap<>();
+    private final Set<String> aliases = new HashSet<>();
+    private final String name;
 
-    private @Nullable String permission = null;
-    private @NotNull String permissionMessage = "&cI'm sorry, but you do not have permission to perform this command.";
-    private @NotNull String badSenderMessage = "&cThis command was not tailored for your type of sender.";
+    private String permission = null;
+    private String permissionMessage = "&cI'm sorry, but you do not have permission to perform this command.";
+    private String badSenderMessage = "&cThis command was not tailored for your type of sender.";
+
+    private CommandLine parser = null;
 
     /**
      * Main constructor that simply initializes the class with the name
@@ -153,6 +155,15 @@ public abstract class AbstractCommandClass implements TabExecutor {
     }
 
     /**
+     * Sets the default parser for this command.
+     *
+     * @param parser The parser to set.
+     */
+    public void setParser(@NotNull CommandLine parser) {
+        this.parser = parser;
+    }
+
+    /**
      * Retrieves the message that gets sent to users when they
      * are not authorized with the permission.
      *
@@ -249,7 +260,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
     @Override
     public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         final CommandSource source = new CommandSource(sender);
-        final CommandArgument argument = new CommandArgument(args);
+        final CommandArgument argument = new CommandArgument(args).withCLI(parser);
         if(args.length > 0 && subcommands.containsKey(args[0].toLowerCase())) {
             subcommands.get(args[0].toLowerCase()).onCommand(sender, command, label, argument.sliceArray(1, args.length));
         } else if(permission != null && !source.isAuthorized(permission)) {
@@ -262,7 +273,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
 
     @Override
     public final List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        final CommandArgument argument = new CommandArgument(args);
+        final CommandArgument argument = new CommandArgument(args).withCLI(parser);
         if(args.length > 0 && subcommands.containsKey(args[0].toLowerCase())) {
             return subcommands.get(args[0].toLowerCase()).onTabComplete(sender, command, alias, argument.sliceArray(1, args.length));
         } else if((permission != null && !sender.hasPermission(permission)) || senders.stream().noneMatch(s -> s.getSenderClass().isInstance(sender))) {

@@ -31,6 +31,18 @@ public final class CommandLine {
     }
 
     /**
+     * Appends a list of arguments as flags.
+     *
+     * @param flags The flags to mark.
+     * @return The same receiver.
+     * @since 1.2
+     */
+    public CommandLine withFlags(@NotNull final String @NotNull ... flags) {
+        this.flags.addAll(Arrays.asList(flags));
+        return this;
+    }
+
+    /**
      * Marks the following argument as an argument. If the provided argument is not a flag,
      * values following these will be considered a property.
      *
@@ -41,6 +53,18 @@ public final class CommandLine {
     @NotNull
     public CommandLine withArgument(@NotNull final String prop) {
         props.add(prop);
+        return this;
+    }
+
+    /**
+     * Appends a list of arguments as arguments.
+     *
+     * @param args The args to mark.
+     * @return The same receiver.
+     * @since 1.2
+     */
+    public CommandLine withArguments(@NotNull final String @NotNull ... args) {
+        props.addAll(Arrays.asList(args));
         return this;
     }
 
@@ -96,7 +120,7 @@ public final class CommandLine {
                 int add = 1;
 
                 if(props.contains(arguments.get(pointer)) && !flags.contains(arguments.get(pointer))
-                        && pointer + 1 < arguments.size() && !arguments.get(pointer + 1).startsWith("-")) {
+                    && pointer + 1 < arguments.size() && !arguments.get(pointer + 1).startsWith("-")) {
                     value = arguments.get(pointer + 1);
                     add = 2;
                 }

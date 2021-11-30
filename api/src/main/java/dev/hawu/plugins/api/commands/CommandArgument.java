@@ -51,7 +51,7 @@ public final class CommandArgument {
      * @since 1.0
      */
     @NotNull
-    public CommandArgument withCLI(@NotNull final CommandLine cli) {
+    public CommandArgument withCLI(@Nullable final CommandLine cli) {
         this.cli = cli;
         return this;
     }

@@ -166,12 +166,7 @@ public abstract class GuiElement<T> {
      * @since 1.2
      */
     public final void setState(final @NotNull BiFunction<@Nullable T, @NotNull Map<@NotNull String, @Nullable Object>, @Nullable T> updater) {
-        final T newState = updater.apply(this.state, this.props);
-        this.prevState = this.state;
-        this.state = updater.apply(this.state, this.props);
-        if(shouldElementUpdate(props, newState)) {
-            forceUpdate();
-        }
+        setState(updater.apply(this.state, this.props));
     }
 
     /**
