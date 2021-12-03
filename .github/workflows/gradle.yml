@@ -2,7 +2,7 @@ name: Gradle
 on:
   push:
     branches:
-      - '*'
+      - 'master'
     paths-ignore:
       - '*.md'
       - 'LICENSE'
@@ -28,5 +28,8 @@ jobs:
           java-version: '16'
       - name: Granting permissions to Gradle
         run: chmod +x gradlew
-      - name: Building and publishing
-        run: ./gradlew build publish
+      - name: Building project
+        run: ./gradlew build
+      - name: Publish to GitHub packages
+        if: ${{ github.ref == 'refs/heads/master'}}
+        run: ./gradlew publish

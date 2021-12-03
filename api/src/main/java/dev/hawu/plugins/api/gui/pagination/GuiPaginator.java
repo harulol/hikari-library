@@ -108,7 +108,7 @@ public final class GuiPaginator<T> {
         }
 
         // Put the button to filter elements if specified.
-        if(filterOptions.getFilterTemplate() != null && filterOptions.getFilterSlots().size() > 0) {
+        if(filterOptions.getFilterTemplate() != null && filterOptions.getFilterSlots().size() > 0 && options.getPredicate() != null) {
             final GuiElement<?> filterButton = new GuiElement<Object>() {
                 @Override
                 public void handleClick(final @NotNull InventoryClickEvent event) {

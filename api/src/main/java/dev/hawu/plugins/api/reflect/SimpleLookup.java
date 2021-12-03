@@ -117,8 +117,8 @@ public final class SimpleLookup {
     public static Class<?> lookupNMS(@NotNull final String legacyPath, @NotNull final String newPath) {
         try {
             return MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_17_R1)
-                    ? Class.forName("net.minecraft." + newPath)
-                    : Class.forName("net.minecraft.server." + MinecraftVersion.v1_17_R1.name() + "." + legacyPath);
+                ? Class.forName("net.minecraft." + newPath)
+                : Class.forName("net.minecraft.server." + MinecraftVersion.getCurrent().name() + "." + legacyPath);
         } catch(final ClassNotFoundException ex) {
             throw new LookupException(ex);
         }

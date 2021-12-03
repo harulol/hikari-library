@@ -35,6 +35,28 @@ public abstract class TitlePacketAdapter {
     }
 
     /**
+     * Sets the adapter for the title packets.
+     *
+     * @param adapter The adapter.
+     */
+    public static void setAdapter(final @NotNull TitlePacketAdapter adapter) {
+        TitlePacketAdapter.adapter = adapter;
+    }
+
+//
+//    @Nullable
+//    protected static String escapeTitle(final @NotNull TitleComponent component) {
+//        if(component.shouldNotWrap()) return Strings.color(component.getTitle());
+//        else return StringEscapeUtils.escapeJava(Strings.color(component.getTitle()));
+//    }
+//
+//    @Nullable
+//    protected static String escapeSubtitle(final @NotNull TitleComponent component) {
+//        if(component.shouldNotWrap()) return Strings.color(component.getSubtitle());
+//        else return StringEscapeUtils.escapeJava(Strings.color(component.getSubtitle()));
+//    }
+
+    /**
      * Sends a title component to a player.
      *
      * @param player    The player to send to.
