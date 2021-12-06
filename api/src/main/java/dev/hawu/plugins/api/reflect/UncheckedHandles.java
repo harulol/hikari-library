@@ -66,9 +66,10 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findSetter(Class, String, Class)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the field.
-     * @param type The field method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the field.
+     * @param type   The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -85,9 +86,10 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findStaticGetter(Class, String, Class)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the field.
-     * @param type The field method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the field.
+     * @param type   The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -104,9 +106,10 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findStaticSetter(Class, String, Class)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the field.
-     * @param type The field method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the field.
+     * @param type   The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -123,9 +126,10 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findStatic(Class, String, MethodType)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the method.
-     * @param type The method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the method.
+     * @param type   The method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -142,9 +146,10 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findVirtual(Class, String, MethodType)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the method.
-     * @param type The method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the method.
+     * @param type   The method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -161,6 +166,7 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findSpecial(Class, String, MethodType, Class)} with
      * the passed parameters and returns the result.
      *
+     * @param lookup        The lookup to use
      * @param ref           The class to lookup.
      * @param name          The name of the method.
      * @param type          The method type.
@@ -182,7 +188,8 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflect(Method)} with the passed parameters
      * and returns the result.
      *
-     * @param m The method to unreflect.
+     * @param lookup The lookup to use
+     * @param m      The method to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -199,7 +206,8 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectConstructor(Constructor)} with the passed parameters
      * and returns the result.
      *
-     * @param c The constructor to unreflect.
+     * @param lookup The lookup to use
+     * @param c      The constructor to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -216,7 +224,8 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectGetter(Field)} with the passed parameters
      * and returns the result.
      *
-     * @param f The field whose getter to unreflect.
+     * @param lookup The lookup to use
+     * @param f      The field whose getter to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -233,7 +242,8 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectSetter(Field)} with the passed parameters
      * and returns the result.
      *
-     * @param f The field whose setter to unreflect.
+     * @param lookup The lookup to use
+     * @param f      The field whose setter to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
@@ -250,6 +260,7 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectSpecial(Method, Class)} with the passed parameters
      * and returns the result.
      *
+     * @param lookup        The lookup to use
      * @param m             The method to unreflect.
      * @param specialCaller The class to invoke {@code invokespecial}.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.

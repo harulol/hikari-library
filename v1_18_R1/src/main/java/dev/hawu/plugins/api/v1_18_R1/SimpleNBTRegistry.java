@@ -1,29 +1,21 @@
-package dev.hawu.plugins.api.v1_12_R1;
+package dev.hawu.plugins.api.v1_18_R1;
 
+import dev.hawu.plugins.api.nbt.NBTList;
 import dev.hawu.plugins.api.nbt.*;
-import dev.hawu.plugins.api.reflect.UncheckedHandles;
-import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import net.minecraft.nbt.*;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodHandles.Lookup;
-import java.util.Objects;
-
 /**
- * Extension for the NBT registry for Bukkit v1_12_R1.
+ * Extension for the NBT registry for Bukkit v1_17_R1.
  *
  * @deprecated See {@link NBTRegistry#getRegistry()}
  */
 @SuppressWarnings("DuplicatedCode")
 @Deprecated
 public final class SimpleNBTRegistry extends NBTRegistry {
-
-    private static final Lookup LOOKUP = MethodHandles.lookup();
-    private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.findGetter(LOOKUP, NBTTagLongArray.class, "b", long[].class);
 
     @NotNull
     private NBTTagList transformAPIList(@NotNull final NBTList list) {
@@ -40,7 +32,7 @@ public final class SimpleNBTRegistry extends NBTRegistry {
         final NBTTagCompound tag = new NBTTagCompound();
         compound.forEach((k, v) -> {
             final NBTBase base = transformAPIBase(v);
-            if(base != null) tag.set(k, base);
+            if(base != null) tag.a(k, base);
         });
         return tag;
     }
@@ -48,19 +40,19 @@ public final class SimpleNBTRegistry extends NBTRegistry {
     @Nullable
     private NBTBase transformAPIBase(@NotNull final NBTType type) {
         if(type instanceof NBTByte) {
-            return new NBTTagByte(((NBTByte) type).getData());
+            return NBTTagByte.a(((NBTByte) type).getData());
         } else if(type instanceof NBTShort) {
-            return new NBTTagShort(((NBTShort) type).getData());
+            return NBTTagShort.a(((NBTShort) type).getData());
         } else if(type instanceof NBTInt) {
-            return new NBTTagInt(((NBTInt) type).getData());
+            return NBTTagInt.a(((NBTInt) type).getData());
         } else if(type instanceof NBTLong) {
-            return new NBTTagLong(((NBTLong) type).getData());
+            return NBTTagLong.a(((NBTLong) type).getData());
         } else if(type instanceof NBTFloat) {
-            return new NBTTagFloat(((NBTFloat) type).getData());
+            return NBTTagFloat.a(((NBTFloat) type).getData());
         } else if(type instanceof NBTDouble) {
-            return new NBTTagDouble(((NBTDouble) type).getData());
+            return NBTTagDouble.a(((NBTDouble) type).getData());
         } else if(type instanceof NBTString) {
-            return new NBTTagString(((NBTString) type).getData());
+            return NBTTagString.a(((NBTString) type).getData());
         } else if(type instanceof NBTByteArray) {
             return new NBTTagByteArray(((NBTByteArray) type).getData());
         } else if(type instanceof NBTIntArray) {
@@ -77,8 +69,8 @@ public final class SimpleNBTRegistry extends NBTRegistry {
     @NotNull
     private NBTList transformNMSList(@NotNull final NBTTagList list) {
         final NBTList tag = new NBTList();
-        for(int i = 0; i < list.size(); i++) {
-            final NBTType nbt = transformNMSBase(list.i(i));
+        for(NBTBase nbtBase : list) {
+            final NBTType nbt = transformNMSBase(nbtBase);
             if(nbt != null) tag.add(nbt);
         }
         return tag;
@@ -87,9 +79,9 @@ public final class SimpleNBTRegistry extends NBTRegistry {
     @NotNull
     private NBTCompound transformNMSCompound(@NotNull final NBTTagCompound compound) {
         final NBTCompound tag = new NBTCompound();
-        for(final String obj : compound.c()) {
-            if(obj == null || compound.get(obj) == null) continue;
-            final NBTType nbt = transformNMSBase(compound.get(obj));
+        for(final String obj : compound.d()) {
+            if(obj == null || compound.c(obj) == null) continue;
+            final NBTType nbt = transformNMSBase(compound.c(obj));
             if(nbt != null) tag.put(obj, nbt);
         }
         return tag;
@@ -98,29 +90,25 @@ public final class SimpleNBTRegistry extends NBTRegistry {
     @Nullable
     private NBTType transformNMSBase(@NotNull final NBTBase base) {
         if(base instanceof NBTTagByte) {
-            return new NBTByte(((NBTTagByte) base).g());
+            return new NBTByte(((NBTTagByte) base).h());
         } else if(base instanceof NBTTagShort) {
-            return new NBTShort(((NBTTagShort) base).f());
+            return new NBTShort(((NBTTagShort) base).g());
         } else if(base instanceof NBTTagInt) {
-            return new NBTInt(((NBTTagInt) base).e());
+            return new NBTInt(((NBTTagInt) base).f());
         } else if(base instanceof NBTTagLong) {
-            return new NBTLong(((NBTTagLong) base).d());
+            return new NBTLong(((NBTTagLong) base).e());
         } else if(base instanceof NBTTagFloat) {
-            return new NBTFloat(((NBTTagFloat) base).i());
+            return new NBTFloat(((NBTTagFloat) base).j());
         } else if(base instanceof NBTTagDouble) {
-            return new NBTDouble(((NBTTagDouble) base).asDouble());
+            return new NBTDouble(((NBTTagDouble) base).i());
         } else if(base instanceof NBTTagString) {
-            return new NBTString(((NBTTagString) base).c_());
+            return new NBTString(base.e_());
         } else if(base instanceof NBTTagByteArray) {
-            return new NBTByteArray(((NBTTagByteArray) base).c());
+            return new NBTByteArray(((NBTTagByteArray) base).d());
         } else if(base instanceof NBTTagIntArray) {
-            return new NBTIntArray(((NBTTagIntArray) base).d());
+            return new NBTIntArray(((NBTTagIntArray) base).f());
         } else if(base instanceof NBTTagLongArray) {
-            try {
-                return new NBTLongArray((long[]) Objects.requireNonNull(TAG_LONG_ARRAY_GETTER).invoke(base));
-            } catch(final Throwable e) {
-                return null;
-            }
+            return new NBTLongArray(((NBTTagLongArray) base).f());
         } else if(base instanceof NBTTagList) {
             return transformNMSList((NBTTagList) base);
         } else if(base instanceof NBTTagCompound) {
@@ -130,18 +118,18 @@ public final class SimpleNBTRegistry extends NBTRegistry {
 
     @Override
     public @Nullable NBTCompound getCompound(final @NotNull ItemStack item) {
-        final net.minecraft.server.v1_12_R1.ItemStack nmsCopy = CraftItemStack.asNMSCopy(item);
-        if(nmsCopy.hasTag()) {
-            assert nmsCopy.getTag() != null;
-            return transformNMSCompound(nmsCopy.getTag());
+        final net.minecraft.world.item.ItemStack nmsCopy = CraftItemStack.asNMSCopy(item);
+        final NBTTagCompound compound = nmsCopy.s();
+        if(compound != null) {
+            return transformNMSCompound(compound);
         } else return null;
     }
 
     @Override
     public @NotNull ItemStack applyCompound(final @NotNull ItemStack item, final @Nullable NBTCompound compound) {
-        final net.minecraft.server.v1_12_R1.ItemStack nmsCopy = CraftItemStack.asNMSCopy(item);
-        if(compound != null) nmsCopy.setTag(transformAPICompound(compound));
-        else nmsCopy.setTag(null);
+        final net.minecraft.world.item.ItemStack nmsCopy = CraftItemStack.asNMSCopy(item);
+        if(compound != null) nmsCopy.c(transformAPICompound(compound));
+        else nmsCopy.c((NBTTagCompound) null);
         return CraftItemStack.asBukkitCopy(nmsCopy);
     }
 

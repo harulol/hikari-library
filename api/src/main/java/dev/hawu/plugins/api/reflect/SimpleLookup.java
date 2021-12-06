@@ -85,7 +85,6 @@ public final class SimpleLookup {
      * @since 1.0
      */
     @NotNull
-    @Deprecated
     public static Class<?> lookupNMS(@NotNull final String name) {
         try {
             return MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_17_R1)
@@ -145,7 +144,6 @@ public final class SimpleLookup {
      * @since 1.0
      */
     @Nullable
-    @Deprecated
     public static Class<?> lookupNMSOrNull(@NotNull final String name) {
         try {
             return lookupNMS(name);

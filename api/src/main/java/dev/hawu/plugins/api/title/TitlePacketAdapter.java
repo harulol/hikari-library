@@ -1,9 +1,10 @@
 package dev.hawu.plugins.api.title;
 
-import dev.hawu.plugins.api.reflect.LookupException;
-import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * A base abstracted packet adapter for sending and
@@ -24,37 +25,19 @@ public abstract class TitlePacketAdapter {
      */
     @NotNull
     public static TitlePacketAdapter getAdapter() {
-        if(adapter != null) return adapter;
-
-        try {
-            return adapter =
-                (TitlePacketAdapter) Class.forName("dev.hawu.plugins.api." + MinecraftVersion.getCurrent().name() + ".SimpleTitlePacketAdapter").newInstance();
-        } catch(final Exception exception) {
-            throw new LookupException(exception);
-        }
+        return Objects.requireNonNull(adapter, "Title Packet adapter is not set");
     }
 
     /**
      * Sets the adapter for the title packets.
      *
      * @param adapter The adapter.
+     * @since 1.3
      */
+    @Internal
     public static void setAdapter(final @NotNull TitlePacketAdapter adapter) {
-        TitlePacketAdapter.adapter = adapter;
+        if(TitlePacketAdapter.adapter == null) TitlePacketAdapter.adapter = adapter;
     }
-
-//
-//    @Nullable
-//    protected static String escapeTitle(final @NotNull TitleComponent component) {
-//        if(component.shouldNotWrap()) return Strings.color(component.getTitle());
-//        else return StringEscapeUtils.escapeJava(Strings.color(component.getTitle()));
-//    }
-//
-//    @Nullable
-//    protected static String escapeSubtitle(final @NotNull TitleComponent component) {
-//        if(component.shouldNotWrap()) return Strings.color(component.getSubtitle());
-//        else return StringEscapeUtils.escapeJava(Strings.color(component.getSubtitle()));
-//    }
 
     /**
      * Sends a title component to a player.

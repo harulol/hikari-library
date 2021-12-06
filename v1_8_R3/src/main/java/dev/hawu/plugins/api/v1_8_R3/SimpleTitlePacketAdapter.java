@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.v1_8_R3;
 
+import dev.hawu.plugins.api.reflect.UncheckedReflects;
 import dev.hawu.plugins.api.title.TitleComponent;
 import dev.hawu.plugins.api.title.TitlePacketAdapter;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
@@ -8,7 +9,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,11 @@ public final class SimpleTitlePacketAdapter extends TitlePacketAdapter {
     }
 
     private static void sendPacket(final @NotNull Player player, final @NotNull Packet<?> packet) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+        UncheckedReflects.sendPacket(player, packet);
+//        final CraftPlayer craftPlayer = (CraftPlayer) player;
+//        final EntityPlayer entityPlayer = craftPlayer.getHandle();
+//        final PlayerConnection playerConnection = entityPlayer.playerConnection;
+//        playerConnection.sendPacket(packet);
     }
 
     @Override
