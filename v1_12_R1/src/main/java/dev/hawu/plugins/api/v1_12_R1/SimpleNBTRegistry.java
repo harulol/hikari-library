@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.util.Objects;
 
 /**
@@ -20,7 +22,8 @@ import java.util.Objects;
 @Deprecated
 public final class SimpleNBTRegistry extends NBTRegistry {
 
-    private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.findGetter(NBTTagLongArray.class, "b", long[].class);
+    private static final Lookup LOOKUP = MethodHandles.lookup();
+    private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.findGetter(LOOKUP, NBTTagLongArray.class, "b", long[].class);
 
     @NotNull
     private NBTTagList transformAPIList(@NotNull final NBTList list) {

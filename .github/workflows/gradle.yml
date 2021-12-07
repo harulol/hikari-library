@@ -2,7 +2,7 @@ name: Gradle
 on:
   push:
     branches:
-      - '*'
+      - 'master'
     paths-ignore:
       - '*.md'
       - 'LICENSE'
@@ -24,9 +24,12 @@ jobs:
       - name: Setting up Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '16'
+          distribution: 'temurin'
+          java-version: '17'
       - name: Granting permissions to Gradle
         run: chmod +x gradlew
-      - name: Building and publishing
-        run: ./gradlew build publish
+      - name: Building project
+        run: ./gradlew build
+      - name: Publish to GitHub packages
+        if: ${{ github.ref == 'refs/heads/master'}}
+        run: ./gradlew publish

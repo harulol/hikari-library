@@ -3,8 +3,9 @@ package dev.hawu.plugins.api.reflect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.CallSite;
+import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
@@ -20,23 +21,22 @@ import java.lang.reflect.Method;
  */
 public final class UncheckedHandles {
 
-    private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-
     private UncheckedHandles() {}
 
     /**
      * Recalls the method {@link Lookup#findConstructor(Class, MethodType)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param type The constructor method type.
+     * @param lookup The {@link Lookup} to use.
+     * @param ref    The class to lookup.
+     * @param type   The constructor method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findConstructor(@NotNull final Class<?> ref, @NotNull final MethodType type) {
+    public static MethodHandle findConstructor(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final MethodType type) {
         try {
-            return LOOKUP.findConstructor(ref, type);
+            return lookup.findConstructor(ref, type);
         } catch(final NoSuchMethodException | IllegalAccessException e) {
             return null;
         }
@@ -46,16 +46,17 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findGetter(Class, String, Class)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the field.
-     * @param type The field method type.
+     * @param lookup The {@link Lookup} to use.
+     * @param ref    The class to lookup.
+     * @param name   The name of the field.
+     * @param type   The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findGetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static MethodHandle findGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return LOOKUP.findGetter(ref, name, type);
+            return lookup.findGetter(ref, name, type);
         } catch(final IllegalAccessException | NoSuchFieldException e) {
             return null;
         }
@@ -65,16 +66,17 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findSetter(Class, String, Class)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the field.
-     * @param type The field method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the field.
+     * @param type   The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findSetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static MethodHandle findSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return LOOKUP.findSetter(ref, name, type);
+            return lookup.findSetter(ref, name, type);
         } catch(final IllegalAccessException | NoSuchFieldException e) {
             return null;
         }
@@ -84,16 +86,17 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findStaticGetter(Class, String, Class)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the field.
-     * @param type The field method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the field.
+     * @param type   The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findStaticGetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static MethodHandle findStaticGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return LOOKUP.findStaticGetter(ref, name, type);
+            return lookup.findStaticGetter(ref, name, type);
         } catch(final NoSuchFieldException | IllegalAccessException e) {
             return null;
         }
@@ -103,16 +106,17 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findStaticSetter(Class, String, Class)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the field.
-     * @param type The field method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the field.
+     * @param type   The field method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findStaticSetter(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static MethodHandle findStaticSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return LOOKUP.findStaticSetter(ref, name, type);
+            return lookup.findStaticSetter(ref, name, type);
         } catch(final NoSuchFieldException | IllegalAccessException e) {
             return null;
         }
@@ -122,16 +126,17 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findStatic(Class, String, MethodType)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the method.
-     * @param type The method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the method.
+     * @param type   The method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findStatic(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
+    public static MethodHandle findStatic(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
         try {
-            return LOOKUP.findStatic(ref, name, type);
+            return lookup.findStatic(ref, name, type);
         } catch(final NoSuchMethodException | IllegalAccessException e) {
             return null;
         }
@@ -141,16 +146,17 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findVirtual(Class, String, MethodType)} with
      * the passed parameters and returns the result.
      *
-     * @param ref  The class to lookup.
-     * @param name The name of the method.
-     * @param type The method type.
+     * @param lookup The lookup to use
+     * @param ref    The class to lookup.
+     * @param name   The name of the method.
+     * @param type   The method type.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findVirtual(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
+    public static MethodHandle findVirtual(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
         try {
-            return LOOKUP.findVirtual(ref, name, type);
+            return lookup.findVirtual(ref, name, type);
         } catch(final NoSuchMethodException | IllegalAccessException e) {
             return null;
         }
@@ -160,6 +166,7 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#findSpecial(Class, String, MethodType, Class)} with
      * the passed parameters and returns the result.
      *
+     * @param lookup        The lookup to use
      * @param ref           The class to lookup.
      * @param name          The name of the method.
      * @param type          The method type.
@@ -168,9 +175,10 @@ public final class UncheckedHandles {
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle findSpecial(@NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type, @NotNull final Class<?> specialCaller) {
+    public static MethodHandle findSpecial(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name,
+                                           @NotNull final MethodType type, @NotNull final Class<?> specialCaller) {
         try {
-            return LOOKUP.findSpecial(ref, name, type, specialCaller);
+            return lookup.findSpecial(ref, name, type, specialCaller);
         } catch(final NoSuchMethodException | IllegalAccessException e) {
             return null;
         }
@@ -180,14 +188,15 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflect(Method)} with the passed parameters
      * and returns the result.
      *
-     * @param m The method to unreflect.
+     * @param lookup The lookup to use
+     * @param m      The method to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle unreflect(@NotNull final Method m) {
+    public static MethodHandle unreflect(final @NotNull Lookup lookup, @NotNull final Method m) {
         try {
-            return LOOKUP.unreflect(m);
+            return lookup.unreflect(m);
         } catch(final IllegalAccessException e) {
             return null;
         }
@@ -197,14 +206,15 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectConstructor(Constructor)} with the passed parameters
      * and returns the result.
      *
-     * @param c The constructor to unreflect.
+     * @param lookup The lookup to use
+     * @param c      The constructor to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle unreflect(@NotNull final Constructor<?> c) {
+    public static MethodHandle unreflect(final @NotNull Lookup lookup, @NotNull final Constructor<?> c) {
         try {
-            return LOOKUP.unreflectConstructor(c);
+            return lookup.unreflectConstructor(c);
         } catch(final IllegalAccessException e) {
             return null;
         }
@@ -214,14 +224,15 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectGetter(Field)} with the passed parameters
      * and returns the result.
      *
-     * @param f The field whose getter to unreflect.
+     * @param lookup The lookup to use
+     * @param f      The field whose getter to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle unreflectGetter(@NotNull final Field f) {
+    public static MethodHandle unreflectGetter(final @NotNull Lookup lookup, @NotNull final Field f) {
         try {
-            return LOOKUP.unreflectGetter(f);
+            return lookup.unreflectGetter(f);
         } catch(final IllegalAccessException e) {
             return null;
         }
@@ -231,14 +242,15 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectSetter(Field)} with the passed parameters
      * and returns the result.
      *
-     * @param f The field whose setter to unreflect.
+     * @param lookup The lookup to use
+     * @param f      The field whose setter to unreflect.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle unreflectSetter(@NotNull final Field f) {
+    public static MethodHandle unreflectSetter(final @NotNull Lookup lookup, @NotNull final Field f) {
         try {
-            return LOOKUP.unreflectSetter(f);
+            return lookup.unreflectSetter(f);
         } catch(final IllegalAccessException e) {
             return null;
         }
@@ -248,18 +260,58 @@ public final class UncheckedHandles {
      * Recalls the method {@link Lookup#unreflectSpecial(Method, Class)} with the passed parameters
      * and returns the result.
      *
+     * @param lookup        The lookup to use
      * @param m             The method to unreflect.
      * @param specialCaller The class to invoke {@code invokespecial}.
      * @return The {@link MethodHandle} or {@code null} if any errors happened.
      * @since 1.0
      */
     @Nullable
-    public static MethodHandle unreflectSpecial(@NotNull final Method m, @NotNull Class<?> specialCaller) {
+    public static MethodHandle unreflectSpecial(final @NotNull Lookup lookup, @NotNull final Method m, @NotNull Class<?> specialCaller) {
         try {
-            return LOOKUP.unreflectSpecial(m, specialCaller);
+            return lookup.unreflectSpecial(m, specialCaller);
         } catch(final IllegalAccessException e) {
             return null;
         }
+    }
+
+    /**
+     * Recalls the method {@link java.lang.invoke.LambdaMetafactory#metafactory(Lookup, String, MethodType, MethodType, MethodHandle, MethodType)}
+     * with the passed parameters, then returns the result.
+     *
+     * @param lookup                 The {@link Lookup} to use.
+     * @param invokedName            The name of the invoked method.
+     * @param invokedType            The type of the invoked method.
+     * @param samMethodType          The type of the SAM method.
+     * @param implMethod             The method to invoke.
+     * @param instantiatedMethodType The type of the instantiated method.
+     * @return The callsite generated by metafactory.
+     * @since 1.3
+     */
+    @Nullable
+    public static CallSite metafactory(final @NotNull Lookup lookup, final @NotNull String invokedName, final @NotNull MethodType invokedType,
+                                       final @NotNull MethodType samMethodType, final @NotNull MethodHandle implMethod,
+                                       final @NotNull MethodType instantiatedMethodType) {
+        try {
+            return LambdaMetafactory.metafactory(lookup, invokedName, invokedType,
+                samMethodType, implMethod, instantiatedMethodType);
+        } catch(final Throwable e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves an instance to build an invocation
+     * to metafactory.
+     *
+     * @param lookup The {@link Lookup} to use.
+     * @return The {@link MetafactoryBuilder} instance.
+     * @since 1.3
+     */
+    @NotNull
+    public static MetafactoryBuilder metafactoryBuilder(final @NotNull Lookup lookup) {
+        return new MetafactoryBuilder(lookup);
     }
 
 }
