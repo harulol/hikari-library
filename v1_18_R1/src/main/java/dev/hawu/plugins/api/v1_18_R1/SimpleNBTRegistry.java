@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Extension for the NBT registry for Bukkit v1_17_R1.
+ * Extension for the NBT registry for Bukkit v1_18_R1.
  *
  * @deprecated See {@link NBTRegistry#getRegistry()}
  */

@@ -25,6 +25,7 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
     The classes needed to make this adapter work cross-version.
      */
     private static final Class<?> I_CHAT_BASE_COMPONENT_CLASS;
+    private static final Class<?> I_CHAT_MUTABLE_COMPONENT_CLASS;
     private static final Class<?> CHAT_SERIALIZER_CLASS;
     private static final Class<?> PACKET_PLAY_OUT_TITLE;
     private static final Class<?> PACKET_PLAY_OUT_CHAT;
@@ -61,6 +62,7 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
 
         // Look up all classes necessary for sending titles and chat messages.
         I_CHAT_BASE_COMPONENT_CLASS = SimpleLookup.lookupNMS("IChatBaseComponent", "network.chat.IChatBaseComponent");
+        I_CHAT_MUTABLE_COMPONENT_CLASS = SimpleLookup.lookupNMS("IChatMutableComponent", "network.chat.IChatMutableComponent");
         PACKET_PLAY_OUT_TITLE = SimpleLookup.lookupNMSOrNull("PacketPlayOutTitle"); // null on v1_17_R1
         PACKET_PLAY_OUT_CHAT = SimpleLookup.lookupNMSOrNull("PacketPlayOutChat"); // null on v1_17_R1
         if(MinecraftVersion.getCurrent() == MinecraftVersion.v1_8_R1) {
@@ -80,18 +82,33 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
 
         // Retrieve methods.
         if(PACKET_PLAY_OUT_CHAT != null) {
-            CHAT_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT,
-                    MethodType.methodType(void.class, I_CHAT_BASE_COMPONENT_CLASS, byte.class))
-                .asType(MethodType.methodType(Object.class, Object.class, byte.class));
+            final MethodHandle directHandle = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT,
+                MethodType.methodType(void.class, I_CHAT_BASE_COMPONENT_CLASS, byte.class));
+
+            // This should only be non-null if the version is from 1.8 - 1.10, as they don't have
+            // an ACTIONBAR enum yet.
+            if(directHandle != null)
+                CHAT_CONSTRUCTOR = directHandle.asType(MethodType.methodType(Object.class, Object.class, byte.class));
+            else CHAT_CONSTRUCTOR = null;
         } else CHAT_CONSTRUCTOR = null;
 
         BUKKIT_SEND_TITLE = UncheckedHandles.findVirtual(lookup, Player.class, "sendTitle",
             MethodType.methodType(void.class, String.class, String.class, int.class, int.class, int.class));
         BUKKIT_RESET_TITLE = UncheckedHandles.findVirtual(lookup, Player.class, "resetTitle", MethodType.methodType(void.class));
 
-        SERIALIZER_A = UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER_CLASS, "a",
-                MethodType.methodType(I_CHAT_BASE_COMPONENT_CLASS, String.class))
-            .asType(MethodType.methodType(Object.class, String.class));
+        if(MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_18_R1)) {
+            SERIALIZER_A = UncheckedHandles.findStatic(lookup, I_CHAT_BASE_COMPONENT_CLASS, "a",
+                    MethodType.methodType(I_CHAT_BASE_COMPONENT_CLASS, String.class))
+                .asType(MethodType.methodType(Object.class, String.class));
+        } else if(MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_16_R1)) {
+            SERIALIZER_A = UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER_CLASS, "a",
+                    MethodType.methodType(I_CHAT_MUTABLE_COMPONENT_CLASS, String.class))
+                .asType(MethodType.methodType(Object.class, String.class));
+        } else {
+            SERIALIZER_A = UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER_CLASS, "a",
+                    MethodType.methodType(I_CHAT_BASE_COMPONENT_CLASS, String.class))
+                .asType(MethodType.methodType(Object.class, String.class));
+        }
 
         if(PACKET_PLAY_OUT_TITLE != null) {
             TITLE_TIMES_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_TITLE,
@@ -110,11 +127,11 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
         PACKET_TITLE_ANIMATIONS = SimpleLookup.lookupNMSOrNull("", "network.protocol.game.ClientboundSetTitlesAnimationPacket");
         if(PACKET_TITLE_ANIMATIONS != null && PACKET_ACTION_BAR != null) {
             TITLE_ANIMATIONS_SET = UncheckedHandles.findConstructor(lookup, PACKET_TITLE_ANIMATIONS,
-                    MethodType.methodType(int.class, int.class, int.class))
+                    MethodType.methodType(void.class, int.class, int.class, int.class))
                 .asType(MethodType.methodType(Object.class, int.class, int.class, int.class));
             ACTION_BAR_SET = UncheckedHandles.findConstructor(lookup, PACKET_ACTION_BAR,
-                    MethodType.methodType(I_CHAT_BASE_COMPONENT_CLASS))
-                .asType(MethodType.methodType(Object.class, I_CHAT_BASE_COMPONENT_CLASS));
+                    MethodType.methodType(void.class, I_CHAT_BASE_COMPONENT_CLASS))
+                .asType(MethodType.methodType(Object.class, Object.class));
         } else {
             TITLE_ANIMATIONS_SET = null;
             ACTION_BAR_SET = null;
@@ -140,9 +157,15 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
     }
 
     @NotNull
+    private Object wrap(final @NotNull String text, final boolean noEscape, final boolean json) throws Throwable {
+        String toWrap = noEscape ? text : Strings.color(StringEscapeUtils.escapeJava(text));
+        if(json) return SERIALIZER_A.invokeExact("{\"text\":\"" + toWrap + "\"}");
+        else return SERIALIZER_A.invokeExact(toWrap);
+    }
+
+    @NotNull
     private Object wrap(final @NotNull String text, final boolean noEscape) throws Throwable {
-        final String toWrap = noEscape ? text : Strings.color(StringEscapeUtils.escapeJava(text));
-        return SERIALIZER_A.invokeExact("{\"text\":\"" + toWrap + "\"}");
+        return wrap(text, noEscape, true);
     }
 
     @NotNull
@@ -150,12 +173,23 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
         return wrap(" ", true);
     }
 
+    private void sendSetTitleAnimations(final @NotNull Player player, final int fadeIn, final int stay, final int fadeOut) throws Throwable {
+        assert TITLE_ANIMATIONS_SET != null;
+        final Object times = TITLE_ANIMATIONS_SET.invokeExact(fadeIn, stay, fadeOut);
+        UncheckedReflects.sendPacket(player, times);
+    }
+
+    private void sendActionBar_v1_18_R1(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
+        assert ACTION_BAR_SET != null;
+        final Object packet = ACTION_BAR_SET.invokeExact(wrap(component.getTitle(), component.shouldNotWrap(), false));
+        sendSetTitleAnimations(player, (int) component.getFadeIn(), (int) component.getStay(), (int) component.getFadeOut());
+        UncheckedReflects.sendPacket(player, packet);
+    }
+
     private void sendActionBar_v1_17_R1(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
         assert ACTION_BAR_SET != null;
-        assert TITLE_ANIMATIONS_SET != null;
         final Object packet = ACTION_BAR_SET.invokeExact(wrap(component.getTitle(), component.shouldNotWrap()));
-        final Object times = TITLE_ANIMATIONS_SET.invokeExact((int) component.getFadeIn(), (int) component.getStay(), (int) component.getFadeOut());
-        UncheckedReflects.sendPacket(player, times);
+        sendSetTitleAnimations(player, (int) component.getFadeIn(), (int) component.getStay(), (int) component.getFadeOut());
         UncheckedReflects.sendPacket(player, packet);
     }
 
@@ -178,7 +212,7 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
     public void send(final @NotNull Player player, final @NotNull TitleComponent component) {
         try {
             if(BUKKIT_SEND_TITLE != null && MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_12_R1)) {
-                BUKKIT_SEND_TITLE.invokeExact(player, component.getTitle(), component.getSubtitle(),
+                BUKKIT_SEND_TITLE.invokeExact(player, Strings.color(component.getTitle()), Strings.color(component.getSubtitle()),
                     (int) component.getFadeIn(), (int) component.getStay(), (int) component.getFadeOut());
                 return;
             }
@@ -199,11 +233,28 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
     @Override
     public void sendActionBar(final @NotNull Player player, final @NotNull TitleComponent component) {
         try {
-            if(ACTION_BAR_SET != null && TITLE_ANIMATIONS_SET != null && MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_17_R1)) {
-                sendActionBar_v1_17_R1(player, component);
-            } else if(TITLE_ENUM_ACTIONBAR != null && MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_11_R1)) {
-                sendActionBar_v1_11_R1(player, component);
-            } else sendActionBar_v1_8_R1(player, component);
+            switch(MinecraftVersion.getCurrent()) {
+                case v1_11_R1:
+                case v1_12_R1:
+                case v1_13_R1:
+                case v1_13_R2:
+                case v1_14_R1:
+                case v1_15_R1:
+                case v1_16_R1:
+                case v1_16_R2:
+                case v1_16_R3:
+                    sendActionBar_v1_11_R1(player, component);
+                    break;
+                case v1_17_R1:
+                    sendActionBar_v1_17_R1(player, component);
+                    break;
+                case v1_18_R1:
+                    sendActionBar_v1_18_R1(player, component);
+                    break;
+                default:
+                    sendActionBar_v1_8_R1(player, component);
+                    break;
+            }
         } catch(final Throwable throwable) {
             throw new RuntimeException(throwable);
         }
@@ -212,7 +263,7 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
     @Override
     public void clear(final @NotNull Player player) {
         try {
-            if(BUKKIT_RESET_TITLE != null && MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_9_R1)) {
+            if(BUKKIT_RESET_TITLE != null && MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_16_R1)) {
                 BUKKIT_RESET_TITLE.invokeExact(player);
                 return;
             }
