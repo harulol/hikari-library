@@ -15,8 +15,15 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 
-// This may be one of the worst things I've ever written.
-// Wait until you see the NBT Impl.
+/**
+ * The main implementation class for sending titles,
+ * including action bars to players.
+ * <p>
+ * This class is probably very messy. Proceed
+ * with caution.
+ *
+ * @since 1.3
+ */
 public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
 
     private static final TitlePacketAdapterImpl INSTANCE = new TitlePacketAdapterImpl();

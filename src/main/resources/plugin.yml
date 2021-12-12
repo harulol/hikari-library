@@ -1,29 +1,6 @@
 name: HikariLibrary
 main: dev.hawu.plugins.hikarilibrary.HikariLibrary
-version: 1.3-SNAPSHOT
+version: 1.3.1-SNAPSHOT
 api-version: 1.13
 description: The library for my plugins thing.
 authors: [ Haru, Hikari ]
-commands:
-  hpm:
-    usage: /<command> <arguments>
-    description: Main command for the package manager.
-permissions:
-  hpm.show:
-    default: op
-    description: Allows access to hpm's show command.
-  hpm.list:
-    default: op
-    description: Allows access to hpm's list command.
-  hpm.search:
-    default: op
-    description: Allows access to hpm's search command.
-  hpm.install:
-    default: op
-    description: Allows access to hpm's install command.
-  hpm.uninstall:
-    default: op
-    description: Allows access to hpm's uninstall command.
-  hpm.upgrade:
-    default: op
-    description: Allows access to hpm's upgrade command.

@@ -175,7 +175,7 @@ public final class GuiPaginator<T> {
             @Override
             @NotNull
             public ItemStack render() {
-                return ItemStackBuilder.from(controlOptions.getNextButtonTemplate())
+                return ItemStackBuilder.from(controlOptions.getPreviousButtonTemplate())
                     .replaceText(Pair.of("prev", currentIndex))
                     .build();
             }

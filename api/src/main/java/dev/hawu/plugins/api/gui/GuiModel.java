@@ -32,6 +32,7 @@ public final class GuiModel implements InventoryHolder {
     private Consumer<InventoryDragEvent> dragHandler = event -> event.setCancelled(true);
     private Runnable onCloseHook;
     private boolean cooldown = true;
+    private final boolean unmountOnClose = false;
 
     /**
      * Constructs a model using a chest inventory with given size.
@@ -246,7 +247,7 @@ public final class GuiModel implements InventoryHolder {
 
     void handleClose() {
         if(this.onCloseHook != null) this.onCloseHook.run();
-        IntStream.range(0, elements.length).forEach(this::unmount);
+        if(unmountOnClose) IntStream.range(0, elements.length).forEach(this::unmount);
     }
 
     void handleClick(final @NotNull InventoryClickEvent event) {
