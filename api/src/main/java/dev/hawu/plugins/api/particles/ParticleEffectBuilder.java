@@ -3,6 +3,7 @@ package dev.hawu.plugins.api.particles;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a builder for building a particle effect
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ParticleEffectBuilder {
 
-    private final String particle;
+    private final ParticleEnum particle;
     private boolean longDistance;
     private double x;
     private double y;
@@ -24,7 +25,12 @@ public final class ParticleEffectBuilder {
     private int particleCount;
     private int[] data;
 
+    @Deprecated
     ParticleEffectBuilder(final @NotNull String particle) {
+        this(ParticleEnum.getParticle(particle));
+    }
+
+    ParticleEffectBuilder(final @Nullable ParticleEnum particle) {
         this.particle = particle;
     }
 

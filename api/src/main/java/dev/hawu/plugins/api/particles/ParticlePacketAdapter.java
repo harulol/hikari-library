@@ -1,8 +1,7 @@
 package dev.hawu.plugins.api.particles;
 
-import dev.hawu.plugins.api.reflect.LookupException;
-import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,30 +23,18 @@ public abstract class ParticlePacketAdapter {
      */
     @NotNull
     public static ParticlePacketAdapter getAdapter() {
-        if(adapter != null) return adapter;
-
-        try {
-            return adapter = (ParticlePacketAdapter) Class.forName(computeClassURL()).newInstance();
-        } catch(final Exception exception) {
-            throw new LookupException(exception);
-        }
+        return adapter;
     }
 
-    @NotNull
-    private static String computeClassURL() {
-        return "dev.hawu.plugins.api." + getFallbackVersionTag() + ".SimpleParticlePacketAdapter";
-    }
-
-    @NotNull
-    private static String getFallbackVersionTag() {
-        switch(MinecraftVersion.getCurrent()) {
-            case v1_8_R1:
-            case v1_8_R2:
-            case v1_8_R3:
-                return MinecraftVersion.getCurrent().name();
-            default:
-                return MinecraftVersion.v1_9_R1.name();
-        }
+    /**
+     * Sets the adapter for particle packets.
+     *
+     * @param packetAdapter The packet adapter implementation.
+     * @since 1.3
+     */
+    @Internal
+    public static void setAdapter(final @NotNull ParticlePacketAdapter packetAdapter) {
+        if(adapter == null) adapter = packetAdapter;
     }
 
     /**
