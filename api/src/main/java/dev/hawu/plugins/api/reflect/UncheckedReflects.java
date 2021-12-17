@@ -2,7 +2,6 @@ package dev.hawu.plugins.api.reflect;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -10,6 +9,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 /**
  * A utility helper class for finding constructors, methods
@@ -55,12 +55,15 @@ public final class UncheckedReflects {
         }
 
         GET_HANDLE = UncheckedHandles.findVirtual(lookup, CRAFT_PLAYER_CLASS, "getHandle", MethodType.methodType(ENTITY_PLAYER_CLASS))
-            .asType(MethodType.methodType(Object.class, Object.class));
+            .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class)))
+            .orElse(null);
         PLAYER_CONNECTION = UncheckedHandles.findGetter(lookup, ENTITY_PLAYER_CLASS, playerConnectionFieldName, PLAYER_CONNECTION_CLASS)
-            .asType(MethodType.methodType(Object.class, Object.class));
+            .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class)))
+            .orElse(null);
         SEND_PACKET = UncheckedHandles.findVirtual(lookup, PLAYER_CONNECTION_CLASS, sendPacketMethodName,
                 MethodType.methodType(void.class, PACKET_CLASS))
-            .asType(MethodType.methodType(void.class, Object.class, Object.class));
+            .map(handle -> handle.asType(MethodType.methodType(void.class, Object.class, Object.class)))
+            .orElse(null);
     }
 
     /**
@@ -70,12 +73,12 @@ public final class UncheckedReflects {
      * @return A {@link Class} if found, {@code null} otherwise.
      * @since 1.3
      */
-    @Nullable
-    public static Class<?> getClass(final @NotNull String name) {
+    @NotNull
+    public static Optional<Class<?>> getClass(final @NotNull String name) {
         try {
-            return Class.forName(name);
-        } catch(final ClassNotFoundException e) {
-            return null;
+            return Optional.of(Class.forName(name));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -88,14 +91,14 @@ public final class UncheckedReflects {
      * @return A {@link Constructor} if found, {@code null} otherwise.
      * @since 1.0
      */
-    @Nullable
-    public static Constructor<?> getConstructor(final @NotNull Class<?> cls, final boolean declared, final @NotNull Class<?> @NotNull ... types) {
+    @NotNull
+    public static Optional<Constructor<?>> getConstructor(final @NotNull Class<?> cls, final boolean declared, final @NotNull Class<?> @NotNull ... types) {
         try {
             if(declared)
-                return cls.getDeclaredConstructor(types);
-            else return cls.getConstructor(types);
+                return Optional.of(cls.getDeclaredConstructor(types));
+            else return Optional.of(cls.getConstructor(types));
         } catch(final NoSuchMethodException ex) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -109,14 +112,14 @@ public final class UncheckedReflects {
      * @return A {@link Method} if found, {@code null} otherwise.
      * @since 1.0
      */
-    @Nullable
-    public static Method getMethod(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name, final @NotNull Class<?> @NotNull ... params) {
+    @NotNull
+    public static Optional<Method> getMethod(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name, final @NotNull Class<?> @NotNull ... params) {
         try {
             if(declared)
-                return cls.getDeclaredMethod(name, params);
-            else return cls.getMethod(name, params);
+                return Optional.of(cls.getDeclaredMethod(name, params));
+            else return Optional.of(cls.getMethod(name, params));
         } catch(final NoSuchMethodException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -129,14 +132,14 @@ public final class UncheckedReflects {
      * @return A {@link Field} if found, {@code null} otherwise.
      * @since 1.0
      */
-    @Nullable
-    public static Field getField(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name) {
+    @NotNull
+    public static Optional<Field> getField(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name) {
         try {
             if(declared)
-                return cls.getDeclaredField(name);
-            else return cls.getField(name);
+                return Optional.of(cls.getDeclaredField(name));
+            else return Optional.of(cls.getField(name));
         } catch(final NoSuchFieldException ex) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -152,7 +155,7 @@ public final class UncheckedReflects {
     public static Class<?> getClassOrThrow(final @NotNull String name) {
         try {
             return Class.forName(name);
-        } catch(final ClassNotFoundException exception) {
+        } catch(final Exception exception) {
             throw new LookupException(exception);
         }
     }

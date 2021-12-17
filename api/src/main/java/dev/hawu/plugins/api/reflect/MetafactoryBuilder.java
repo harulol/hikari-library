@@ -1,12 +1,12 @@
 package dev.hawu.plugins.api.reflect;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.CallSite;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.util.Optional;
 
 /**
  * Represents a builder to build an invocation
@@ -97,10 +97,10 @@ public final class MetafactoryBuilder {
      * Builds the callsite, and returns null if it failed.
      *
      * @return The callsite
-     * @since 1.3
+     * @since 1.4
      */
-    @Nullable
-    public CallSite build() {
+    @NotNull
+    public Optional<CallSite> build() {
         return UncheckedHandles.metafactory(caller, invokedName, invokedType,
             samMethodType, implMethod, instantiatedMethodType);
     }

@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * Simple utility class to provide very simple and primitive
  * lookups of {@code org.bukkit.craftbukkit} classes and
@@ -66,6 +68,18 @@ public final class SimpleLookup {
         } catch(final LookupException ex) {
             return null;
         }
+    }
+
+    /**
+     * Attempts to lookup a class in the {@code org.bukkit.craftbukkit} packages
+     * and returns the result encapsulated in an {@link Optional}.
+     *
+     * @param name The name of the class to look up.
+     * @return The optional wrapping the class, or null.
+     * @since 1.4
+     */
+    public static Optional<Class<?>> findOBC(final @NotNull String name) {
+        return Optional.ofNullable(lookupOBCOrNull(name));
     }
 
     /**
@@ -179,6 +193,20 @@ public final class SimpleLookup {
         } catch(final LookupException ex) {
             return null;
         }
+    }
+
+    /**
+     * Looks up a class within the package {@code net.minecraft}.
+     * The path will be implicitly formatted by the library.
+     *
+     * @param legacy     The path to look for if the Bukkit version is below {@code 1.17}.
+     * @param newVersion The path to look for if the Bukkit version is at least {@code 1.17}.
+     * @return The class wrapped in a {@link Optional}.
+     * @since 1.4
+     */
+    @NotNull
+    public static Optional<Class<?>> findNMS(@NotNull final String legacy, @NotNull final String newVersion) {
+        return Optional.ofNullable(lookupNMSOrNull(legacy, newVersion));
     }
 
 }

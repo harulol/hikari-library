@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Represents an immutable tuple with 2 values.
@@ -16,8 +17,8 @@ import java.util.Objects;
  */
 public class Pair<A, B> {
 
-    private final A first;
-    private final B second;
+    protected final A first;
+    protected final B second;
 
     /**
      * Quickly construct a pair using a call that is generally
@@ -75,10 +76,23 @@ public class Pair<A, B> {
      *
      * @return The first value or null.
      * @since 1.2
+     * @deprecated Use {@link Pair#getFirstOption()} for nullability and {@link Pair#getFirst()} for non-null instead.
      */
     @Nullable
+    @Deprecated
     public final A getFirstOrNull() {
         return first;
+    }
+
+    /**
+     * Retrieves the first value encapsulated in an {@link Optional}.
+     *
+     * @return The first value in option.
+     * @since 1.4
+     */
+    @NotNull
+    public final Optional<A> getFirstOption() {
+        return Optional.ofNullable(first);
     }
 
     /**
@@ -87,10 +101,23 @@ public class Pair<A, B> {
      *
      * @return The second value or null.
      * @since 1.2
+     * @deprecated Use {@link Pair#getSecondOption()} for nullability and {@link Pair#getSecond()} for non-null instead.
      */
+    @Deprecated
     @Nullable
     public final B getSecondOrNull() {
         return second;
+    }
+
+    /**
+     * Retrieves the second value encapsulated in an {@link Optional}.
+     *
+     * @return The second value in option.
+     * @since 1.4
+     */
+    @NotNull
+    public final Optional<B> getSecondOption() {
+        return Optional.ofNullable(second);
     }
 
     /**
@@ -121,8 +148,7 @@ public class Pair<A, B> {
 
     @Override
     public String toString() {
-        return String.format("Pair{first=%s,second=%s}",
-            getFirstOrNull() == null ? "null" : getFirst().toString(), getSecondOrNull() == null ? "null" : getSecond().toString());
+        return String.format("Pair{first=%s,second=%s}", first, second);
     }
 
     @Override

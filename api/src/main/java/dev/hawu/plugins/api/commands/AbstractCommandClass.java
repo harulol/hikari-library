@@ -170,8 +170,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @return The permission message.
      * @since 1.0
      */
-    public @NotNull
-    String getPermissionMessage() {
+    public @NotNull String getPermissionMessage() {
         return permissionMessage;
     }
 
@@ -192,8 +191,7 @@ public abstract class AbstractCommandClass implements TabExecutor {
      * @return The bad sender message.
      * @since 1.0
      */
-    public @NotNull
-    String getBadSenderMessage() {
+    public @NotNull String getBadSenderMessage() {
         return badSenderMessage;
     }
 

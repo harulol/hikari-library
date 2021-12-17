@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Represents an immutable tuple with 4 values.
@@ -18,7 +19,7 @@ import java.util.Objects;
  */
 public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
 
-    private final D fourth;
+    protected final D fourth;
 
     /**
      * Quickly construct a quadruple using a call that is generally
@@ -72,10 +73,23 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
      *
      * @return The fourth value or null.
      * @since 1.2
+     * @deprecated Use {@link Quadruple#getFourthOption()} for nullability and {@link Quadruple#getFourth()} for non-nullability.
      */
     @Nullable
+    @Deprecated
     public final D getFourthOrNull() {
         return this.fourth;
+    }
+
+    /**
+     * Retrieves the fourth value encapsulated in an {@link Optional}.
+     *
+     * @return The fourth value in option.
+     * @since 1.4
+     */
+    @NotNull
+    public final Optional<D> getFourthOption() {
+        return Optional.ofNullable(fourth);
     }
 
     /**
@@ -93,14 +107,12 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
 
     @Override
     public String toString() {
-        return String.format("Quadruple{first=%s,second=%s,third=%s,fourth=%s}",
-            getFirstOrNull() == null ? "null" : getFirst().toString(), getSecondOrNull() == null ? "null" : getSecond().toString(),
-            getThirdOrNull() == null ? "null" : getThird().toString(), getFourthOrNull() == null ? "null" : getFourth().toString());
+        return String.format("Quadruple{first=%s,second=%s,third=%s,fourth=%s}", first, second, third, fourth);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(getFirstOrNull()).append(getSecondOrNull()).append(getThirdOrNull()).append(fourth).toHashCode();
+        return new HashCodeBuilder().append(first).append(second).append(third).append(fourth).toHashCode();
     }
 
     @Override
@@ -108,11 +120,8 @@ public class Quadruple<A, B, C, D> extends Triplet<A, B, C> {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         Quadruple<?, ?, ?, ?> quadruple = (Quadruple<?, ?, ?, ?>) obj;
-        return new EqualsBuilder()
-            .append(getFirstOrNull(), quadruple.getFirstOrNull())
-            .append(getSecondOrNull(), quadruple.getSecondOrNull())
-            .append(getThirdOrNull(), quadruple.getThirdOrNull())
-            .append(fourth, quadruple.fourth).isEquals();
+        return new EqualsBuilder().append(first, quadruple.first).append(second, quadruple.second)
+            .append(third, quadruple.third).append(fourth, quadruple.fourth).isEquals();
     }
 
 }

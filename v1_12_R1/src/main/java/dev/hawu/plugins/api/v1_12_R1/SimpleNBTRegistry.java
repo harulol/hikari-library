@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.v1_12_R1;
 
 import dev.hawu.plugins.api.nbt.*;
 import dev.hawu.plugins.api.reflect.UncheckedHandles;
+import dev.hawu.plugins.api.reflect.UncheckedReflects;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -22,8 +23,13 @@ import java.util.Objects;
 @Deprecated
 public final class SimpleNBTRegistry extends NBTRegistry {
 
-    private static final Lookup LOOKUP = MethodHandles.lookup();
-    private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.findGetter(LOOKUP, NBTTagLongArray.class, "b", long[].class);
+    private static final Field LONG_ARRAY_FIELD = UncheckedReflects.getField(NBTTagLongArray.class, true, "b")
+        .map(field -> {
+            field.setAccessible(true);
+            return field;
+        })
+        .orElseThrow(() -> new IllegalStateException("Could not find field 'b' in NBTTagLongArray"));
+    private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.unreflectGetter(MethodHandles.lookup(), LONG_ARRAY_FIELD).get();
 
     @NotNull
     private NBTTagList transformAPIList(@NotNull final NBTList list) {

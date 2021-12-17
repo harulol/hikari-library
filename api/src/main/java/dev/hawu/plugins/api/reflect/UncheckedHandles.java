@@ -1,7 +1,6 @@
 package dev.hawu.plugins.api.reflect;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaMetafactory;
@@ -11,6 +10,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 /**
  * Helper utility class for finding method handles
@@ -30,15 +30,15 @@ public final class UncheckedHandles {
      * @param lookup The {@link Lookup} to use.
      * @param ref    The class to lookup.
      * @param type   The constructor method type.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findConstructor(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final MethodType type) {
+    @NotNull
+    public static Optional<MethodHandle> findConstructor(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final MethodType type) {
         try {
-            return lookup.findConstructor(ref, type);
-        } catch(final NoSuchMethodException | IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.findConstructor(ref, type));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -50,15 +50,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    @NotNull
+    public static Optional<MethodHandle> findGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return lookup.findGetter(ref, name, type);
-        } catch(final IllegalAccessException | NoSuchFieldException e) {
-            return null;
+            return Optional.of(lookup.findGetter(ref, name, type));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -70,15 +70,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    @NotNull
+    public static Optional<MethodHandle> findSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return lookup.findSetter(ref, name, type);
-        } catch(final IllegalAccessException | NoSuchFieldException e) {
-            return null;
+            return Optional.of(lookup.findSetter(ref, name, type));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -90,15 +90,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findStaticGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    @NotNull
+    public static Optional<MethodHandle> findStaticGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return lookup.findStaticGetter(ref, name, type);
-        } catch(final NoSuchFieldException | IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.findStaticGetter(ref, name, type));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -110,15 +110,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findStaticSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    @NotNull
+    public static Optional<MethodHandle> findStaticSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return lookup.findStaticSetter(ref, name, type);
-        } catch(final NoSuchFieldException | IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.findStaticSetter(ref, name, type));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -130,15 +130,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the method.
      * @param type   The method type.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findStatic(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
+    @NotNull
+    public static Optional<MethodHandle> findStatic(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
         try {
-            return lookup.findStatic(ref, name, type);
-        } catch(final NoSuchMethodException | IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.findStatic(ref, name, type));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -150,15 +150,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the method.
      * @param type   The method type.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findVirtual(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
+    @NotNull
+    public static Optional<MethodHandle> findVirtual(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
         try {
-            return lookup.findVirtual(ref, name, type);
-        } catch(final NoSuchMethodException | IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.findVirtual(ref, name, type));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -171,16 +171,16 @@ public final class UncheckedHandles {
      * @param name          The name of the method.
      * @param type          The method type.
      * @param specialCaller The proposed calling class to invoke {@code invokespecial}.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle findSpecial(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name,
-                                           @NotNull final MethodType type, @NotNull final Class<?> specialCaller) {
+    @NotNull
+    public static Optional<MethodHandle> findSpecial(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name,
+                                                     @NotNull final MethodType type, @NotNull final Class<?> specialCaller) {
         try {
-            return lookup.findSpecial(ref, name, type, specialCaller);
-        } catch(final NoSuchMethodException | IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.findSpecial(ref, name, type, specialCaller));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -190,15 +190,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param m      The method to unreflect.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle unreflect(final @NotNull Lookup lookup, @NotNull final Method m) {
+    @NotNull
+    public static Optional<MethodHandle> unreflect(final @NotNull Lookup lookup, @NotNull final Method m) {
         try {
-            return lookup.unreflect(m);
-        } catch(final IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.unreflect(m));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -208,15 +208,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param c      The constructor to unreflect.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle unreflect(final @NotNull Lookup lookup, @NotNull final Constructor<?> c) {
+    @NotNull
+    public static Optional<MethodHandle> unreflect(final @NotNull Lookup lookup, @NotNull final Constructor<?> c) {
         try {
-            return lookup.unreflectConstructor(c);
-        } catch(final IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.unreflectConstructor(c));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -226,15 +226,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param f      The field whose getter to unreflect.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle unreflectGetter(final @NotNull Lookup lookup, @NotNull final Field f) {
+    @NotNull
+    public static Optional<MethodHandle> unreflectGetter(final @NotNull Lookup lookup, @NotNull final Field f) {
         try {
-            return lookup.unreflectGetter(f);
-        } catch(final IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.unreflectGetter(f));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -244,15 +244,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param f      The field whose setter to unreflect.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle unreflectSetter(final @NotNull Lookup lookup, @NotNull final Field f) {
+    @NotNull
+    public static Optional<MethodHandle> unreflectSetter(final @NotNull Lookup lookup, @NotNull final Field f) {
         try {
-            return lookup.unreflectSetter(f);
-        } catch(final IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.unreflectSetter(f));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -263,15 +263,15 @@ public final class UncheckedHandles {
      * @param lookup        The lookup to use
      * @param m             The method to unreflect.
      * @param specialCaller The class to invoke {@code invokespecial}.
-     * @return The {@link MethodHandle} or {@code null} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
      * @since 1.0
      */
-    @Nullable
-    public static MethodHandle unreflectSpecial(final @NotNull Lookup lookup, @NotNull final Method m, @NotNull Class<?> specialCaller) {
+    @NotNull
+    public static Optional<MethodHandle> unreflectSpecial(final @NotNull Lookup lookup, @NotNull final Method m, @NotNull Class<?> specialCaller) {
         try {
-            return lookup.unreflectSpecial(m, specialCaller);
-        } catch(final IllegalAccessException e) {
-            return null;
+            return Optional.of(lookup.unreflectSpecial(m, specialCaller));
+        } catch(final Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -285,19 +285,18 @@ public final class UncheckedHandles {
      * @param samMethodType          The type of the SAM method.
      * @param implMethod             The method to invoke.
      * @param instantiatedMethodType The type of the instantiated method.
-     * @return The callsite generated by metafactory.
+     * @return The callsite generated by metafactory wrapped inside an {@link Optional}.
      * @since 1.3
      */
-    @Nullable
-    public static CallSite metafactory(final @NotNull Lookup lookup, final @NotNull String invokedName, final @NotNull MethodType invokedType,
-                                       final @NotNull MethodType samMethodType, final @NotNull MethodHandle implMethod,
-                                       final @NotNull MethodType instantiatedMethodType) {
+    @NotNull
+    public static Optional<CallSite> metafactory(final @NotNull Lookup lookup, final @NotNull String invokedName, final @NotNull MethodType invokedType,
+                                                 final @NotNull MethodType samMethodType, final @NotNull MethodHandle implMethod,
+                                                 final @NotNull MethodType instantiatedMethodType) {
         try {
-            return LambdaMetafactory.metafactory(lookup, invokedName, invokedType,
-                samMethodType, implMethod, instantiatedMethodType);
+            return Optional.of(LambdaMetafactory.metafactory(lookup, invokedName, invokedType,
+                samMethodType, implMethod, instantiatedMethodType));
         } catch(final Throwable e) {
-            e.printStackTrace();
-            return null;
+            return Optional.empty();
         }
     }
 

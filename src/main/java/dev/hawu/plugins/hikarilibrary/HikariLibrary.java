@@ -4,6 +4,8 @@ import dev.hawu.plugins.api.Tasks;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
 import dev.hawu.plugins.api.inventories.Inventories;
 import dev.hawu.plugins.api.items.BukkitMaterial;
+import dev.hawu.plugins.api.particles.ParticlePacketAdapter;
+import dev.hawu.plugins.api.particles.ParticlePacketAdapterImpl;
 import dev.hawu.plugins.api.title.TitlePacketAdapter;
 import dev.hawu.plugins.api.title.TitlePacketAdapterImpl;
 import org.bukkit.Bukkit;
@@ -18,6 +20,7 @@ public final class HikariLibrary extends JavaPlugin {
         Inventories.setPlugin(this);
 
         TitlePacketAdapter.setAdapter(TitlePacketAdapterImpl.getInstance());
+        ParticlePacketAdapter.setAdapter(ParticlePacketAdapterImpl.getInstance());
     }
 
     @Override

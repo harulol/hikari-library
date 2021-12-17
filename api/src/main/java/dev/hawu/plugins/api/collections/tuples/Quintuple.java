@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Represents an immutable tuple with 5 values.
@@ -76,10 +77,23 @@ public final class Quintuple<A, B, C, D, E> extends Quadruple<A, B, C, D> {
      *
      * @return The fifth value or null.
      * @since 1.2
+     * @deprecated Use {@link Quintuple#getFifthOption()} for nullability and {@link Quintuple#getFifth()} for non-nullability.
      */
     @Nullable
+    @Deprecated
     public E getFifthOrNull() {
         return this.fifth;
+    }
+
+    /**
+     * Retrieves the fifth value encapsulated in an {@link Optional}.
+     *
+     * @return The fifth value in option.
+     * @since 1.4
+     */
+    @NotNull
+    public Optional<E> getFifthOption() {
+        return Optional.ofNullable(fifth);
     }
 
     /**
@@ -97,17 +111,12 @@ public final class Quintuple<A, B, C, D, E> extends Quadruple<A, B, C, D> {
 
     @Override
     public String toString() {
-        return String.format("Quintuple{first=%s,second=%s,third=%s,fourth=%s,fifth=%s}",
-            getFirstOrNull() == null ? "null" : getFirst().toString(), getSecondOrNull() == null ? "null" : getSecond().toString(),
-            getThirdOrNull() == null ? "null" : getThird().toString(), getFourthOrNull() == null ? "null" : getFourth().toString(),
-            getFifthOrNull() == null ? "null" : getFifth().toString());
+        return String.format("Quintuple{first=%s,second=%s,third=%s,fourth=%s,fifth=%s}", first, second, third, fourth, fifth);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-            .append(getFirstOrNull()).append(getSecondOrNull())
-            .append(getThirdOrNull()).append(getFourthOrNull()).append(fifth).toHashCode();
+        return new HashCodeBuilder().append(first).append(second).append(third).append(fourth).append(fifth).toHashCode();
     }
 
     @Override
@@ -115,12 +124,8 @@ public final class Quintuple<A, B, C, D, E> extends Quadruple<A, B, C, D> {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         Quintuple<?, ?, ?, ?, ?> quintuple = (Quintuple<?, ?, ?, ?, ?>) obj;
-        return new EqualsBuilder()
-            .append(getFirstOrNull(), quintuple.getFirstOrNull())
-            .append(getSecondOrNull(), quintuple.getSecondOrNull())
-            .append(getThirdOrNull(), quintuple.getThirdOrNull())
-            .append(getFourthOrNull(), quintuple.getFourthOrNull())
-            .append(getFifthOrNull(), quintuple.getFifthOrNull()).isEquals();
+        return new EqualsBuilder().append(first, quintuple.first).append(second, quintuple.second)
+            .append(third, quintuple.third).append(fourth, quintuple.fourth).append(fifth, quintuple.fifth).isEquals();
     }
 
 }

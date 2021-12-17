@@ -14,6 +14,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
+import java.util.Optional;
 
 /**
  * The main implementation class for sending titles,
@@ -69,7 +70,7 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
 
         // Look up all classes necessary for sending titles and chat messages.
         I_CHAT_BASE_COMPONENT_CLASS = SimpleLookup.lookupNMS("IChatBaseComponent", "network.chat.IChatBaseComponent");
-        I_CHAT_MUTABLE_COMPONENT_CLASS = SimpleLookup.lookupNMS("IChatMutableComponent", "network.chat.IChatMutableComponent");
+        I_CHAT_MUTABLE_COMPONENT_CLASS = SimpleLookup.lookupNMSOrNull("IChatMutableComponent", "network.chat.IChatMutableComponent");
         PACKET_PLAY_OUT_TITLE = SimpleLookup.lookupNMSOrNull("PacketPlayOutTitle"); // null on v1_17_R1
         PACKET_PLAY_OUT_CHAT = SimpleLookup.lookupNMSOrNull("PacketPlayOutChat"); // null on v1_17_R1
         if(MinecraftVersion.getCurrent() == MinecraftVersion.v1_8_R1) {
@@ -88,42 +89,44 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
         TITLE_ENUM_ACTIONBAR = lookupTitleEnum(lookup, "ACTIONBAR"); // null on v1_10_R1 and below
 
         // Retrieve methods.
-        if(PACKET_PLAY_OUT_CHAT != null) {
-            final MethodHandle directHandle = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT,
-                MethodType.methodType(void.class, I_CHAT_BASE_COMPONENT_CLASS, byte.class));
-
-            // This should only be non-null if the version is from 1.8 - 1.10, as they don't have
-            // an ACTIONBAR enum yet.
-            if(directHandle != null)
-                CHAT_CONSTRUCTOR = directHandle.asType(MethodType.methodType(Object.class, Object.class, byte.class));
-            else CHAT_CONSTRUCTOR = null;
-        } else CHAT_CONSTRUCTOR = null;
+        if(PACKET_PLAY_OUT_CHAT != null)
+            CHAT_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT,
+                    MethodType.methodType(void.class, I_CHAT_BASE_COMPONENT_CLASS, byte.class))
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class, byte.class)))
+                .orElse(null);
+        else CHAT_CONSTRUCTOR = null;
 
         BUKKIT_SEND_TITLE = UncheckedHandles.findVirtual(lookup, Player.class, "sendTitle",
-            MethodType.methodType(void.class, String.class, String.class, int.class, int.class, int.class));
-        BUKKIT_RESET_TITLE = UncheckedHandles.findVirtual(lookup, Player.class, "resetTitle", MethodType.methodType(void.class));
+            MethodType.methodType(void.class, String.class, String.class, int.class, int.class, int.class)).orElse(null);
+        BUKKIT_RESET_TITLE = UncheckedHandles.findVirtual(lookup, Player.class, "resetTitle", MethodType.methodType(void.class)).orElse(null);
 
+        // I like Minecraft for changing a ton of internals.
         if(MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_18_R1)) {
             SERIALIZER_A = UncheckedHandles.findStatic(lookup, I_CHAT_BASE_COMPONENT_CLASS, "a",
                     MethodType.methodType(I_CHAT_BASE_COMPONENT_CLASS, String.class))
-                .asType(MethodType.methodType(Object.class, String.class));
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, String.class)))
+                .orElse(null);
         } else if(MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_16_R1)) {
             SERIALIZER_A = UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER_CLASS, "a",
                     MethodType.methodType(I_CHAT_MUTABLE_COMPONENT_CLASS, String.class))
-                .asType(MethodType.methodType(Object.class, String.class));
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, String.class)))
+                .orElse(null);
         } else {
             SERIALIZER_A = UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER_CLASS, "a",
                     MethodType.methodType(I_CHAT_BASE_COMPONENT_CLASS, String.class))
-                .asType(MethodType.methodType(Object.class, String.class));
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, String.class)))
+                .orElse(null);
         }
 
         if(PACKET_PLAY_OUT_TITLE != null) {
             TITLE_TIMES_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_TITLE,
                     MethodType.methodType(void.class, int.class, int.class, int.class))
-                .asType(MethodType.methodType(Object.class, int.class, int.class, int.class));
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, int.class, int.class, int.class)))
+                .orElse(null);
             TITLE_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_TITLE,
                     MethodType.methodType(void.class, ENUM_TITLE_ACTION, I_CHAT_BASE_COMPONENT_CLASS))
-                .asType(MethodType.methodType(Object.class, Object.class, Object.class));
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class, Object.class)))
+                .orElse(null);
         } else {
             TITLE_TIMES_CONSTRUCTOR = null;
             TITLE_CONSTRUCTOR = null;
@@ -135,10 +138,12 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
         if(PACKET_TITLE_ANIMATIONS != null && PACKET_ACTION_BAR != null) {
             TITLE_ANIMATIONS_SET = UncheckedHandles.findConstructor(lookup, PACKET_TITLE_ANIMATIONS,
                     MethodType.methodType(void.class, int.class, int.class, int.class))
-                .asType(MethodType.methodType(Object.class, int.class, int.class, int.class));
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, int.class, int.class, int.class)))
+                .orElse(null);
             ACTION_BAR_SET = UncheckedHandles.findConstructor(lookup, PACKET_ACTION_BAR,
                     MethodType.methodType(void.class, I_CHAT_BASE_COMPONENT_CLASS))
-                .asType(MethodType.methodType(Object.class, Object.class));
+                .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class)))
+                .orElse(null);
         } else {
             TITLE_ANIMATIONS_SET = null;
             ACTION_BAR_SET = null;
@@ -150,9 +155,9 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
     @Nullable
     private static Object lookupTitleEnum(final @NotNull Lookup lookup, final @NotNull String name) {
         try {
-            return UncheckedHandles.findStaticGetter(lookup, ENUM_TITLE_ACTION, name, ENUM_TITLE_ACTION)
-                .asType(MethodType.methodType(Object.class))
-                .invokeExact();
+            final Optional<MethodHandle> handle = UncheckedHandles.findStaticGetter(lookup, ENUM_TITLE_ACTION, name, ENUM_TITLE_ACTION)
+                .map(h -> h.asType(MethodType.methodType(Object.class)));
+            return handle.isPresent() ? handle.get().invokeExact() : null;
         } catch(final Throwable throwable) {
             return null;
         }

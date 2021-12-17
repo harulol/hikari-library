@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Represents an immutable tuple with 3 values.
@@ -17,7 +18,7 @@ import java.util.Objects;
  */
 public class Triplet<A, B, C> extends Pair<A, B> {
 
-    private final C third;
+    protected final C third;
 
     /**
      * Quickly construct a triplet using a call that is generally
@@ -67,10 +68,23 @@ public class Triplet<A, B, C> extends Pair<A, B> {
      *
      * @return The third value or null.
      * @since 1.2
+     * @deprecated Use {@link Triplet#getThirdOption()} for nullability and {@link Triplet#getThird()} for non-null.
      */
     @Nullable
+    @Deprecated
     public final C getThirdOrNull() {
         return this.third;
+    }
+
+    /**
+     * Retrieves the third value encapsulated in an {@link Optional}.
+     *
+     * @return The third value in option.
+     * @since 1.4
+     */
+    @NotNull
+    public final Optional<C> getThirdOption() {
+        return Optional.ofNullable(third);
     }
 
     /**
@@ -88,14 +102,12 @@ public class Triplet<A, B, C> extends Pair<A, B> {
 
     @Override
     public String toString() {
-        return String.format("Triplet{first=%s,second=%s,third=%s}",
-            getFirstOrNull() == null ? "null" : getFirst().toString(), getSecondOrNull() == null ? "null" : getSecond().toString(),
-            getThirdOrNull() == null ? "null" : getThird().toString());
+        return String.format("Triplet{first=%s,second=%s,third=%s}", first, second, third);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(getFirstOrNull()).append(getSecondOrNull()).append(third).toHashCode();
+        return new HashCodeBuilder().append(first).append(second).append(third).toHashCode();
     }
 
     @Override
@@ -103,11 +115,7 @@ public class Triplet<A, B, C> extends Pair<A, B> {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         Triplet<?, ?, ?> triplet = (Triplet<?, ?, ?>) obj;
-        return new EqualsBuilder()
-            .append(getFirstOrNull(), triplet.getFirstOrNull())
-            .append(getSecondOrNull(), triplet.getSecondOrNull())
-            .append(third, triplet.third)
-            .isEquals();
+        return new EqualsBuilder().append(first, triplet.first).append(second, triplet.second).append(third, triplet.third).isEquals();
     }
 
 }
