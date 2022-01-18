@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 /**
  * Represents a list of text component parts
@@ -43,6 +44,18 @@ public final class TextComponent {
      */
     public void add(final @NotNull TextComponentPart part) {
         this.list.add(part);
+    }
+
+    /**
+     * Adds a text component part to the list.
+     *
+     * @param builder The consumer to configure the builder.
+     * @since 1.5
+     */
+    public void add(final @NotNull Consumer<TextComponentPartBuilder> builder) {
+        final TextComponentPartBuilder partBuilder = new TextComponentPartBuilder();
+        builder.accept(partBuilder);
+        this.list.add(partBuilder.build());
     }
 
     @Override
