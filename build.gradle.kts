@@ -4,7 +4,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.1"
 }
 
-version = "1.4-SNAPSHOT"
+version = "1.5-SNAPSHOT"
 
 // Configuring main stuff for all projects.
 allprojects {
