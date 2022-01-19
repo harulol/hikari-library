@@ -60,7 +60,7 @@ public final class TextComponent {
 
     @Override
     public String toString() {
-        final StringJoiner joiner = new StringJoiner(",", "[\"\"", "]");
+        final StringJoiner joiner = new StringJoiner(",", list.isEmpty() ? "[\"\"" : "[\"\",", "]");
         list.stream().map(TextComponentPart::toString).forEach(joiner::add);
         return joiner.toString();
     }

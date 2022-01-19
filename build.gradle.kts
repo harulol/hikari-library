@@ -1,6 +1,8 @@
 plugins {
     `java-library`
     `maven-publish`
+    kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.dokka") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "7.1.1"
 }
 
@@ -27,6 +29,7 @@ allprojects {
 
     dependencies {
         api("org.jetbrains:annotations:23.0.0")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
         implementation("com.google.code.gson:gson:2.8.9")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
@@ -43,6 +46,7 @@ setProperty("libsDirName", project.name)
 dependencies {
     implementation("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
     subprojects.forEach {
+        @Suppress("DEPRECATION")
         compileClasspath(it)
     }
 }

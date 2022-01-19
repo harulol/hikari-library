@@ -1,5 +1,27 @@
+plugins {
+    kotlin("jvm")
+    id("org.jetbrains.dokka")
+}
+
 dependencies {
     implementation("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
+}
+
+tasks.dokkaJavadoc {
+    outputDirectory.set(tasks.javadoc.get().destinationDir)
+    moduleName.set("HikariLibrary")
+
+    dokkaSourceSets {
+        configureEach {
+            reportUndocumented.set(true)
+            skipEmptyPackages.set(true)
+            displayName.set("HikariLibrary")
+            sourceRoots.from(file("src"))
+            jdkVersion.set(8)
+            includes.from("./packages.md")
+        }
+    }
 }
 
 val libraryName = "hikari-library"
@@ -17,8 +39,8 @@ val sourcesJar by tasks.creating(Jar::class) {
 }
 
 val javadocJar by tasks.creating(Jar::class) {
-    dependsOn(tasks.javadoc.get())
-    from(tasks.javadoc.get())
+    dependsOn(tasks.dokkaJavadoc.get())
+    from(tasks.dokkaJavadoc.get())
     archiveBaseName.set(libraryName)
     archiveAppendix.set(project.name.toLowerCase())
     archiveClassifier.set("javadoc")
