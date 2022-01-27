@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.reflect;
 
+import dev.hawu.plugins.api.collections.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.CallSite;
@@ -100,7 +101,7 @@ public final class MetafactoryBuilder {
      * @since 1.4
      */
     @NotNull
-    public Optional<CallSite> build() {
+    public Property<CallSite> build() {
         return UncheckedHandles.metafactory(caller, invokedName, invokedType,
             samMethodType, implMethod, instantiatedMethodType);
     }

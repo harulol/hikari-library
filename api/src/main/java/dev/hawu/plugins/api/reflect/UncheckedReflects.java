@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.reflect;
 
+import dev.hawu.plugins.api.collections.Property;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,6 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Optional;
 
 /**
  * A utility helper class for finding constructors, methods
@@ -56,14 +56,14 @@ public final class UncheckedReflects {
 
         GET_HANDLE = UncheckedHandles.findVirtual(lookup, CRAFT_PLAYER_CLASS, "getHandle", MethodType.methodType(ENTITY_PLAYER_CLASS))
             .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class)))
-            .orElse(null);
+            .orNull();
         PLAYER_CONNECTION = UncheckedHandles.findGetter(lookup, ENTITY_PLAYER_CLASS, playerConnectionFieldName, PLAYER_CONNECTION_CLASS)
             .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class)))
-            .orElse(null);
+            .orNull();
         SEND_PACKET = UncheckedHandles.findVirtual(lookup, PLAYER_CONNECTION_CLASS, sendPacketMethodName,
                 MethodType.methodType(void.class, PACKET_CLASS))
             .map(handle -> handle.asType(MethodType.methodType(void.class, Object.class, Object.class)))
-            .orElse(null);
+            .orNull();
     }
 
     /**
@@ -74,11 +74,11 @@ public final class UncheckedReflects {
      * @since 1.3
      */
     @NotNull
-    public static Optional<Class<?>> getClass(final @NotNull String name) {
+    public static Property<Class<?>> getClass(final @NotNull String name) {
         try {
-            return Optional.of(Class.forName(name));
+            return Property.of(Class.forName(name));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -92,13 +92,13 @@ public final class UncheckedReflects {
      * @since 1.0
      */
     @NotNull
-    public static Optional<Constructor<?>> getConstructor(final @NotNull Class<?> cls, final boolean declared, final @NotNull Class<?> @NotNull ... types) {
+    public static Property<Constructor<?>> getConstructor(final @NotNull Class<?> cls, final boolean declared, final @NotNull Class<?> @NotNull ... types) {
         try {
             if(declared)
-                return Optional.of(cls.getDeclaredConstructor(types));
-            else return Optional.of(cls.getConstructor(types));
+                return Property.of(cls.getDeclaredConstructor(types));
+            else return Property.of(cls.getConstructor(types));
         } catch(final NoSuchMethodException ex) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -113,13 +113,13 @@ public final class UncheckedReflects {
      * @since 1.0
      */
     @NotNull
-    public static Optional<Method> getMethod(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name, final @NotNull Class<?> @NotNull ... params) {
+    public static Property<Method> getMethod(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name, final @NotNull Class<?> @NotNull ... params) {
         try {
             if(declared)
-                return Optional.of(cls.getDeclaredMethod(name, params));
-            else return Optional.of(cls.getMethod(name, params));
+                return Property.of(cls.getDeclaredMethod(name, params));
+            else return Property.of(cls.getMethod(name, params));
         } catch(final NoSuchMethodException e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -133,13 +133,13 @@ public final class UncheckedReflects {
      * @since 1.0
      */
     @NotNull
-    public static Optional<Field> getField(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name) {
+    public static Property<Field> getField(final @NotNull Class<?> cls, final boolean declared, final @NotNull String name) {
         try {
             if(declared)
-                return Optional.of(cls.getDeclaredField(name));
-            else return Optional.of(cls.getField(name));
+                return Property.of(cls.getDeclaredField(name));
+            else return Property.of(cls.getField(name));
         } catch(final NoSuchFieldException ex) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 

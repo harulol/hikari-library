@@ -28,7 +28,7 @@ public final class SimpleNBTRegistry extends NBTRegistry {
             field.setAccessible(true);
             return field;
         })
-        .orElseThrow(() -> new IllegalStateException("Could not find field 'b' in NBTTagLongArray"));
+        .orElseThrow(new IllegalStateException("Could not find field 'b' in NBTTagLongArray"));
     private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.unreflectGetter(MethodHandles.lookup(), LONG_ARRAY_FIELD).get();
 
     @NotNull

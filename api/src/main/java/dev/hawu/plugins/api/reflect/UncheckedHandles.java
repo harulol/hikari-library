@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.reflect;
 
+import dev.hawu.plugins.api.collections.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.CallSite;
@@ -10,7 +11,6 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Optional;
 
 /**
  * Helper utility class for finding method handles
@@ -30,15 +30,15 @@ public final class UncheckedHandles {
      * @param lookup The {@link Lookup} to use.
      * @param ref    The class to lookup.
      * @param type   The constructor method type.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findConstructor(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final MethodType type) {
+    public static Property<MethodHandle> findConstructor(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final MethodType type) {
         try {
-            return Optional.of(lookup.findConstructor(ref, type));
+            return Property.of(lookup.findConstructor(ref, type));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -50,15 +50,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static Property<MethodHandle> findGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return Optional.of(lookup.findGetter(ref, name, type));
+            return Property.of(lookup.findGetter(ref, name, type));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -70,15 +70,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static Property<MethodHandle> findSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return Optional.of(lookup.findSetter(ref, name, type));
+            return Property.of(lookup.findSetter(ref, name, type));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -90,15 +90,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findStaticGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static Property<MethodHandle> findStaticGetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return Optional.of(lookup.findStaticGetter(ref, name, type));
+            return Property.of(lookup.findStaticGetter(ref, name, type));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -110,15 +110,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the field.
      * @param type   The field method type.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findStaticSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
+    public static Property<MethodHandle> findStaticSetter(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final Class<?> type) {
         try {
-            return Optional.of(lookup.findStaticSetter(ref, name, type));
+            return Property.of(lookup.findStaticSetter(ref, name, type));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -130,15 +130,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the method.
      * @param type   The method type.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findStatic(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
+    public static Property<MethodHandle> findStatic(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
         try {
-            return Optional.of(lookup.findStatic(ref, name, type));
+            return Property.of(lookup.findStatic(ref, name, type));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -150,15 +150,15 @@ public final class UncheckedHandles {
      * @param ref    The class to lookup.
      * @param name   The name of the method.
      * @param type   The method type.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findVirtual(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
+    public static Property<MethodHandle> findVirtual(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name, @NotNull final MethodType type) {
         try {
-            return Optional.of(lookup.findVirtual(ref, name, type));
+            return Property.of(lookup.findVirtual(ref, name, type));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -171,16 +171,16 @@ public final class UncheckedHandles {
      * @param name          The name of the method.
      * @param type          The method type.
      * @param specialCaller The proposed calling class to invoke {@code invokespecial}.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> findSpecial(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name,
+    public static Property<MethodHandle> findSpecial(final @NotNull Lookup lookup, @NotNull final Class<?> ref, @NotNull final String name,
                                                      @NotNull final MethodType type, @NotNull final Class<?> specialCaller) {
         try {
-            return Optional.of(lookup.findSpecial(ref, name, type, specialCaller));
+            return Property.of(lookup.findSpecial(ref, name, type, specialCaller));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -190,15 +190,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param m      The method to unreflect.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> unreflect(final @NotNull Lookup lookup, @NotNull final Method m) {
+    public static Property<MethodHandle> unreflect(final @NotNull Lookup lookup, @NotNull final Method m) {
         try {
-            return Optional.of(lookup.unreflect(m));
+            return Property.of(lookup.unreflect(m));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -208,15 +208,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param c      The constructor to unreflect.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> unreflect(final @NotNull Lookup lookup, @NotNull final Constructor<?> c) {
+    public static Property<MethodHandle> unreflect(final @NotNull Lookup lookup, @NotNull final Constructor<?> c) {
         try {
-            return Optional.of(lookup.unreflectConstructor(c));
+            return Property.of(lookup.unreflectConstructor(c));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -226,15 +226,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param f      The field whose getter to unreflect.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> unreflectGetter(final @NotNull Lookup lookup, @NotNull final Field f) {
+    public static Property<MethodHandle> unreflectGetter(final @NotNull Lookup lookup, @NotNull final Field f) {
         try {
-            return Optional.of(lookup.unreflectGetter(f));
+            return Property.of(lookup.unreflectGetter(f));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -244,15 +244,15 @@ public final class UncheckedHandles {
      *
      * @param lookup The lookup to use
      * @param f      The field whose setter to unreflect.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> unreflectSetter(final @NotNull Lookup lookup, @NotNull final Field f) {
+    public static Property<MethodHandle> unreflectSetter(final @NotNull Lookup lookup, @NotNull final Field f) {
         try {
-            return Optional.of(lookup.unreflectSetter(f));
+            return Property.of(lookup.unreflectSetter(f));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -263,15 +263,15 @@ public final class UncheckedHandles {
      * @param lookup        The lookup to use
      * @param m             The method to unreflect.
      * @param specialCaller The class to invoke {@code invokespecial}.
-     * @return The {@link MethodHandle} or {@code null} inside an {@link Optional} if any errors happened.
+     * @return The {@link MethodHandle} or {@code null} inside an {@link Property} if any errors happened.
      * @since 1.0
      */
     @NotNull
-    public static Optional<MethodHandle> unreflectSpecial(final @NotNull Lookup lookup, @NotNull final Method m, @NotNull Class<?> specialCaller) {
+    public static Property<MethodHandle> unreflectSpecial(final @NotNull Lookup lookup, @NotNull final Method m, @NotNull Class<?> specialCaller) {
         try {
-            return Optional.of(lookup.unreflectSpecial(m, specialCaller));
+            return Property.of(lookup.unreflectSpecial(m, specialCaller));
         } catch(final Exception e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 
@@ -285,18 +285,18 @@ public final class UncheckedHandles {
      * @param samMethodType          The type of the SAM method.
      * @param implMethod             The method to invoke.
      * @param instantiatedMethodType The type of the instantiated method.
-     * @return The callsite generated by metafactory wrapped inside an {@link Optional}.
+     * @return The callsite generated by metafactory wrapped inside an {@link Property}.
      * @since 1.3
      */
     @NotNull
-    public static Optional<CallSite> metafactory(final @NotNull Lookup lookup, final @NotNull String invokedName, final @NotNull MethodType invokedType,
+    public static Property<CallSite> metafactory(final @NotNull Lookup lookup, final @NotNull String invokedName, final @NotNull MethodType invokedType,
                                                  final @NotNull MethodType samMethodType, final @NotNull MethodHandle implMethod,
                                                  final @NotNull MethodType instantiatedMethodType) {
         try {
-            return Optional.of(LambdaMetafactory.metafactory(lookup, invokedName, invokedType,
+            return Property.of(LambdaMetafactory.metafactory(lookup, invokedName, invokedType,
                 samMethodType, implMethod, instantiatedMethodType));
         } catch(final Throwable e) {
-            return Optional.empty();
+            return Property.empty();
         }
     }
 

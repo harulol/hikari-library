@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.reflect;
 
+import dev.hawu.plugins.api.collections.Property;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,17 +27,16 @@ public final class FuzzyReflects {
      *
      * @param cls  The class to start looking up.
      * @param type The type of the method to match.
-     * @return Always a non-null method instance.
-     * @throws NoSuchMethodError If no methods could be found.
+     * @return Always a non-null method wrapper.
      * @since 1.0
      */
     @NotNull
-    public static Method searchMethod(@NotNull final Class<?> cls, @NotNull final MethodType type) {
+    public static Property<Method> searchMethod(@NotNull final Class<?> cls, @NotNull final MethodType type) {
         for(final Method method : cls.getDeclaredMethods()) {
-            if(Arrays.equals(method.getParameterTypes(), type.parameterArray())) return method;
+            if(Arrays.equals(method.getParameterTypes(), type.parameterArray())) return Property.of(method);
         }
         if(cls.getSuperclass() != null) return searchMethod(cls.getSuperclass(), type);
-        throw new NoSuchMethodError("No methods of type " + type.toMethodDescriptorString() + " found in " + cls.getName() + " and superclasses.");
+        return Property.empty();
     }
 
     /**
@@ -45,17 +45,16 @@ public final class FuzzyReflects {
      *
      * @param cls  The class to start looking up.
      * @param type The type of the field to retrieve.
-     * @return Always a non-null field instance.
-     * @throws NoSuchFieldError If no fields could be found.
+     * @return Always a non-null field wrapper.
      * @since 1.0
      */
     @NotNull
-    public static Field searchField(@NotNull final Class<?> cls, @NotNull final Class<?> type) {
+    public static Property<Field> searchField(@NotNull final Class<?> cls, @NotNull final Class<?> type) {
         for(final Field field : cls.getDeclaredFields()) {
-            if(field.getDeclaringClass() == type) return field;
+            if(field.getDeclaringClass() == type) return Property.of(field);
         }
         if(cls.getSuperclass() != null) return searchField(cls, type);
-        throw new NoSuchFieldError("No fields of type " + type.getSimpleName() + " found in " + cls.getName() + " and superclasses.");
+        return Property.empty();
     }
 
     /**

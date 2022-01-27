@@ -35,7 +35,7 @@ public final class ParticlePacketAdapterImpl extends ParticlePacketAdapter {
     static {
         final Lookup lookup = MethodHandles.lookup();
 
-        BUKKIT_PARTICLE = UncheckedReflects.getClass("org.bukkit.Particle").orElse(null);
+        BUKKIT_PARTICLE = UncheckedReflects.getClass("org.bukkit.Particle").orNull();
         ENUM_PARTICLE = SimpleLookup.lookupNMSOrNull("EnumParticle");
         PACKET_PLAY_OUT_PARTICLES = SimpleLookup.lookupNMSOrNull("PacketPlayOutWorldParticles");
 
@@ -43,13 +43,13 @@ public final class ParticlePacketAdapterImpl extends ParticlePacketAdapter {
             VALUE_OF_BUKKIT_PARTICLE = UncheckedHandles.findStatic(lookup, BUKKIT_PARTICLE, "valueOf",
                     MethodType.methodType(BUKKIT_PARTICLE, String.class))
                 .map(handle -> handle.asType(MethodType.methodType(Object.class, String.class)))
-                .orElse(null);
+                .orNull();
             SPAWN_PARTICLE = UncheckedHandles.findVirtual(lookup, Player.class, "spawnParticle",
                     MethodType.methodType(void.class, BUKKIT_PARTICLE, double.class, double.class, double.class, int.class,
                         double.class, double.class, double.class, double.class, Object.class))
                 .map(handle -> handle.asType(MethodType.methodType(void.class, Player.class, Object.class,
                     double.class, double.class, double.class, int.class, double.class, double.class, double.class, double.class, int[].class)))
-                .orElse(null);
+                .orNull();
         } else {
             VALUE_OF_BUKKIT_PARTICLE = null;
             SPAWN_PARTICLE = null;
@@ -59,13 +59,13 @@ public final class ParticlePacketAdapterImpl extends ParticlePacketAdapter {
             VALUE_OF_ENUM_PARTICLE = UncheckedHandles.findStatic(lookup, ENUM_PARTICLE, "valueOf",
                     MethodType.methodType(ENUM_PARTICLE, String.class))
                 .map(handle -> handle.asType(MethodType.methodType(Object.class, String.class)))
-                .orElse(null);
+                .orNull();
             PACKET_PARTICLES_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_PARTICLES,
                     MethodType.methodType(void.class, ENUM_PARTICLE, boolean.class, float.class, float.class, float.class,
                         float.class, float.class, float.class, float.class, int.class, int[].class))
                 .map(handle -> handle.asType(MethodType.methodType(Object.class, Object.class, boolean.class,
                     float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class, int[].class)))
-                .orElse(null);
+                .orNull();
         } else {
             VALUE_OF_ENUM_PARTICLE = null;
             PACKET_PARTICLES_CONSTRUCTOR = null;
