@@ -1,10 +1,10 @@
 package dev.hawu.plugins.api.chat;
 
-import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.Adapter;
+import dev.hawu.plugins.api.exceptions.AlreadyInitializedException;
+import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ObjectInputStream;
 import java.util.Objects;
 
 /**
@@ -69,8 +69,29 @@ public abstract class ChatPacketAdapter {
      * @since 1.5
      */
     public static void setAdapter(final @NotNull ChatPacketAdapter packetAdapter) {
-        if(adapter != null) throw new RuntimeException("ChatPacketAdapter is already initialized.");
+        if(adapter != null) throw new AlreadyInitializedException("ChatPacketAdapter is already initialized.");
         adapter = packetAdapter;
+    }
+
+    /**
+     * Attempts to resolve for an implementation of the
+     * chat packet adapter based on the server's current version.
+     *
+     * Usually, these kinds of implementations are repeated
+     * and they might be replaced with just one class using
+     * static final method handles soon.
+     *
+     * @since 1.5
+     */
+    @Deprecated
+    public static void resolve() {
+        if(adapter != null) return;
+
+        try {
+            adapter = (ChatPacketAdapter) Class.forName("dev.hawu.plugins.api." + MinecraftVersion.getCurrent() + ".SimpleChatRegistry").newInstance();
+        } catch(final Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
