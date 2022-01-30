@@ -1,5 +1,8 @@
-package dev.hawu.plugins.api.particles;
+package dev.hawu.plugins.api.impl;
 
+import dev.hawu.plugins.api.particles.ParticleEffect;
+import dev.hawu.plugins.api.particles.ParticleEnum;
+import dev.hawu.plugins.api.particles.ParticlePacketAdapter;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import dev.hawu.plugins.api.reflect.SimpleLookup;
 import dev.hawu.plugins.api.reflect.UncheckedHandles;
