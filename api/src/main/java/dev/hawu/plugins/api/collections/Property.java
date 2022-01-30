@@ -153,6 +153,19 @@ public class Property<T> {
     }
 
     /**
+     * Retrieves the same instance if the value is present,
+     * the other property otherwise.
+     *
+     * @param other The other property to return if this property is empty.
+     * @return The same instance if the value is present,
+     * @since 1.5
+     */
+    @NotNull
+    public final Property<T> either(final @NotNull Property<T> other) {
+        return value != null ? this : other;
+    }
+
+    /**
      * Attempts to retrieve the value, or throws a customized
      * throwable if it is not present.
      *

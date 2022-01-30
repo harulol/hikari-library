@@ -11,6 +11,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Helper utility class for finding method handles
@@ -296,6 +297,123 @@ public final class UncheckedHandles {
             return Property.of(LambdaMetafactory.metafactory(lookup, invokedName, invokedType,
                 samMethodType, implMethod, instantiatedMethodType));
         } catch(final Throwable e) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Finds or creates an instance of the given method type.
+     *
+     * @param rtype  the return type
+     * @param ptypes the parameter types
+     * @return a method type with the given components
+     * @throws NullPointerException     if {@code rtype} or {@code ptypes} or any element of {@code ptypes} is null
+     * @throws IllegalArgumentException if any element of {@code ptypes} is {@code void.class}
+     * @since 1.5
+     */
+    @NotNull
+    public static Property<MethodType> methodType(final Class<?> rtype, final Class<?>[] ptypes) {
+        try {
+            return Property.of(MethodType.methodType(rtype, ptypes));
+        } catch(final NullPointerException e) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Finds or creates a method type with the given components.
+     * Convenience method for {@link #methodType(java.lang.Class, java.lang.Class[]) methodType}.
+     *
+     * @param rtype  the return type
+     * @param ptypes the parameter types
+     * @return a method type with the given components
+     * @throws NullPointerException     if {@code rtype} or {@code ptypes} or any element of {@code ptypes} is null
+     * @throws IllegalArgumentException if any element of {@code ptypes} is {@code void.class}
+     */
+    @NotNull
+    public static Property<MethodType> methodType(final Class<?> rtype, final List<Class<?>> ptypes) {
+        try {
+            return Property.of(MethodType.methodType(rtype, ptypes));
+        } catch(final NullPointerException e) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Finds or creates a method type with the given components.
+     * Convenience method for {@link #methodType(java.lang.Class, java.lang.Class[]) methodType}.
+     * The leading parameter type is prepended to the remaining array.
+     *
+     * @param rtype  the return type
+     * @param ptype0 the first parameter type
+     * @param ptypes the remaining parameter types
+     * @return a method type with the given components
+     * @throws NullPointerException     if {@code rtype} or {@code ptype0} or {@code ptypes} or any element of {@code ptypes} is null
+     * @throws IllegalArgumentException if {@code ptype0} or {@code ptypes} or any element of {@code ptypes} is {@code void.class}
+     */
+    @NotNull
+    public static Property<MethodType> methodType(final Class<?> rtype, final Class<?> ptype0, final Class<?>... ptypes) {
+        try {
+            return Property.of(MethodType.methodType(rtype, ptype0, ptypes));
+        } catch(final NullPointerException e) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Finds or creates a method type with the given components.
+     * Convenience method for {@link #methodType(java.lang.Class, java.lang.Class[]) methodType}.
+     * The resulting method has no parameter types.
+     *
+     * @param rtype the return type
+     * @return a method type with the given return value
+     * @throws NullPointerException if {@code rtype} is null
+     */
+    @NotNull
+    public static Property<MethodType> methodType(final Class<?> rtype) {
+        try {
+            return Property.of(MethodType.methodType(rtype));
+        } catch(final Exception e) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Finds or creates a method type with the given components.
+     * Convenience method for {@link #methodType(java.lang.Class, java.lang.Class[]) methodType}.
+     * The resulting method has the single given parameter type.
+     *
+     * @param rtype  the return type
+     * @param ptype0 the parameter type
+     * @return a method type with the given return value and parameter type
+     * @throws NullPointerException     if {@code rtype} or {@code ptype0} is null
+     * @throws IllegalArgumentException if {@code ptype0} is {@code void.class}
+     */
+    @NotNull
+    public static Property<MethodType> methodType(final Class<?> rtype, final Class<?> ptype0) {
+        try {
+            return Property.of(MethodType.methodType(rtype, ptype0));
+        } catch(final Exception e) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Finds or creates a method type with the given components.
+     * Convenience method for {@link #methodType(java.lang.Class, java.lang.Class[]) methodType}.
+     * The resulting method has the same parameter types as {@code ptypes},
+     * and the specified return type.
+     *
+     * @param rtype  the return type
+     * @param ptypes the method type which supplies the parameter types
+     * @return a method type with the given components
+     * @throws NullPointerException if {@code rtype} or {@code ptypes} is null
+     */
+    @NotNull
+    public static Property<MethodType> methodType(Class<?> rtype, MethodType ptypes) {
+        try {
+            return Property.of(MethodType.methodType(rtype, ptypes));
+        } catch(final Exception e) {
             return Property.empty();
         }
     }

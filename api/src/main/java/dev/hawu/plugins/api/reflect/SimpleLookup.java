@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.reflect;
 
+import dev.hawu.plugins.api.collections.Property;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,8 +79,8 @@ public final class SimpleLookup {
      * @return The optional wrapping the class, or null.
      * @since 1.4
      */
-    public static Optional<Class<?>> findOBC(final @NotNull String name) {
-        return Optional.ofNullable(lookupOBCOrNull(name));
+    public static Property<Class<?>> findOBC(final @NotNull String name) {
+        return Property.of(lookupOBCOrNull(name));
     }
 
     /**
@@ -205,8 +206,8 @@ public final class SimpleLookup {
      * @since 1.4
      */
     @NotNull
-    public static Optional<Class<?>> findNMS(@NotNull final String legacy, @NotNull final String newVersion) {
-        return Optional.ofNullable(lookupNMSOrNull(legacy, newVersion));
+    public static Property<Class<?>> findNMS(@NotNull final String legacy, @NotNull final String newVersion) {
+        return Property.of(lookupNMSOrNull(legacy, newVersion));
     }
 
 }
