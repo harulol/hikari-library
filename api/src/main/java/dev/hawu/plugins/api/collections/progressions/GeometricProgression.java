@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.math.progressions;
+package dev.hawu.plugins.api.collections.progressions;
 
 /**
  * Represents a sequence of non-zero numbers where each term
@@ -17,7 +17,7 @@ public final class GeometricProgression extends Progression {
      * @param step The common ratio.
      * @since 1.0
      */
-    public GeometricProgression(final long from, final long step) {
+    public GeometricProgression(final double from, final double step) {
         super(from, step);
         if(from == 0 || step == 0) throw new IllegalArgumentException("Neither the first term nor the step could be 0.");
     }
@@ -35,8 +35,8 @@ public final class GeometricProgression extends Progression {
      * @since 1.0
      */
     @Override
-    public long getTerm(final int n) {
-        return from * (long) Math.pow(step, n - 1);
+    public double getTerm(final int n) {
+        return from * Math.pow(step, n - 1);
     }
 
     private double log(final double base, final double value) {
@@ -58,8 +58,8 @@ public final class GeometricProgression extends Progression {
      * @since 1.0
      */
     @Override
-    public long getNthTerm(final long v) {
-        return (long) Math.floor(log(step, (double) v / from)) + 1;
+    public int getNthTerm(final double v) {
+        return (int) Math.floor(log(step, v / from)) + 1;
     }
 
 }

@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.math.progressions;
+package dev.hawu.plugins.api.collections.progressions;
 
 /**
  * Represents a sequence of numbers such that the difference
@@ -6,7 +6,7 @@ package dev.hawu.plugins.api.math.progressions;
  *
  * @since 1.0
  */
-public final class ArithmeticProgression extends Progression {
+public class ArithmeticProgression extends Progression {
 
     /**
      * Constructs a default arithmetic progression
@@ -15,7 +15,7 @@ public final class ArithmeticProgression extends Progression {
      * @param from The first term of the progression.
      * @since 1.0
      */
-    public ArithmeticProgression(final long from) {
+    public ArithmeticProgression(final double from) {
         this(from, 1);
     }
 
@@ -27,7 +27,7 @@ public final class ArithmeticProgression extends Progression {
      * @param step The step of this progression.
      * @since 1.0
      */
-    public ArithmeticProgression(final long from, final long step) {
+    public ArithmeticProgression(final double from, final double step) {
         super(from, step);
     }
 
@@ -44,7 +44,7 @@ public final class ArithmeticProgression extends Progression {
      * @since 1.0
      */
     @Override
-    public long getTerm(final int n) {
+    public double getTerm(final int n) {
         if(n < 1) throw new IllegalArgumentException("The numbering for terms starts from 1 for arithmetic progressions.");
         return from + step * (n - 1); // a(n) = a(1) + d * a(n-1)
     }
@@ -64,8 +64,8 @@ public final class ArithmeticProgression extends Progression {
      * @since 1.0
      */
     @Override
-    public long getNthTerm(final long v) {
-        return ((v - from) / step) + 1;
+    public int getNthTerm(final double v) {
+        return (int) Math.floor((v - from) / step) + 1;
     }
 
 }

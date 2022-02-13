@@ -1,7 +1,8 @@
 package progressions;
 
-import dev.hawu.plugins.api.math.progressions.ArithmeticProgression;
-import dev.hawu.plugins.api.math.progressions.GeometricProgression;
+import dev.hawu.plugins.api.collections.progressions.ArithmeticProgression;
+import dev.hawu.plugins.api.collections.progressions.GeometricProgression;
+import dev.hawu.plugins.api.collections.progressions.HarmonicProgression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,18 @@ public final class ProgressionTest {
         // The 9th term would be the closet to 7,000 without going over
         Assertions.assertEquals(81, progression.getTerm(5));
         Assertions.assertEquals(9, progression.getNthTerm(7000));
+    }
+
+    @Test
+    @DisplayName("Harmonic Progression test")
+    public void harmonicProgressionTest() {
+        final HarmonicProgression progression = new HarmonicProgression(1);
+        // The progression would be as followed:
+        // 1 1/2 1/3 1/4 1/5 1/6 1/7
+        // The 3rd term would be 1/3
+        // The 10th term would be the closet to 1/10.5 without going under
+        Assertions.assertEquals(1.0 / 3.0, progression.getTerm(3));
+        Assertions.assertEquals(10, progression.getNthTerm(1.0 / 10.5));
     }
 
 }

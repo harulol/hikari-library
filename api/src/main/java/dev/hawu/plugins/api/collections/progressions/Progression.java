@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.math.progressions;
+package dev.hawu.plugins.api.collections.progressions;
 
 /**
  * Represents a progression of integers.
@@ -12,7 +12,7 @@ public abstract class Progression {
      *
      * @since 1.0
      */
-    protected final long from;
+    protected final double from;
 
     /**
      * The common difference between each term
@@ -20,7 +20,7 @@ public abstract class Progression {
      *
      * @since 1.0
      */
-    protected final long step;
+    protected final double step;
 
     /**
      * Empty constructor to construct a generic progression.
@@ -29,7 +29,7 @@ public abstract class Progression {
      * @param step The common difference.
      * @since 1.0
      */
-    Progression(final long from, final long step) {
+    Progression(final double from, final double step) {
         this.from = from;
         this.step = step;
     }
@@ -44,7 +44,7 @@ public abstract class Progression {
      * @return The term at the provided index.
      * @since 1.0
      */
-    public abstract long getTerm(final int n);
+    public abstract double getTerm(final int n);
 
     /**
      * Gets the minimum term index that has the value
@@ -55,6 +55,6 @@ public abstract class Progression {
      * @return The index of the term.
      * @since 1.0
      */
-    public abstract long getNthTerm(final long v);
+    public abstract int getNthTerm(final double v);
 
 }
