@@ -1,5 +1,7 @@
 package dev.hawu.plugins.api.particles;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -164,6 +166,25 @@ public final class ParticleEffect {
         this.particleData = particleData;
         this.particleCount = particleCount;
         this.data = data;
+    }
+
+    /**
+     * Plays the contained particle effect to a player.
+     *
+     * @param player the player to play to.
+     * @since 1.5
+     */
+    public void play(final @NotNull Player player) {
+        ParticlePacketAdapter.getAdapter().send(player, this);
+    }
+
+    /**
+     * Plays the contained particle effect to all online players.
+     *
+     * @since 1.5
+     */
+    public void play() {
+        Bukkit.getOnlinePlayers().forEach(this::play);
     }
 
     /**
