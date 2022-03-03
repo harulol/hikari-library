@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "7.1.1"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 version = "1.5-SNAPSHOT"
@@ -28,7 +28,7 @@ allprojects {
     dependencies {
         api("org.jetbrains:annotations:23.0.0")
         implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
-        implementation("com.google.code.gson:gson:2.8.9")
+        implementation("com.google.code.gson:gson:2.9.0")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
     }
