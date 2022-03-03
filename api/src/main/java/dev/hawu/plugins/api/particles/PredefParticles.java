@@ -34,7 +34,8 @@ public final class PredefParticles {
             final double x = radius * Math.cos(angle);
             final double z = radius * Math.sin(angle);
             final Location loc = center.clone().add(x, 0, z);
-            players.forEach(effect::play);
+            final ParticleEffect particle = effect.toBuilder().setLocation(loc).build();
+            players.forEach(particle::play);
         }
     }
 
@@ -54,7 +55,8 @@ public final class PredefParticles {
         final Vector destination = to.toVector();
         final Vector direction = MathUtils.normalize(to.toVector().subtract(from.toVector())).multiply(step);
         while(current.distanceSquared(destination) > step) {
-            players.forEach(effect::play);
+            final ParticleEffect particleEffect = effect.toBuilder().setLocation(current.toLocation(from.getWorld())).build();
+            players.forEach(particleEffect::play);
             current.add(direction);
         }
     }

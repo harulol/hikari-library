@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.impl;
 
 import dev.hawu.plugins.api.chat.ChatPacketAdapter;
 import dev.hawu.plugins.api.chat.TextComponent;
+import dev.hawu.plugins.api.reflect.LookupException;
 import dev.hawu.plugins.api.reflect.SimpleLookup;
 import dev.hawu.plugins.api.reflect.UncheckedHandles;
 import dev.hawu.plugins.api.reflect.UncheckedReflects;
@@ -11,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.UUID;
 
 public final class ChatPacketAdapterImpl extends ChatPacketAdapter {
@@ -43,7 +43,7 @@ public final class ChatPacketAdapterImpl extends ChatPacketAdapter {
                     try {
                         return handle.asType(UncheckedHandles.methodType(Object.class).get()).invokeExact();
                     } catch(Throwable e) {
-                        throw new RuntimeException(e);
+                        throw new LookupException(e);
                     }
                 })
                 .orNull();

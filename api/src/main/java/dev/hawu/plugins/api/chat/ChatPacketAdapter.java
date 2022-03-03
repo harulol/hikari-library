@@ -15,6 +15,8 @@ import java.util.Objects;
  */
 public abstract class ChatPacketAdapter {
 
+    private static ChatPacketAdapter adapter;
+
     /**
      * Sends a text component to the player.
      *
@@ -48,8 +50,6 @@ public abstract class ChatPacketAdapter {
      * @since 1.5
      */
     public abstract void sendAll(final @NotNull String message);
-
-    private static ChatPacketAdapter adapter;
 
     /**
      * Retrieves the set adapter instance.

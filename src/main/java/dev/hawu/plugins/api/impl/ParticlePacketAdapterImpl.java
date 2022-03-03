@@ -82,18 +82,18 @@ public final class ParticlePacketAdapterImpl extends ParticlePacketAdapter {
         return INSTANCE;
     }
 
-    private Object getEnum_v1_8(final ParticleEnum particleEnum) throws Throwable {
+    private Object getNMSEnum(final ParticleEnum particleEnum) throws Throwable {
         if(particleEnum == null) return null;
         return Objects.requireNonNull(VALUE_OF_ENUM_PARTICLE).invokeExact(particleEnum.name());
     }
 
-    private Object getEnum_v1_9(final ParticleEnum particleEnum) throws Throwable {
+    private Object getBukkitEnum(final ParticleEnum particleEnum) throws Throwable {
         if(particleEnum == null) return null;
         return Objects.requireNonNull(VALUE_OF_BUKKIT_PARTICLE).invokeExact(particleEnum.name());
     }
 
     private void sendPacket(final @NotNull Player player, final @NotNull ParticleEffect effect) throws Throwable {
-        final Object particle = getEnum_v1_8(effect.effect);
+        final Object particle = getNMSEnum(effect.effect);
         if(particle == null) return;
 
         final Object packet = Objects.requireNonNull(PACKET_PARTICLES_CONSTRUCTOR).invokeExact(particle, effect.longDistance,
@@ -102,7 +102,7 @@ public final class ParticlePacketAdapterImpl extends ParticlePacketAdapter {
     }
 
     private void spawnParticle(final @NotNull Player player, final @NotNull ParticleEffect effect) throws Throwable {
-        final Object particle = getEnum_v1_9(effect.effect);
+        final Object particle = getBukkitEnum(effect.effect);
         if(particle == null) return;
 
         Objects.requireNonNull(SPAWN_PARTICLE).invokeExact(player, particle, effect.x, effect.y, effect.z, effect.particleCount,

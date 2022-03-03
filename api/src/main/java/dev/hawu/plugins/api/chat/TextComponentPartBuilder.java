@@ -29,16 +29,9 @@ public final class TextComponentPartBuilder {
     private TextHoverEvent hoverEvent = null;
 
     /**
-     * Constructs an empty instance of the builder.
-     *
-     * @since 1.5
-     */
-    public TextComponentPartBuilder() {}
-
-    /**
      * Creates a new instance of the builder.
      *
-     * @return Said intance.
+     * @return Said instance.
      * @since 1.5
      */
     @NotNull

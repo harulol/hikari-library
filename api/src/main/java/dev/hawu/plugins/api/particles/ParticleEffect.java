@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.particles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -185,6 +186,23 @@ public final class ParticleEffect {
      */
     public void play() {
         Bukkit.getOnlinePlayers().forEach(this::play);
+    }
+
+    /**
+     * Constructs a new builder of particle effects with the current
+     * particle effect as a base.
+     *
+     * @return The new builder.
+     * @since 1.5
+     */
+    public ParticleEffectBuilder toBuilder() {
+        return ParticleEffect.of(particle)
+            .setOffset(new Vector(offsetX, offsetY, offsetZ))
+            .longDistance(longDistance)
+            .setLocation(new Vector(x, y, z))
+            .setParticleData(particleData)
+            .setParticleCount(particleCount)
+            .setData(data);
     }
 
     /**

@@ -2,10 +2,7 @@ package dev.hawu.plugins.api.impl;
 
 import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.collections.Property;
-import dev.hawu.plugins.api.reflect.MinecraftVersion;
-import dev.hawu.plugins.api.reflect.SimpleLookup;
-import dev.hawu.plugins.api.reflect.UncheckedHandles;
-import dev.hawu.plugins.api.reflect.UncheckedReflects;
+import dev.hawu.plugins.api.reflect.*;
 import dev.hawu.plugins.api.title.TitleComponent;
 import dev.hawu.plugins.api.title.TitlePacketAdapter;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -193,21 +190,24 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
         UncheckedReflects.sendPacket(player, times);
     }
 
-    private void sendActionBar_v1_18_R1(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
+    // For Minecraft 1.18
+    private void sendActionBar18(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
         assert ACTION_BAR_SET != null;
         final Object packet = ACTION_BAR_SET.invokeExact(wrap(component.getTitle(), component.shouldNotWrap(), false));
         sendSetTitleAnimations(player, (int) component.getFadeIn(), (int) component.getStay(), (int) component.getFadeOut());
         UncheckedReflects.sendPacket(player, packet);
     }
 
-    private void sendActionBar_v1_17_R1(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
+    // For Minecraft 1.17+
+    private void sendActionBar17(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
         assert ACTION_BAR_SET != null;
         final Object packet = ACTION_BAR_SET.invokeExact(wrap(component.getTitle(), component.shouldNotWrap()));
         sendSetTitleAnimations(player, (int) component.getFadeIn(), (int) component.getStay(), (int) component.getFadeOut());
         UncheckedReflects.sendPacket(player, packet);
     }
 
-    private void sendActionBar_v1_11_R1(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
+    // For Minecraft 1.11+
+    private void sendActionBar11(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
         assert TITLE_CONSTRUCTOR != null;
         assert TITLE_TIMES_CONSTRUCTOR != null;
         final Object packet = TITLE_CONSTRUCTOR.invokeExact(TITLE_ENUM_ACTIONBAR, wrap(component.getTitle(), component.shouldNotWrap()));
@@ -216,7 +216,8 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
         UncheckedReflects.sendPacket(player, packet);
     }
 
-    private void sendActionBar_v1_8_R1(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
+    // For Minecraft 1.8+
+    private void sendActionBar8(final @NotNull Player player, final @NotNull TitleComponent component) throws Throwable {
         assert CHAT_CONSTRUCTOR != null;
         final Object packet = CHAT_CONSTRUCTOR.invokeExact(wrap(component.getTitle(), component.shouldNotWrap()), (byte) 2);
         UncheckedReflects.sendPacket(player, packet);
@@ -257,20 +258,20 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
                 case v1_16_R1:
                 case v1_16_R2:
                 case v1_16_R3:
-                    sendActionBar_v1_11_R1(player, component);
+                    sendActionBar11(player, component);
                     break;
                 case v1_17_R1:
-                    sendActionBar_v1_17_R1(player, component);
+                    sendActionBar17(player, component);
                     break;
                 case v1_18_R1:
-                    sendActionBar_v1_18_R1(player, component);
+                    sendActionBar18(player, component);
                     break;
                 default:
-                    sendActionBar_v1_8_R1(player, component);
+                    sendActionBar8(player, component);
                     break;
             }
         } catch(final Throwable throwable) {
-            throw new RuntimeException(throwable);
+            throw new LookupException(throwable);
         }
     }
 
@@ -286,7 +287,7 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
             final Object reset = TITLE_CONSTRUCTOR.invokeExact(TITLE_ENUM_CLEAR, wrapEmpty());
             UncheckedReflects.sendPacket(player, reset);
         } catch(final Throwable throwable) {
-            throw new RuntimeException(throwable);
+            throw new LookupException(throwable);
         }
     }
 
