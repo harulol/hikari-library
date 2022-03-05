@@ -33,3 +33,8 @@ jobs:
       - name: Publish to GitHub packages
         if: ${{ github.ref == 'refs/heads/master'}}
         run: ./gradlew publish
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: './build/parent/PluginLibrary/HikariLibrary-*.jar'
+          name: 'Built Library'
