@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -25,7 +26,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     private EventPriority priority = EventPriority.NORMAL;
     private boolean ignoreCancelled = false;
 
-    private Consumer<T> consumer;
+    private BiConsumer<ClosableListener, T> consumer;
     private Predicate<T> predicate;
     private boolean countsIfFiltered;
     private long expiryInvocations = -1;
@@ -75,6 +76,20 @@ public final class EventSubscriptionBuilder<T extends Event> {
      */
     @NotNull
     public EventSubscriptionBuilder<T> handler(final @NotNull Consumer<@NotNull T> consumer) {
+        this.consumer = (listener, event) -> consumer.accept(event);
+        return this;
+    }
+
+    /**
+     * Sets the predicate for this event subscription
+     * with two parameters.
+     *
+     * @param consumer the handler for the event
+     * @return the same builder
+     * @since 1.5
+     */
+    @NotNull
+    public EventSubscriptionBuilder<T> openHandler(final @NotNull BiConsumer<@NotNull ClosableListener, @NotNull T> consumer) {
         this.consumer = consumer;
         return this;
     }
@@ -89,8 +104,8 @@ public final class EventSubscriptionBuilder<T extends Event> {
      */
     @NotNull
     public EventSubscriptionBuilder<T> andThen(final @NotNull Consumer<@NotNull T> consumer) {
-        if(this.consumer == null) this.consumer = consumer;
-        else this.consumer = this.consumer.andThen(consumer);
+        if(this.consumer == null) handler(consumer);
+        else this.consumer = this.consumer.andThen((listener, event) -> consumer.accept(event));
         return this;
     }
 
@@ -199,7 +214,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
 
             if(count.incrementAndGet() == expiryInvocations)
                 listener.close();
-            this.consumer.accept(casted);
+            this.consumer.accept(listener, casted);
         }, plugin, ignoreCancelled);
         return listener;
     }
