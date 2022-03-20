@@ -195,12 +195,8 @@ public final class EventSubscriptionBuilder<T extends Event> {
         final AtomicInteger count = new AtomicInteger();
         final long buildTime = System.currentTimeMillis();
         Bukkit.getPluginManager().registerEvent(eventClass, listener, priority, (l, event) -> {
-            T casted;
-            try {
-                casted = (T) event;
-            } catch(final ClassCastException exception) {
-                return;
-            }
+            if(!eventClass.isInstance(event)) return;
+            T casted = eventClass.cast(event);
 
             if((expiryTime > 0 && System.currentTimeMillis() - buildTime > expiryTime) || (expiryInvocations > 0 && count.get() == expiryInvocations)) {
                 listener.close();
