@@ -48,7 +48,7 @@ public final class I18n {
      */
     public void reload() {
         // Make sure that file exists.
-        plugin.saveResource("messages.yml", false);
+        if(!messagesFile.exists()) plugin.saveResource("messages.yml", true);
         try {
             messages.load(messagesFile);
         } catch(final Exception ignored) {}

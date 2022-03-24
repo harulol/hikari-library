@@ -114,6 +114,17 @@ public class Property<T> {
     }
 
     /**
+     * Attempts to make this property accept null values.
+     *
+     * @return The property instance.
+     * @since 1.5
+     */
+    @NotNull
+    public Property<T> nullable() {
+        throw new UnsupportedOperationException("A read-only property cannot be made nullable.");
+    }
+
+    /**
      * Attempts to retrieve the value within this property,
      * accepting that {@code null} is a valid response.
      *

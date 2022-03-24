@@ -188,7 +188,6 @@ public final class EventSubscriptionBuilder<T extends Event> {
      * @return Said closable listener.
      * @since 1.2
      */
-    @SuppressWarnings("unchecked")
     @NotNull
     public ClosableListener build(final @NotNull JavaPlugin plugin) {
         final ClosableListener listener = new ClosableListener();

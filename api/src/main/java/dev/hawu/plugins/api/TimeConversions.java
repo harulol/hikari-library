@@ -117,7 +117,7 @@ public final class TimeConversions {
      *
      * @since 1.0
      */
-    static final class TimeMillisBuilder {
+    public static final class TimeMillisBuilder {
 
         private double total = 0D;
 
@@ -283,7 +283,7 @@ public final class TimeConversions {
      *
      * @since 1.0
      */
-    static final class TimeStringBuilder {
+    public static final class TimeStringBuilder {
 
         private final double value;
         private TimeUnit unit = TimeUnit.MILLISECOND;

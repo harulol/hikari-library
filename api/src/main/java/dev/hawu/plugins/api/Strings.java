@@ -111,8 +111,8 @@ public final class Strings {
     public static String fillPlaceholders(@NotNull final String message, @NotNull final Pair<?, ?> @NotNull ... params) {
         String curr = message;
         for(Pair<?, ?> param : params) {
-            if(param.getFirst() == null) continue;
-            curr = curr.replace("%" + param.getFirst() + "%", param.getSecond() == null ? "null" : param.getSecond().toString());
+            if(param.getFirstOption().orElse(null) == null) continue;
+            curr = curr.replace("%" + param.getFirst() + "%", param.getSecondOption().orElse(null) == null ? "null" : param.getSecond().toString());
         }
         return color(curr);
     }
