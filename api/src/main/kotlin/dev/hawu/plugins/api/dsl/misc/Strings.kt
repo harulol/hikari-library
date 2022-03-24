@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.misc
+package dev.hawu.plugins.api.dsl.misc
 
 import dev.hawu.plugins.api.Strings
 import java.text.DecimalFormat

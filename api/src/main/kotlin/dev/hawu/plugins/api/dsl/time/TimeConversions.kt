@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.time
+package dev.hawu.plugins.api.dsl.time
 
 /**
  * Constructs a spec to build time in milliseconds.

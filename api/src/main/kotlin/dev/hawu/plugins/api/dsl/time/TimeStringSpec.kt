@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.time
+package dev.hawu.plugins.api.dsl.time
 
 import dev.hawu.plugins.api.TimeConversions
 import dev.hawu.plugins.api.TimeUnit
