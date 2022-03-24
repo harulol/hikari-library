@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.impl;
 
 import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.collections.Property;
+import dev.hawu.plugins.api.exceptions.PacketException;
 import dev.hawu.plugins.api.reflect.*;
 import dev.hawu.plugins.api.title.TitleComponent;
 import dev.hawu.plugins.api.title.TitlePacketAdapter;
@@ -241,7 +242,7 @@ public final class TitlePacketAdapterImpl extends TitlePacketAdapter {
             UncheckedReflects.sendPacket(player, title);
             UncheckedReflects.sendPacket(player, subtitle);
         } catch(Throwable e) {
-            throw new RuntimeException(e);
+            throw new PacketException(e);
         }
     }
 

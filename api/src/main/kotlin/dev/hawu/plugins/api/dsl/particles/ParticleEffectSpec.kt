@@ -61,6 +61,9 @@ class ParticleEffectSpec internal constructor() {
         this.data = data
     }
 
+    /**
+     * Public interface to build the particle effect enum.
+     */
     sealed interface IParticleEnumOption {
         infix fun named(s: String)
         infix fun named(enum: ParticleEnum)
@@ -76,6 +79,10 @@ class ParticleEffectSpec internal constructor() {
         }
     }
 
+    /**
+     * Public interface to build the location for
+     * this particle.
+     */
     sealed interface IParticleLocationOption {
         infix fun x(x: Number): IParticleLocationOption
         infix fun y(y: Number): IParticleLocationOption
@@ -107,9 +114,24 @@ class ParticleEffectSpec internal constructor() {
         }
     }
 
+    /**
+     * Public interface to build the particle's
+     * various options.
+     */
     sealed interface IParticleOption {
+
+        /**
+         * Configures the amount of particles to spawn at once.
+         * This value may be special for a few particle enums.
+         */
         infix fun count(v: Int): IParticleOption
+
+        /**
+         * Configures the display speed of the particle.
+         * This value may be special for a few particle enums.
+         */
         infix fun speed(v: Number): IParticleOption
+
     }
 
     private inner class ParticleOption : IParticleOption {

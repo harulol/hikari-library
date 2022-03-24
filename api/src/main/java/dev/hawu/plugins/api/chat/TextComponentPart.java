@@ -65,6 +65,16 @@ public final class TextComponentPart {
         this.hoverEvent = hoverEvent;
     }
 
+    private void addFormatting(final String field, final TextFormattingOption option, final StringBuilder builder) {
+        if(option != TextFormattingOption.INHERIT)
+            builder.append(",\"").append(field).append("\":\"").append(option.name().toLowerCase()).append("\"");
+    }
+
+    private void addNotNull(final String field, final String value, final StringBuilder builder) {
+        if(value != null)
+            builder.append(",\"").append(field).append("\":\"").append(value).append("\"");
+    }
+
     /**
      * Serializes this part into a JSON representation using
      * Minecraft's specification.
@@ -77,25 +87,15 @@ public final class TextComponentPart {
         final StringBuilder sb = new StringBuilder();
         sb.append("{\"text\":\"").append(text).append("\"");
 
-        if(color != null) sb.append(",\"color\":\"").append(color).append("\"");
+        addNotNull("color", color, sb);
+        addFormatting("bold", bold, sb);
+        addFormatting("italic", italic, sb);
+        addFormatting("underlined", underlined, sb);
+        addFormatting("strikethrough", strikethrough, sb);
+        addFormatting("obfuscated", obfuscated, sb);
 
-        if(bold == TextFormattingOption.TRUE) sb.append(",\"bold\":\"true\"");
-        else if(bold == TextFormattingOption.FALSE) sb.append(",\"bold\":\"false\"");
-
-        if(italic == TextFormattingOption.TRUE) sb.append(",\"italic\":\"true\"");
-        else if(italic == TextFormattingOption.FALSE) sb.append(",\"italic\":\"false\"");
-
-        if(underlined == TextFormattingOption.TRUE) sb.append(",\"underlined\":\"true\"");
-        else if(underlined == TextFormattingOption.FALSE) sb.append(",\"underlined\":\"false\"");
-
-        if(strikethrough == TextFormattingOption.TRUE) sb.append(",\"strikethrough\":\"true\"");
-        else if(strikethrough == TextFormattingOption.FALSE) sb.append(",\"strikethrough\":\"false\"");
-
-        if(obfuscated == TextFormattingOption.TRUE) sb.append(",\"obfuscated\":\"true\"");
-        else if(obfuscated == TextFormattingOption.FALSE) sb.append(",\"obfuscated\":\"false\"");
-
-        if(font != null) sb.append(",\"font\":\"").append(font).append("\"");
-        if(insertion != null) sb.append(",\"insertion\":\"").append(insertion).append("\"");
+        addNotNull("font", font, sb);
+        addNotNull("insertion", insertion, sb);
         if(clickEvent != null) sb.append(",").append(clickEvent);
         if(hoverEvent != null) sb.append(",").append(hoverEvent);
         if(extras.size() >= 1) {

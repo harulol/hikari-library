@@ -87,6 +87,9 @@ class TimeMillisSpec internal constructor() {
         return underlyingBuilder.build()
     }
 
+    /**
+     * Public interface to handle a type of time unit.
+     */
     sealed interface TimeUnitValue
     private class TimeValue(val unit: TimeUnit, val plural: Boolean) : TimeUnitValue
 

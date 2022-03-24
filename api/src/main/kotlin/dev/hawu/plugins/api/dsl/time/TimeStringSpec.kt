@@ -29,19 +29,19 @@ class TimeStringSpec internal constructor() {
      * Add spaces between components.
      * Like `1m20s` to `1m 20s`.
      */
-    val spaced: TimeStringOption
+    val spaced: ITimeStringOption
         get() {
             withSpaces = true
-            return WithSpaces
+            return WithSpacesOption
         }
 
     /**
      * Whether to display the units in abbreviations.
      */
-    val abbreviated: TimeStringOption
+    val abbreviated: ITimeStringOption
         get() {
             withAbbreviations = true
-            return WithAbbreviations
+            return WithAbbreviationsOption
         }
 
     internal fun build(): String {
@@ -51,13 +51,16 @@ class TimeStringSpec internal constructor() {
         return builder.build()
     }
 
-    sealed interface TimeStringOption {
-        infix fun and(other: TimeStringOption) {
+    /**
+     * Public interface to chain options for time string formatter.
+     */
+    sealed interface ITimeStringOption {
+        infix fun and(other: ITimeStringOption) {
             if(other === this) throw IllegalArgumentException("Cannot chain the same option.")
         }
     }
 
-    private object WithSpaces : TimeStringOption
-    private object WithAbbreviations : TimeStringOption
+    private object WithSpacesOption : ITimeStringOption
+    private object WithAbbreviationsOption : ITimeStringOption
 
 }
