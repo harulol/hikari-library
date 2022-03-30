@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.title;
 
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -135,6 +136,27 @@ public final class TitleComponent {
      */
     public boolean shouldNotWrap() {
         return dontWrap;
+    }
+
+    /**
+     * Sends this title component to a player.
+     *
+     * @param player the player to send to
+     * @since 1.6
+     */
+    public void send(final @NotNull Player player) {
+        TitlePacketAdapter.getAdapter().send(player, this);
+    }
+
+    /**
+     * Sends this title component to a player
+     * as an action bar.
+     *
+     * @param player the player to send to
+     * @since 1.6
+     */
+    public void sendActionBar(final @NotNull Player player) {
+        TitlePacketAdapter.getAdapter().sendActionBar(player, this);
     }
 
 }
