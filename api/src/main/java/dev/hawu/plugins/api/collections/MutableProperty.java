@@ -3,6 +3,8 @@ package dev.hawu.plugins.api.collections;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * Represents another type of property but its value
  * is not constant and can be changed by the user.
@@ -13,6 +15,44 @@ import org.jetbrains.annotations.Nullable;
 public final class MutableProperty<T> extends Property<T> {
 
     private boolean nullable = false;
+
+    /**
+     * Creates a new mutable property with the given value.
+     *
+     * @param value the value to be contained within the property.
+     * @param <T>   the type of the value.
+     * @return a new property with the given value.
+     * @since 1.6
+     */
+    @NotNull
+    public static <T> Property<T> of(@Nullable T value) {
+        return new MutableProperty<>(value);
+    }
+
+    /**
+     * Retrieves an instance of an empty mutable property.
+     *
+     * @param <T> The type of the property.
+     * @return The empty property.
+     * @since 1.6
+     */
+    @NotNull
+    public static <T> Property<T> empty() {
+        return new MutableProperty<>(null);
+    }
+
+    /**
+     * Attempts to convert a {@link Optional} to a {@link Property}.
+     *
+     * @param optional The optional to convert.
+     * @param <T>      The type of the property.
+     * @return The converted property.
+     * @since 1.6
+     */
+    @NotNull
+    public static <T> Property<T> fromOptional(final @NotNull Optional<T> optional) {
+        return optional.map(MutableProperty::of).orElseGet(MutableProperty::empty);
+    }
 
     MutableProperty(final T value) {
         super(value);
