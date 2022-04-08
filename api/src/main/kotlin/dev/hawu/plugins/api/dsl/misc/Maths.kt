@@ -45,6 +45,17 @@ fun Vector.rotateY(cos: Double, sin: Double) = MathUtils.rotateAroundAxisY(this,
 fun Vector.rotateZ(cos: Double, sin: Double) = MathUtils.rotateAroundAxisZ(this, cos, sin)
 
 /**
+ * Rotates a vector around the input axis.
+ */
+fun Vector.rotate(axis: Vector, degree: Double) = MathUtils.rotateAroundAxis(this, axis, degree)
+
+/**
+ * Rotates a vector around the input axis, with the angle
+ * already precomputed.
+ */
+fun Vector.rotate(axis: Vector, cos: Double, sin: Double) = MathUtils.rotateAroundAxis(this, axis, cos, sin)
+
+/**
  * Finds the perpendicular part of [this] onto [other].
  */
 fun Vector.perpendicular(other: Vector) = MathUtils.perpendicular(this, other)

@@ -133,6 +133,53 @@ public final class MathUtils {
     }
 
     /**
+     * Rotates around an axis defined by the provided vector.
+     *
+     * @param v     the vector to rotate
+     * @param axis  the axis to rotate around
+     * @param angle the angle to rotate by (in degrees)
+     * @return the rotated vector
+     * @author spigotmc
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxis(final @NotNull Vector v, final @NotNull Vector axis, final double angle) {
+        return rotateAroundAxis(v, axis, Math.cos(Math.toRadians(angle)), Math.sin(Math.toRadians(angle)));
+    }
+
+    /**
+     * Rotates around an axis defined by the provided vector.
+     *
+     * @param v    the vector to rotate
+     * @param axis the axis to rotate around
+     * @param cos  the cosine of the angle
+     * @param sin  the sine of the angle
+     * @return the rotated vector
+     * @author spigotmc
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxis(final @NotNull Vector v, final @NotNull Vector axis, final double cos, final double sin) {
+        axis.normalize();
+
+        double x = v.getX(), y = v.getY(), z = v.getZ();
+        double x2 = axis.getX(), y2 = axis.getY(), z2 = axis.getZ();
+        double dotProduct = v.dot(axis);
+
+        double xPrime = x2 * dotProduct * (1d - cos)
+            + x * cos
+            + (-z2 * y + y2 * z) * sin;
+        double yPrime = y2 * dotProduct * (1d - cos)
+            + y * cos
+            + (z2 * x - x2 * z) * sin;
+        double zPrime = z2 * dotProduct * (1d - cos)
+            + z * cos
+            + (-y2 * x + x2 * y) * sin;
+
+        return v.setX(xPrime).setY(yPrime).setZ(zPrime);
+    }
+
+    /**
      * Gets the perpendicular part of vector u on vector onto.
      * This does not mutate the original vectors.
      *

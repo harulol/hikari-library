@@ -1,7 +1,9 @@
 package dev.hawu.plugins.api;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -105,6 +107,34 @@ public final class Players {
             if(mainHandSetter != null) mainHandSetter.invokeExact(inventory, item);
             else inventory.setItemInHand(item);
         } catch(final Throwable ignored) {}
+    }
+
+    /**
+     * Retrieves a unit vector that points to the left side
+     * of a player.
+     *
+     * @param player The player to get the vector for.
+     * @return A unit vector pointing to the left side of the player.
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector getLeftUnit(final @NotNull Player player) {
+        final Vector direction = player.getLocation().getDirection().normalize();
+        return new Vector(-direction.getZ(), 0, direction.getX()).normalize();
+    }
+
+    /**
+     * Retrieves a unit vector that points to the right side
+     * of a player.
+     *
+     * @param player The player to get the vector for.
+     * @return A unit vector pointing to the right side of the player.
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector getRightUnit(final @NotNull Player player) {
+        final Vector direction = player.getLocation().getDirection().normalize();
+        return new Vector(direction.getZ(), 0, -direction.getX()).normalize();
     }
 
 }
