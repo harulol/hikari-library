@@ -255,6 +255,21 @@ public final class ItemStackBuilder {
     }
 
     /**
+     * Applies a function to make changes to the item meta
+     * but after casting it to another, hopefully working meta type.
+     *
+     * @param metaConsumer The consumer to accept.
+     * @param <T>          The type of meta to cast to.
+     * @return The same builder.
+     * @since 1.6
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends ItemMeta> ItemStackBuilder transformed(final @NotNull Consumer<T> metaConsumer) {
+        metaConsumer.accept((T) this.meta);
+        return this;
+    }
+
+    /**
      * Sets the compound to be applied to the item stack
      * after the meta is applied.
      *

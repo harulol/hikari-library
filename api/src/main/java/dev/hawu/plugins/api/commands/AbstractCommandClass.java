@@ -134,6 +134,16 @@ public abstract class AbstractCommandClass implements TabExecutor {
     }
 
     /**
+     * Allows a type of sender.
+     *
+     * @param types The type of sender to allow.
+     * @since 1.6
+     */
+    protected final void allow(SenderType... types) {
+        senders.addAll(Arrays.asList(types));
+    }
+
+    /**
      * Retrieves the permission of this command.
      *
      * @return The permission of this command.
