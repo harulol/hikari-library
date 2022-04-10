@@ -23,13 +23,9 @@ open class CommandSpec(spec: CommandSpec.() -> Unit) {
     private val subcommands = mutableListOf<AbstractCommandClass>()
 
     val name = MutableProperty.of<String>(null)
-
     val parser = MutableProperty.of<CommandLine>(null)
-
     val permission = MutableProperty.of<String>(null)
-
     val permissionMessage = MutableProperty.of<String>(PERMISSION_MESSAGE)
-
     val wrongSenderMessage = MutableProperty.of<String>(WRONG_SENDER_MESSAGE)
 
     /**
@@ -101,7 +97,13 @@ open class CommandSpec(spec: CommandSpec.() -> Unit) {
             }
 
             override fun run(sender: CommandSource, args: CommandArgument) {
-                CommandRunSpec(sender, args, parser.orNull()).runSpec()
+                try {
+                    CommandRunSpec(sender, args, parser.orNull()).runSpec()
+                } catch(_: InterruptedException) {
+                    // Intentionally left blank.
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
             override fun tab(sender: CommandSource, args: CommandArgument): List<String>? {

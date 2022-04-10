@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta
  * Specification for creating an item stack.
  */
 @ScopeControlMarker
-class ItemStackSpec private constructor(from: ItemStack) {
+class ItemStackSpec internal constructor(from: ItemStack) {
 
     val material = MutableProperty.of(Material.AIR)
     val amount = MutableProperty.of(1)
@@ -29,6 +29,8 @@ class ItemStackSpec private constructor(from: ItemStack) {
         meta = from.itemMeta
         compound.set(NBTRegistry.getRegistry().getCompound(from))
     }
+
+    internal constructor(material: Material) : this(ItemStack(material))
 
     /**
      * Configures this item stack's meta.

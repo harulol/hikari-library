@@ -26,6 +26,12 @@ class CommandRunSpec internal constructor(
         get() = sender.player
 
     /**
+     * Stops the execution of this specification :)
+     */
+    val stop: Unit
+        get() = throw InterruptedException("Stop command called.")
+
+    /**
      * Retrieves the parsed arguments.
      * Requires the CLI property to be set beforehand.
      */
