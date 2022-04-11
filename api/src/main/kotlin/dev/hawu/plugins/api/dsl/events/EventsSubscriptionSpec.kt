@@ -10,10 +10,11 @@ import org.bukkit.plugin.java.JavaPlugin
  * Specification for an event subscription.
  */
 @ScopeControlMarker
-class EventsSubscriptionSpec<T : Event> internal constructor(private val eventClass: Class<T>) {
+class EventsSubscriptionSpec<T : Event> internal constructor(eventClass: Class<T>) {
 
     private val underlyingBuilder = Events.newSubscription(eventClass)
-    private val plugin = MutableProperty.of<JavaPlugin>(null)
+
+    val plugin = MutableProperty.of<JavaPlugin>(null)
 
     /**
      * Open the options specification for this event subscription

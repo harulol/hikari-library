@@ -28,7 +28,7 @@ class CommandRunSpec internal constructor(
     /**
      * Stops the execution of this specification :)
      */
-    val stop: Unit
+    val stop: Nothing
         get() = throw InterruptedException("Stop command called.")
 
     /**
