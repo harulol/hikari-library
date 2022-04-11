@@ -32,7 +32,7 @@ public final class GuiModel implements InventoryHolder {
     private Consumer<InventoryDragEvent> dragHandler = event -> event.setCancelled(true);
     private Runnable onCloseHook;
     private boolean cooldown = true;
-    private final boolean unmountOnClose = false;
+    private boolean unmountOnClose = false;
 
     /**
      * Constructs a model using a chest inventory with given size.
@@ -83,6 +83,17 @@ public final class GuiModel implements InventoryHolder {
     public GuiModel(final @NotNull InventoryType type, final @NotNull String title) {
         this.inventory = Bukkit.createInventory(this, type, Strings.color(title));
         this.elements = new GuiElement<?>[inventory.getSize()];
+    }
+
+    /**
+     * Configures whether this inventory should automatically unmount
+     * everything as the inventory closes.
+     *
+     * @param v Whether to unmount
+     * @since 1.6
+     */
+    public void setUnmountOnClose(final boolean v) {
+        this.unmountOnClose = v;
     }
 
     /**

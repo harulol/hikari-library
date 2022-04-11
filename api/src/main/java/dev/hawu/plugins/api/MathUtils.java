@@ -36,4 +36,177 @@ public final class MathUtils {
         else return vector.normalize();
     }
 
+    /**
+     * Rotates the provided vector around the X axis.
+     *
+     * @param v     the vector to rotate
+     * @param angle the angle to rotate by (in degrees)
+     * @return the rotated vector
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxisX(final @NotNull Vector v, final double angle) {
+        final double radians = Math.toRadians(angle);
+        return rotateAroundAxisX(v, Math.cos(radians), Math.sin(radians));
+    }
+
+    /**
+     * Rotates the provided vector around the Y axis.
+     *
+     * @param v     the vector to rotate
+     * @param angle the angle to rotate by (in degrees)
+     * @return the rotated vector
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxisY(final @NotNull Vector v, final double angle) {
+        final double radians = Math.toRadians(-angle);
+        return rotateAroundAxisY(v, Math.cos(radians), Math.sin(radians));
+    }
+
+    /**
+     * Rotates the provided vector around the Z axis.
+     *
+     * @param v     the vector to rotate
+     * @param angle the angle to rotate by (in degrees)
+     * @return the rotated vector
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxisZ(final @NotNull Vector v, final double angle) {
+        final double radians = Math.toRadians(angle);
+        return rotateAroundAxisZ(v, Math.cos(radians), Math.sin(radians));
+    }
+
+    /**
+     * Rotates the provided vector around the X axis,
+     * with trig functions pre-calculated. Usually for performance reasons.
+     *
+     * @param v   the vector to rotate
+     * @param cos the cosine of the angle to rotate by
+     * @param sin the sine of the angle to rotate by
+     * @return the rotated vector
+     * @author finnbon
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxisX(final @NotNull Vector v, final double cos, final double sin) {
+        double y = v.getY() * cos - v.getZ() * sin;
+        double z = v.getY() * sin + v.getZ() * cos;
+        return v.setY(y).setZ(z);
+    }
+
+    /**
+     * Rotates the provided vector around the Y axis,
+     * with trig functions pre-calculated. Usually for performance reasons.
+     *
+     * @param v   the vector to rotate
+     * @param cos the cosine of the angle to rotate by
+     * @param sin the sine of the angle to rotate by
+     * @return the rotated vector
+     * @author finnbon
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxisY(final @NotNull Vector v, final double cos, final double sin) {
+        double x = v.getX() * cos + v.getZ() * sin;
+        double z = v.getX() * -sin + v.getZ() * cos;
+        return v.setX(x).setZ(z);
+    }
+
+    /**
+     * Rotates the provided vector around the Z axis,
+     * with trig functions pre-calculated. Usually for performance reasons.
+     *
+     * @param v   the vector to rotate
+     * @param cos the cosine of the angle to rotate by
+     * @param sin the sine of the angle to rotate by
+     * @return the rotated vector
+     * @author finnbon
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxisZ(final @NotNull Vector v, final double cos, final double sin) {
+        double x = v.getX() * cos - v.getY() * sin;
+        double y = v.getX() * sin + v.getY() * cos;
+        return v.setX(x).setY(y);
+    }
+
+    /**
+     * Rotates around an axis defined by the provided vector.
+     *
+     * @param v     the vector to rotate
+     * @param axis  the axis to rotate around
+     * @param angle the angle to rotate by (in degrees)
+     * @return the rotated vector
+     * @author spigotmc
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxis(final @NotNull Vector v, final @NotNull Vector axis, final double angle) {
+        return rotateAroundAxis(v, axis, Math.cos(Math.toRadians(angle)), Math.sin(Math.toRadians(angle)));
+    }
+
+    /**
+     * Rotates around an axis defined by the provided vector.
+     *
+     * @param v    the vector to rotate
+     * @param axis the axis to rotate around
+     * @param cos  the cosine of the angle
+     * @param sin  the sine of the angle
+     * @return the rotated vector
+     * @author spigotmc
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector rotateAroundAxis(final @NotNull Vector v, final @NotNull Vector axis, final double cos, final double sin) {
+        axis.normalize();
+
+        double x = v.getX(), y = v.getY(), z = v.getZ();
+        double x2 = axis.getX(), y2 = axis.getY(), z2 = axis.getZ();
+        double dotProduct = v.dot(axis);
+
+        double xPrime = x2 * dotProduct * (1d - cos)
+            + x * cos
+            + (-z2 * y + y2 * z) * sin;
+        double yPrime = y2 * dotProduct * (1d - cos)
+            + y * cos
+            + (z2 * x - x2 * z) * sin;
+        double zPrime = z2 * dotProduct * (1d - cos)
+            + z * cos
+            + (-y2 * x + x2 * y) * sin;
+
+        return v.setX(xPrime).setY(yPrime).setZ(zPrime);
+    }
+
+    /**
+     * Gets the perpendicular part of vector u on vector onto.
+     * This does not mutate the original vectors.
+     *
+     * @param u    the vector to find the perpendicular part of
+     * @param onto the vector to find the perpendicular part on
+     * @return the perpendicular part of vector u on vector onto.
+     * @author SHUTUPANDUSECAPS
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector perpendicular(final @NotNull Vector u, final @NotNull Vector onto) {
+        return u.clone().subtract(projection(onto, u));
+    }
+
+    /**
+     * Gets the projection of vector u on vector onto.
+     * This does not mutate the original vectors.
+     *
+     * @param u    the vector to find the projection of
+     * @param onto the vector to find the projection on
+     * @return the projection of vector u on vector onto.
+     * @author SHUTUPANDUSECAPS
+     * @since 1.6
+     */
+    @NotNull
+    public static Vector projection(final @NotNull Vector onto, final @NotNull Vector u) {
+        return onto.clone().multiply(onto.dot(u) / onto.lengthSquared());
+    }
+
 }
