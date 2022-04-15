@@ -38,8 +38,8 @@ public final class TimeConversions {
      * @since 1.0
      */
     @NotNull
-    public static TimeStringBuilder buildTimestamp(final double value) {
-        return new TimeStringBuilder(value);
+    public static TimeStringBuilder buildTimestamp(final @NotNull Number value) {
+        return new TimeStringBuilder(value.doubleValue());
     }
 
     /**
