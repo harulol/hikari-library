@@ -6,9 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Utility class that provides operations on {@link String}s.
@@ -52,6 +50,43 @@ public final class Strings {
         } catch(final IllegalArgumentException ex) {
             return null;
         }
+    }
+
+    /**
+     * Chops a string to smaller pieces of strings on each line.
+     *
+     * @param s         The string to chop.
+     * @param maxLength The maximum length of each line.
+     * @return A list of strings.
+     * @since 1.6
+     */
+    @NotNull
+    public static List<String> chop(final @NotNull String s, final int maxLength) {
+        return chop(Arrays.asList(s.split("\n")), maxLength);
+    }
+
+    /**
+     * Chops a list of strings to smaller pieces of strings on each line.
+     *
+     * @param original  The original string.
+     * @param maxLength The maximum length of each line.
+     * @return A list of strings.
+     * @since 1.6
+     */
+    @NotNull
+    public static List<String> chop(final @NotNull List<String> original, final int maxLength) {
+        final List<String> newList = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(final String s : original) {
+            if(stringBuilder.length() + s.length() > maxLength && stringBuilder.length() > 0) {
+                newList.add(stringBuilder.toString().trim());
+                stringBuilder = new StringBuilder();
+            } else stringBuilder.append(" ").append(s);
+        }
+
+        if(stringBuilder.length() > 0) newList.add(stringBuilder.toString().trim());
+        return newList;
     }
 
     /**

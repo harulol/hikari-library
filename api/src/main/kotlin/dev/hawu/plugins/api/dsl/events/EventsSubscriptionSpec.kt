@@ -20,8 +20,8 @@ class EventsSubscriptionSpec<T : Event> internal constructor(eventClass: Class<T
      * Open the options specification for this event subscription
      * spec.
      */
-    fun options(spec: EventsSubscriptionOptionsSpec.() -> Unit) {
-        val options = EventsSubscriptionOptionsSpec().apply(spec)
+    fun options(spec: EventsSubscriptionOptionsSpec<T>.() -> Unit) {
+        val options = EventsSubscriptionOptionsSpec<T>().apply(spec)
         options.applyTo(underlyingBuilder)
     }
 
@@ -32,6 +32,13 @@ class EventsSubscriptionSpec<T : Event> internal constructor(eventClass: Class<T
         underlyingBuilder.openHandler { listener, event ->
             EventsSubscriptionActionSpec(event, listener).apply(spec)
         }
+    }
+
+    /**
+     * The filter to apply to the event.
+     */
+    fun filter(spec: EventsSubscriptionActionSpec<T>.() -> Boolean) {
+        underlyingBuilder.openFilter { listener, event -> EventsSubscriptionActionSpec(event, listener).run(spec) }
     }
 
     internal fun build() {

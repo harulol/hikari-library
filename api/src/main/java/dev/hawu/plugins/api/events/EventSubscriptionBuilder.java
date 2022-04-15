@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -27,7 +28,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
     private boolean ignoreCancelled = false;
 
     private BiConsumer<ClosableListener, T> consumer;
-    private Predicate<T> predicate;
+    private BiPredicate<ClosableListener, T> predicate;
     private boolean countsIfFiltered;
     private long expiryInvocations = -1;
     private long expiryTime = -1;
@@ -132,6 +133,21 @@ public final class EventSubscriptionBuilder<T extends Event> {
      */
     @NotNull
     public EventSubscriptionBuilder<T> filter(final @NotNull Predicate<T> predicate) {
+        if(this.predicate == null) this.predicate = (listener, event) -> predicate.test(event);
+        else this.predicate = this.predicate.and((listener, event) -> predicate.test(event));
+        return this;
+    }
+
+    /**
+     * Sets the filter for this subscription, but requests an additional
+     * listener variable.
+     *
+     * @param predicate The predicate to set.
+     * @return The same builder.
+     * @since 1.6
+     */
+    @NotNull
+    public EventSubscriptionBuilder<T> openFilter(final @NotNull BiPredicate<@NotNull ClosableListener, @NotNull T> predicate) {
         if(this.predicate == null) this.predicate = predicate;
         else this.predicate = this.predicate.and(predicate);
         return this;
@@ -202,7 +218,7 @@ public final class EventSubscriptionBuilder<T extends Event> {
                 return;
             }
 
-            if(predicate != null && !predicate.test(casted)) {
+            if(predicate != null && !predicate.test(listener, casted)) {
                 if(countsIfFiltered) count.getAndIncrement();
                 return;
             }
