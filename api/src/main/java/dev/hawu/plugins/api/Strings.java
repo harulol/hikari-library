@@ -62,7 +62,22 @@ public final class Strings {
      */
     @NotNull
     public static List<String> chop(final @NotNull String s, final int maxLength) {
-        return chop(Arrays.asList(s.split("\n")), maxLength);
+        final String[] arr = s.split(" ");
+        final List<String> result = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(final String str : arr) {
+            if(stringBuilder.length() + str.length() > maxLength - 1 && stringBuilder.length() > 0) {
+                result.add(stringBuilder.toString().trim());
+                stringBuilder = new StringBuilder(str);
+                continue;
+            }
+
+            stringBuilder.append(" ").append(str);
+        }
+
+        if(stringBuilder.length() > 0) result.add(stringBuilder.toString());
+        return result;
     }
 
     /**
@@ -75,18 +90,7 @@ public final class Strings {
      */
     @NotNull
     public static List<String> chop(final @NotNull List<String> original, final int maxLength) {
-        final List<String> newList = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for(final String s : original) {
-            if(stringBuilder.length() + s.length() > maxLength && stringBuilder.length() > 0) {
-                newList.add(stringBuilder.toString().trim());
-                stringBuilder = new StringBuilder();
-            } else stringBuilder.append(" ").append(s);
-        }
-
-        if(stringBuilder.length() > 0) newList.add(stringBuilder.toString().trim());
-        return newList;
+        return chop(String.join(" ", original), maxLength);
     }
 
     /**
