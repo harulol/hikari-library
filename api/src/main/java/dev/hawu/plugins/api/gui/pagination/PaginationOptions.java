@@ -34,7 +34,7 @@ final class PaginationOptions<T> {
     }
 
     @NotNull
-    public Collection<@NotNull T> getFilteredItems(final @NotNull Collection<@NotNull T> items, final @Nullable String filter) {
+    public Collection<? extends @NotNull T> getFilteredItems(final @NotNull Collection<? extends @NotNull T> items, final @Nullable String filter) {
         if(predicate == null || filter == null) return items;
         return items.stream()
             .filter(item -> predicate.test(item, filter))

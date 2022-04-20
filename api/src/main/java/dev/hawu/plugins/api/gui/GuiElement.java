@@ -245,6 +245,16 @@ public abstract class GuiElement<T> {
         model.mount(slot, another);
     }
 
+    /**
+     * Receives the model this is mounted on.
+     *
+     * @return The model.
+     * @since 1.6
+     */
+    public final GuiModel getModel() {
+        return model;
+    }
+
     void mount(final @NotNull GuiModel model, final int slot) {
         this.model = model;
         this.slot = slot;

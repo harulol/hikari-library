@@ -3,6 +3,7 @@ package dev.hawu.plugins.api.misc;
 import dev.hawu.plugins.api.collections.CooldownMap;
 import dev.hawu.plugins.api.collections.Property;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,6 @@ import java.util.UUID;
 public final class SporadicMessenger {
 
     private final CooldownMap<UUID> map;
-    private final String message;
 
     /**
      * Creates the messenger with a cooldown of the given amount of milliseconds.
@@ -28,9 +28,8 @@ public final class SporadicMessenger {
      * @param cooldown the cooldown in milliseconds
      * @since 1.6
      */
-    public SporadicMessenger(final Number cooldown, final @NotNull String message) {
+    public SporadicMessenger(final Number cooldown) {
         map = new CooldownMap<>(cooldown.longValue());
-        this.message = message;
     }
 
     /**
@@ -38,8 +37,8 @@ public final class SporadicMessenger {
      *
      * @since 1.6
      */
-    public SporadicMessenger(final @NotNull String message) {
-        this(3000, message);
+    public SporadicMessenger() {
+        this(3000);
     }
 
     /**
@@ -49,7 +48,7 @@ public final class SporadicMessenger {
      * @return true if the player was not on cooldown, false otherwise
      * @since 1.6
      */
-    public boolean send(final UUID uuid) {
+    public boolean send(final @NotNull UUID uuid, final @NotNull String message) {
         if(map.isOnCooldown(uuid)) return false;
         map.putOnCooldown(uuid);
         Property.of(Bukkit.getPlayer(uuid)).ifPresent(player -> player.sendMessage(message));
@@ -63,10 +62,24 @@ public final class SporadicMessenger {
      * @return true if the player was not on cooldown, false otherwise
      * @since 1.6
      */
-    public boolean send(final @NotNull Player player) {
+    public boolean send(final @NotNull Player player, final @NotNull String message) {
         if(map.isOnCooldown(player.getUniqueId())) return false;
         map.putOnCooldown(player.getUniqueId());
         player.sendMessage(message);
+        return true;
+    }
+
+    /**
+     * Attempts to send an entity a message.
+     *
+     * @param entity the entity
+     * @return true if the entity was not on cooldown, false otherwise
+     * @since 1.6
+     */
+    public boolean send(final @NotNull Entity entity, final @NotNull String message) {
+        if(map.isOnCooldown(entity.getUniqueId())) return false;
+        map.putOnCooldown(entity.getUniqueId());
+        entity.sendMessage(message);
         return true;
     }
 

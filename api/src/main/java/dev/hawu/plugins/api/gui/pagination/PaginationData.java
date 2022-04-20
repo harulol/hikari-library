@@ -14,12 +14,12 @@ import java.util.function.Supplier;
 @Internal
 final class PaginationData<T> {
 
-    private final Collection<T> collection;
+    private final Collection<? extends T> collection;
     private final Supplier<GuiModel> modelSupplier;
     private final List<Integer> allowedSlots;
     private final BiFunction<T, Integer, GuiElement<?>> itemGenerator;
 
-    public PaginationData(final @NotNull Collection<@NotNull T> collection, final @NotNull Supplier<@NotNull GuiModel> modelSupplier,
+    public PaginationData(final @NotNull Collection<? extends @NotNull T> collection, final @NotNull Supplier<@NotNull GuiModel> modelSupplier,
                           final @NotNull List<@NotNull Integer> allowedSlots, final @NotNull BiFunction<@NotNull T, @NotNull Integer, @Nullable GuiElement<?>> itemGenerator) {
         this.collection = collection;
         this.modelSupplier = modelSupplier;
@@ -28,7 +28,7 @@ final class PaginationData<T> {
     }
 
     @NotNull
-    public Collection<@NotNull T> getCollection() {
+    public Collection<? extends @NotNull T> getCollection() {
         return collection;
     }
 

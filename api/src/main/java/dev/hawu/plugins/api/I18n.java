@@ -30,8 +30,11 @@ public final class I18n {
      */
     public I18n(final @NotNull JavaPlugin plugin) {
         this.plugin = plugin;
-        plugin.saveResource("messages.yml", false);
         this.messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+
+        if(!this.messagesFile.exists()) {
+            plugin.saveResource("messages.yml", true);
+        }
         this.messages = YamlConfiguration.loadConfiguration(this.messagesFile);
         this.defaultMessages = YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource("messages.yml")));
     }

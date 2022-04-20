@@ -7,8 +7,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.BreakIterator;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Raytracing stuff, i guess?
@@ -23,6 +25,7 @@ public class Raytracing {
     private double step = 1.0;
     private double distance = 10.0;
     private Consumer<Location> eachStep = null;
+    private boolean stopAtFirstEntity = false;
 
     protected Raytracing() {
     }
@@ -120,6 +123,18 @@ public class Raytracing {
     }
 
     /**
+     * Configures the raytracing to stop at the first entity it encounters.
+     *
+     * @return this builder
+     * @since 1.6
+     */
+    @NotNull
+    public final Raytracing stopsAtFirstEntity() {
+        stopAtFirstEntity = true;
+        return this;
+    }
+
+    /**
      * Starts the raytrace.
      *
      * @return the result
@@ -138,12 +153,13 @@ public class Raytracing {
         final double squaredDistance = distance * distance;
         final Location current = origin.clone();
         final Set<UUID> visitedEntities = new HashSet<>();
-        final Set<Entity> entities = new HashSet<>();
+        final List<Entity> entities = new ArrayList<>();
         final Set<Vector> visitedBlocks = new HashSet<>();
         final List<Block> blocks = new ArrayList<>();
 
+        outer:
         while(true) {
-            if(current.distanceSquared(origin) >= squaredDistance)
+            if(current.distanceSquared(origin) >= squaredDistance || (stopAtFirstEntity && entities.size() >= 1))
                 break;
 
             // Adds the block only if it is not visited.
@@ -154,14 +170,15 @@ public class Raytracing {
             }
 
             // Checks for entities. We can't use .getNearbyEntities since 1.8 does not have it implemented.
-            current.getWorld().getEntities().stream()
-                .filter(entity -> entity.getLocation().distanceSquared(current) <= step * step)
-                .forEach(entity -> {
-                    if(!visitedEntities.contains(entity.getUniqueId())) {
-                        visitedEntities.add(entity.getUniqueId());
-                        entities.add(entity);
-                    }
-                });
+            final Collection<Entity> nearby = WorldEntitiesLookupAdapter.getAdapter().getNearbyEntities(current, step, step, step);
+            for(final Entity entity : nearby) {
+                if(!visitedEntities.contains(entity.getUniqueId())) {
+                    visitedEntities.add(entity.getUniqueId());
+                    entities.add(entity);
+
+                    if(stopAtFirstEntity) break outer;
+                }
+            }
 
             // Whatever needs to be done on each step.
             if(eachStep != null)

@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
  */
 public final class GuiPaginationBuilder<T> {
 
-    private Collection<T> collection;
+    private Collection<? extends T> collection;
     private Supplier<GuiModel> modelSupplier;
     private List<Integer> allowedSlots;
     private BiFunction<T, Integer, GuiElement<?>> itemGenerator;
@@ -137,7 +137,7 @@ public final class GuiPaginationBuilder<T> {
      * @since 1.2
      */
     @NotNull
-    public GuiPaginationBuilder<T> setCollection(final @NotNull Collection<@NotNull T> collection) {
+    public GuiPaginationBuilder<T> setCollection(final @NotNull Collection<? extends @NotNull T> collection) {
         this.collection = collection;
         return this;
     }

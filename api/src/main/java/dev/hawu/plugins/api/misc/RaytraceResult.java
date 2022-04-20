@@ -15,11 +15,11 @@ import java.util.Set;
  */
 public final class RaytraceResult {
 
-    private final Set<Entity> entities;
+    private final List<Entity> entities;
     private final List<Block> blocks;
     private final Location location;
 
-    RaytraceResult(final Set<Entity> entities, final List<Block> blocks, final Location currentLocation) {
+    RaytraceResult(final List<Entity> entities, final List<Block> blocks, final Location currentLocation) {
         this.entities = entities;
         this.blocks = blocks;
         this.location = currentLocation;
@@ -32,7 +32,7 @@ public final class RaytraceResult {
      * @since 1.6
      */
     @NotNull
-    public Set<Entity> getEntities() {
+    public List<Entity> getEntities() {
         return entities;
     }
 

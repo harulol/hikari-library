@@ -1,6 +1,8 @@
 package dev.hawu.plugins.api;
 
+import dev.hawu.plugins.api.collections.Property;
 import dev.hawu.plugins.api.collections.tuples.Pair;
+import jdk.vm.ci.meta.Value;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +51,102 @@ public final class Strings {
             return UUID.fromString(uuid);
         } catch(final IllegalArgumentException ex) {
             return null;
+        }
+    }
+
+    /**
+     * Attempts to cast a string to a byte.
+     * @param value The string to cast.
+     * @return The byte value if the string was successfully casted, {@code null} otherwise.
+     * @since 1.6
+     */
+    @NotNull
+    public static Property<Byte> castToByte(@NotNull final String value) {
+        try {
+            final byte v = Byte.parseByte(value);
+            return Property.of(v);
+        } catch(final NumberFormatException exception) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Attempts to cast a string to a short.
+     * @param value The string to cast.
+     * @return The short value if the string was successfully casted, {@code null} otherwise.
+     * @since 1.6
+     */
+    @NotNull
+    public static Property<Short> castToShort(@NotNull final String value) {
+        try {
+            final short v = Short.parseShort(value);
+            return Property.of(v);
+        } catch(final NumberFormatException exception) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Attempts to cast a string to an integer.
+     * @param value The string to cast.
+     * @return The integer value if the string was successfully casted, {@code null} otherwise.
+     * @since 1.6
+     */
+    @NotNull
+    public static Property<Integer> castToInteger(@NotNull final String value) {
+        try {
+            final int v = Integer.parseInt(value);
+            return Property.of(v);
+        } catch(final NumberFormatException exception) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Attempts to cast a string to a long.
+     * @param value The string to cast.
+     * @return The long value if the string was successfully casted, {@code null} otherwise.
+     * @since 1.6
+     */
+    @NotNull
+    public static Property<Long> castToLong(@NotNull final String value) {
+        try {
+            final long v = Long.parseLong(value);
+            return Property.of(v);
+        } catch(final NumberFormatException exception) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Attempts to cast a string to a float.
+     * @param value The string to cast.
+     * @return The float value if the string was successfully casted, {@code null} otherwise.
+     * @since 1.6
+     */
+    @NotNull
+    public static Property<Float> castToFloat(@NotNull final String value) {
+        try {
+            final float v = Float.parseFloat(value);
+            return Property.of(v);
+        } catch(final NumberFormatException exception) {
+            return Property.empty();
+        }
+    }
+
+    /**
+     * Attempts to cast a string to a double.
+     * @param value The string to cast.
+     * @return The double value if the string was successfully casted, {@code null} otherwise.
+     * @since 1.6
+     */
+    @NotNull
+    public static Property<Double> castToDouble(@NotNull final String value) {
+        try {
+            final double v = Double.parseDouble(value);
+            return Property.of(v);
+        } catch(final NumberFormatException exception) {
+            return Property.empty();
         }
     }
 
