@@ -22,8 +22,8 @@ public final class ObjectUtils {
      * @return the left object if it is non-null, otherwise the right object
      * @since 1.5
      */
-    @NotNull
-    public static <T> T elvis(final @Nullable T left, final @NotNull T right) {
+    @Nullable
+    public static <T> T elvis(final @Nullable T left, final @Nullable T right) {
         return left == null ? right : left;
     }
 

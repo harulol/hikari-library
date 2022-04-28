@@ -1,0 +1,3 @@
+current-locale: "&aYour current locale is %locale%."
+unknown-locale: "&cLocale %locale% not found."
+change-locale: "&eChanged your locale to %locale%."

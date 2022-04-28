@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
  *
  * @since 1.0
  */
+@Deprecated
 public final class I18n {
 
     private final @NotNull JavaPlugin plugin;

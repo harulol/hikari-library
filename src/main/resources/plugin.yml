@@ -1,6 +1,17 @@
 name: HikariLibrary
 main: dev.hawu.plugins.hikarilibrary.HikariLibrary
-version: 1.5-SNAPSHOT
+version: 1.6-SNAPSHOT
 api-version: 1.13
 description: The library for my plugins thing.
 authors: [ Haru, Hikari ]
+commands:
+  hikarilibrary:
+    aliases: [ hlib ]
+    description: The main command for the library.
+permissions:
+  hikari-library.base:
+    default: op
+    description: Allows access to the base command.
+  hikari-library.locale:
+    default: true
+    description: Allows access to the locale command.
