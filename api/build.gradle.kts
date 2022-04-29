@@ -15,19 +15,18 @@ tasks.jar {
     archiveAppendix.set(project.name.toLowerCase())
 }
 
-tasks.dokkaJavadoc {
-    outputDirectory.set(buildDir.resolve("dokka"))
-    moduleName.set("HikariLibrary")
-
+tasks.dokkaJavadoc.configure {
     dokkaSourceSets {
         named("main") {
-            reportUndocumented.set(true)
+            outputDirectory.set(buildDir.resolve("dokkaJavadoc"))
+            moduleName.set("HikariLibrary")
             skipEmptyPackages.set(true)
             displayName.set("HikariLibrary")
-            println(file(".").absolutePath)
-            platform.set(org.jetbrains.dokka.Platform.jvm)
-            sourceRoots.from(file("src"))
             jdkVersion.set(8)
+        }
+
+        removeIf {
+            name == "test"
         }
     }
 }
@@ -40,7 +39,6 @@ val sourcesJar by tasks.creating(Jar::class) {
 }
 
 val javadocJar by tasks.creating(Jar::class) {
-    dependsOn(tasks.dokkaJavadoc.get())
     from(tasks.dokkaJavadoc.get())
     archiveBaseName.set(libraryName)
     archiveAppendix.set(project.name.toLowerCase())

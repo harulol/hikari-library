@@ -65,8 +65,17 @@ class ParticleEffectSpec internal constructor() {
      * Public interface to build the particle effect enum.
      */
     sealed interface IParticleEnumOption {
+
+        /**
+         * Sets the particle by its name from a [string][s].
+         */
         infix fun named(s: String)
+
+        /**
+         * Sets the particle by its name from an enum constant.
+         */
         infix fun named(enum: ParticleEnum)
+
     }
 
     private inner class ParticleEnumOption : IParticleEnumOption {
@@ -84,10 +93,28 @@ class ParticleEffectSpec internal constructor() {
      * this particle.
      */
     sealed interface IParticleLocationOption {
+
+        /**
+         * Sets the x co-ord for the particle.
+         */
         infix fun x(x: Number): IParticleLocationOption
+
+        /**
+         * Sets the y co-ord for the particle.
+         */
         infix fun y(y: Number): IParticleLocationOption
+
+        /**
+         * Sets the z co-ord for the particle.
+         */
         infix fun z(z: Number): IParticleLocationOption
+
+        /**
+         * Sets all co-ords for the particle from
+         * a [Location] instance.
+         */
         infix fun location(loc: Location): IParticleLocationOption
+
     }
 
     private inner class ParticleLocationOption : IParticleLocationOption {
@@ -146,11 +173,33 @@ class ParticleEffectSpec internal constructor() {
         }
     }
 
+    /**
+     * The option to modify offsets for particles.
+     * This can be used as special values for special
+     * kinds of particles.
+     */
     sealed interface IParticleOffsetOption {
+
+        /**
+         * Offset on the x-axis, or the first special value.
+         */
         infix fun x(x: Number): IParticleOffsetOption
+
+        /**
+         * Offset on the y-axis, or the second special value.
+         */
         infix fun y(y: Number): IParticleOffsetOption
+
+        /**
+         * Offset on the z-axis, or the third special value.
+         */
         infix fun z(z: Number): IParticleOffsetOption
+
+        /**
+         * Sets all offsets to a single number provided.
+         */
         infix fun all(v: Number)
+
     }
 
     private inner class ParticleOffsetOption : IParticleOffsetOption {

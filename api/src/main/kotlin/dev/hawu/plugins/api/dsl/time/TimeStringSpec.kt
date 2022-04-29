@@ -55,9 +55,14 @@ class TimeStringSpec internal constructor() {
      * Public interface to chain options for time string formatter.
      */
     sealed interface ITimeStringOption {
+
+        /**
+         * Infix function for chaining options.
+         */
         infix fun and(other: ITimeStringOption) {
             if(other === this) throw IllegalArgumentException("Cannot chain the same option.")
         }
+
     }
 
     private object WithSpacesOption : ITimeStringOption

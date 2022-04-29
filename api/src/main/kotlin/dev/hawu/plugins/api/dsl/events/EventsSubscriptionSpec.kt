@@ -3,6 +3,7 @@ package dev.hawu.plugins.api.dsl.events
 import dev.hawu.plugins.api.collections.MutableProperty
 import dev.hawu.plugins.api.dsl.ScopeControlMarker
 import dev.hawu.plugins.api.events.Events
+import dev.hawu.plugins.api.events.listener.ClosableListener
 import org.bukkit.event.Event
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -41,10 +42,10 @@ class EventsSubscriptionSpec<T : Event> internal constructor(eventClass: Class<T
         underlyingBuilder.openFilter { listener, event -> EventsSubscriptionActionSpec(event, listener).run(spec) }
     }
 
-    internal fun build() {
+    internal fun build(): ClosableListener {
         if(!plugin.isPresent)
             throw IllegalStateException("Plugin must be set before building the subscription.")
-        underlyingBuilder.build(plugin.get())
+        return underlyingBuilder.build(plugin.get())
     }
 
 }
