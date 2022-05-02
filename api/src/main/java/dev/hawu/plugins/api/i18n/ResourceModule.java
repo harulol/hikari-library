@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -86,9 +87,9 @@ public final class ResourceModule {
 
     private String extractString(final String key, final FileConfiguration config) {
         if(config.isList(key)) {
-            final StringBuilder builder = new StringBuilder();
-            config.getStringList(key).forEach(builder::append);
-            return Strings.color(builder.toString());
+            final StringJoiner joiner = new StringJoiner("\n");
+            config.getStringList(key).forEach(joiner::add);
+            return Strings.color(joiner.toString());
         }
 
         return Strings.color(config.getString(key));

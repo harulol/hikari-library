@@ -1,4 +1,4 @@
-package progressions;
+package dev.hawu.plugins.api.progressions;
 
 import dev.hawu.plugins.api.collections.progressions.ArithmeticProgression;
 import dev.hawu.plugins.api.collections.progressions.GeometricProgression;
