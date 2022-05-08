@@ -92,6 +92,7 @@ public final class TimeConversions {
      */
     @NotNull
     public static String convertToReadableFormat(final double value, @NotNull final TimeUnit until, final boolean spaces, final boolean fully) {
+        // I don't know how this works.
         double curr = value;
         final StringBuilder sb = new StringBuilder();
         for(final TimeUnit unit : TimeUnit.getReversedArray()) {

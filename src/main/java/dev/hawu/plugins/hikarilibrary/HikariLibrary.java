@@ -10,6 +10,7 @@ import dev.hawu.plugins.api.i18n.ResourceModule;
 import dev.hawu.plugins.api.impl.*;
 import dev.hawu.plugins.api.inventories.Inventories;
 import dev.hawu.plugins.api.items.BukkitMaterial;
+import dev.hawu.plugins.api.misc.PluginAdapter;
 import dev.hawu.plugins.api.misc.WorldEntitiesLookupAdapter;
 import dev.hawu.plugins.api.particles.ParticlePacketAdapter;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
@@ -82,6 +83,7 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
 
         ConfigurationSerialization.registerClass(CraftUser.class);
 
+        PluginAdapter.setPlugin(this);
         TitlePacketAdapter.setAdapter(TitlePacketAdapterImpl.getInstance());
         ParticlePacketAdapter.setAdapter(ParticlePacketAdapterImpl.getInstance());
         ChatPacketAdapter.setAdapter(ChatPacketAdapterImpl.INSTANCE);

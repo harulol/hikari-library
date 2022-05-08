@@ -184,6 +184,19 @@ public abstract class GuiElement<T> {
     }
 
     /**
+     * Constructs a state manager that goes along with this Gui Element.
+     *
+     * @param initialState The initial state.
+     * @param <K>          The type of the state.
+     * @return The state manager.
+     * @since 1.6
+     */
+    @NotNull
+    public final <K> ElementState<K> useState(final @Nullable K initialState) {
+        return new ElementState<>(this, initialState);
+    }
+
+    /**
      * Retrieves the map of this element.
      *
      * @return The current props.

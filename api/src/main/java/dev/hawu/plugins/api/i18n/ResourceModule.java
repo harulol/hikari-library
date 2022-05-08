@@ -92,7 +92,7 @@ public final class ResourceModule {
             return Strings.color(joiner.toString());
         }
 
-        return Strings.color(config.getString(key));
+        return Strings.color(config.getString(key, key));
     }
 
     /**

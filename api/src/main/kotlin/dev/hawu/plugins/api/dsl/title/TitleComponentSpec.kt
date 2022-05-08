@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.dsl.title
 
 import dev.hawu.plugins.api.collections.MutableProperty
 import dev.hawu.plugins.api.dsl.ScopeControlMarker
+import dev.hawu.plugins.api.dsl.time.toMillis
 import dev.hawu.plugins.api.title.TitleComponent
 
 /**
@@ -21,6 +22,12 @@ class TitleComponentSpec internal constructor() {
      * The subtitle of this title.
      */
     val subtitle = MutableProperty.of<String>("")
+
+    /**
+     * Set the animations of this title.
+     */
+    val animations: ITitleAnimationsOptions
+        get() = TitleAnimationsOptions()
 
     /**
      * The time in ticks to fade in the title.
@@ -47,5 +54,74 @@ class TitleComponentSpec internal constructor() {
         }
 
     internal fun build() = TitleComponent(title.get(), subtitle.get(), fadeIn.get(), stay.get(), fadeOut.get(), _dontWrap)
+
+    /**
+     * For chaining infix calls to set animations.
+     */
+    interface ITitleAnimationsOptions {
+
+        /**
+         * Sets the fade in time in ticks.
+         */
+        infix fun fadeIn(time: Long): ITitleAnimationsOptions
+
+        /**
+         * Sets the fade in time.
+         */
+        infix fun fadeIn(time: String): ITitleAnimationsOptions
+
+        /**
+         * Sets the stay time in ticks.
+         */
+        infix fun stay(time: Long): ITitleAnimationsOptions
+
+        /**
+         * Sets the stay time.
+         */
+        infix fun stay(time: String): ITitleAnimationsOptions
+
+        /**
+         * Sets the fade out time in ticks.
+         */
+        infix fun fadeOut(time: Long): ITitleAnimationsOptions
+
+        /**
+         * Sets the fade out time.
+         */
+        infix fun fadeOut(time: String): ITitleAnimationsOptions
+
+    }
+
+    private inner class TitleAnimationsOptions : ITitleAnimationsOptions {
+        override fun fadeIn(time: Long): ITitleAnimationsOptions {
+            fadeIn.set(time)
+            return this
+        }
+
+        override fun fadeIn(time: String): ITitleAnimationsOptions {
+            fadeIn.set(time.toMillis().toLong())
+            return this
+        }
+
+        override fun stay(time: Long): ITitleAnimationsOptions {
+            stay.set(time)
+            return this
+        }
+
+        override fun stay(time: String): ITitleAnimationsOptions {
+            stay.set(time.toMillis().toLong())
+            return this
+        }
+
+        override fun fadeOut(time: Long): ITitleAnimationsOptions {
+            fadeOut.set(time)
+            return this
+        }
+
+        override fun fadeOut(time: String): ITitleAnimationsOptions {
+            fadeOut.set(time.toMillis().toLong())
+            return this
+        }
+    }
 
 }

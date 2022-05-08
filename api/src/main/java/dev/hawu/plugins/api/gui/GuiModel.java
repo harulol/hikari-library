@@ -114,6 +114,20 @@ public final class GuiModel implements InventoryHolder {
     }
 
     /**
+     * Mounts an element at the given coordinates. Any elements
+     * at this index will be unmounted before mounting
+     * this new element.
+     *
+     * @param x       The x coordinate.
+     * @param y       The y coordinate.
+     * @param element The element to mount.
+     * @since 1.6
+     */
+    public void mount(final int x, final int y, final @Nullable GuiElement<?> element) {
+        mount(x + y * 9, element);
+    }
+
+    /**
      * Checks if the model is currently affected
      * by the cooldown checks in inventory click events.
      *
@@ -180,6 +194,17 @@ public final class GuiModel implements InventoryHolder {
             element.unmount();
         }
         this.elements[index] = null;
+    }
+
+    /**
+     * Unmounts the element at the given coordinates.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @since 1.6
+     */
+    public void unmount(final int x, final int y) {
+        unmount(x + y * 9);
     }
 
     /**
