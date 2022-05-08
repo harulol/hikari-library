@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -27,6 +29,7 @@ public final class GuiModel implements InventoryHolder {
 
     private final Inventory inventory;
     private final GuiElement<?>[] elements;
+    private final Map<String, GuiElement<?>> identifiersMap = new HashMap<>();
 
     private Consumer<InventoryClickEvent> outsideClickHandler = event -> event.setCancelled(true);
     private Consumer<InventoryDragEvent> dragHandler = event -> event.setCancelled(true);
@@ -109,6 +112,8 @@ public final class GuiModel implements InventoryHolder {
         unmount(index);
         this.elements[index] = element;
         if(element != null) {
+            if(element.getIdentifier() != null)
+                identifiersMap.put(element.getIdentifier().toLowerCase(), element);
             element.mount(this, index);
         }
     }
@@ -192,6 +197,8 @@ public final class GuiModel implements InventoryHolder {
         final GuiElement<?> element = this.elements[index];
         if(element != null) {
             element.unmount();
+            if(element.getIdentifier() != null)
+                identifiersMap.remove(element.getIdentifier().toLowerCase());
         }
         this.elements[index] = null;
     }
@@ -256,6 +263,46 @@ public final class GuiModel implements InventoryHolder {
     @Nullable
     public GuiElement<?> getElement(final int index) {
         return elements[index];
+    }
+
+    /**
+     * Retrieves the element that has the ID provided.
+     *
+     * @param id The ID to search for.
+     * @return The element with the ID, nullable.
+     * @since 1.6
+     */
+    @Nullable
+    public GuiElement<?> getElement(final @NotNull String id) {
+        return identifiersMap.getOrDefault(id.toLowerCase(), null);
+    }
+
+    /**
+     * Retrieves the element at the provided index.
+     *
+     * @param index The index to retrieve at.
+     * @param <K>   The type of the element to cast to.
+     * @return The element there, nullable.
+     * @since 1.6
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public <K> GuiElement<K> getTypedElement(final int index) {
+        return (GuiElement<K>) elements[index];
+    }
+
+    /**
+     * Retrieves the element that has the ID provided.
+     *
+     * @param id  The ID to search for.
+     * @param <K> The type of the element to cast to.
+     * @return The element with the ID, nullable.
+     * @since 1.6
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public <K> GuiElement<K> getTypedElement(final @NotNull String id) {
+        return (GuiElement<K>) identifiersMap.getOrDefault(id.toLowerCase(), null);
     }
 
     /**

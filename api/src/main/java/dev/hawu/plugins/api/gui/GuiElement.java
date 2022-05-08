@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.gui;
 
+import dev.hawu.plugins.api.gui.templates.StaticElement;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ public abstract class GuiElement<T> {
     private boolean firstMount = true;
     private GuiModel model;
     private int slot = -1;
+    private String identifier;
 
     /**
      * Constructs a quick element using an empty map
@@ -64,18 +66,12 @@ public abstract class GuiElement<T> {
      * Creates a new gui element with a static item stack.
      *
      * @param itemStack The item stack.
-     * @param <T>       The type of the gui element.
      * @return The gui element.
      * @since 1.2
      */
     @NotNull
-    public static <T> GuiElement<T> createStaticElement(final @Nullable ItemStack itemStack) {
-        return new GuiElement<T>() {
-            @Override
-            public @Nullable ItemStack render() {
-                return itemStack;
-            }
-        };
+    public static GuiElement<?> createStaticElement(final @Nullable ItemStack itemStack) {
+        return new StaticElement(itemStack);
     }
 
     /**
@@ -181,6 +177,30 @@ public abstract class GuiElement<T> {
         if(shouldElementUpdate(props, newState)) {
             forceUpdate();
         }
+    }
+
+    /**
+     * Retrieves the identifier of this element, if available.
+     *
+     * @return The identifier, or null if not available.
+     * @since 1.6
+     */
+    @Nullable
+    public final String getIdentifier() {
+        return this.identifier;
+    }
+
+    /**
+     * Sets the identifier to use for the element.
+     * <p>
+     * Identifiers should be lower-cased and concatenated with a hyphen.
+     * Models will ignore cases for all identifiers.
+     *
+     * @param identifier The identifier to use.
+     * @since 1.6
+     */
+    public final void setIdentifier(final @NotNull String identifier) {
+        this.identifier = identifier;
     }
 
     /**
