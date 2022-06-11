@@ -45,6 +45,7 @@ public final class UncheckedReflects {
                 sendPacketMethodName = "sendPacket";
                 break;
             case v1_18_R1:
+            case v1_18_R2:
                 playerConnectionFieldName = "b";
                 sendPacketMethodName = "a";
                 break;

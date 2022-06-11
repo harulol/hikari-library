@@ -127,6 +127,13 @@ public enum MinecraftVersion {
      * @since 1.3
      */
     v1_18_R1(1, 18, 0),
+
+    /**
+     * Represents Minecraft 1.18.2.
+     *
+     * @since 1.7
+     */
+    v1_18_R2(1, 18, 2),
     ;
 
     private static MinecraftVersion current;

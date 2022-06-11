@@ -99,7 +99,7 @@ class TitleComponentSpec internal constructor() {
         }
 
         override fun fadeIn(time: String): ITitleAnimationsOptions {
-            fadeIn.set(time.toMillis().toLong())
+            fadeIn.set(time.toMillis().toLong() / 20)
             return this
         }
 
@@ -109,7 +109,7 @@ class TitleComponentSpec internal constructor() {
         }
 
         override fun stay(time: String): ITitleAnimationsOptions {
-            stay.set(time.toMillis().toLong())
+            stay.set(time.toMillis().toLong() / 20)
             return this
         }
 
@@ -119,7 +119,7 @@ class TitleComponentSpec internal constructor() {
         }
 
         override fun fadeOut(time: String): ITitleAnimationsOptions {
-            fadeOut.set(time.toMillis().toLong())
+            fadeOut.set(time.toMillis().toLong() / 20)
             return this
         }
     }
