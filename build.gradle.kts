@@ -29,7 +29,7 @@ allprojects {
 
     dependencies {
         api("org.jetbrains:annotations:23.0.0")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.0")
         implementation("com.google.code.gson:gson:2.9.0")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
