@@ -2,20 +2,12 @@ package dev.hawu.plugins.api.dsl.items
 
 import dev.hawu.plugins.api.collections.MutableProperty
 import dev.hawu.plugins.api.dsl.ScopeControlMarker
+import dev.hawu.plugins.api.dsl.misc.color
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.meta.BannerMeta
-import org.bukkit.inventory.meta.BookMeta
-import org.bukkit.inventory.meta.EnchantmentStorageMeta
-import org.bukkit.inventory.meta.FireworkEffectMeta
-import org.bukkit.inventory.meta.FireworkMeta
-import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.inventory.meta.LeatherArmorMeta
-import org.bukkit.inventory.meta.MapMeta
-import org.bukkit.inventory.meta.PotionMeta
-import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.inventory.meta.*
 
 /**
  * Specify the item meta for the item stacks specification.
@@ -161,7 +153,7 @@ class ItemMetaSpec internal constructor(private val material: Material) {
 
     internal fun build(): ItemMeta {
         val meta = Bukkit.getItemFactory().getItemMeta(material)
-        meta.displayName = name.get()
+        meta.displayName = name.get().color()
         meta.lore = lore.get()
         meta.addItemFlags(*flags.get().toTypedArray())
         enchantments.get().forEach { (k, v) -> meta.addEnchant(k, v, true) }

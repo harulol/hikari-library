@@ -14,6 +14,7 @@ import dev.hawu.plugins.api.misc.PluginAdapter;
 import dev.hawu.plugins.api.misc.WorldEntitiesLookupAdapter;
 import dev.hawu.plugins.api.particles.ParticlePacketAdapter;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
+import dev.hawu.plugins.api.reflect.SimpleLookup;
 import dev.hawu.plugins.api.title.TitlePacketAdapter;
 import dev.hawu.plugins.hikarilibrary.commands.BaseCommand;
 import org.bukkit.Bukkit;
@@ -78,19 +79,23 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         GuiClickEvents.initialize(this);
         Inventories.setPlugin(this);
         Events.registerEvents(this, this);
-
-        getLogger().info("Loading adapters for Minecraft " + MinecraftVersion.getCurrent().name());
-
-        ConfigurationSerialization.registerClass(CraftUser.class);
-
         PluginAdapter.setPlugin(this);
-        TitlePacketAdapter.setAdapter(TitlePacketAdapterImpl.getInstance());
-        ParticlePacketAdapter.setAdapter(ParticlePacketAdapterImpl.getInstance());
-        ChatPacketAdapter.setAdapter(ChatPacketAdapterImpl.INSTANCE);
-        WorldEntitiesLookupAdapter.setAdapter(WorldEntitiesLookupAdapterImpl.getInstance());
+        ConfigurationSerialization.registerClass(CraftUser.class);
         UserAdapterImpl.init(this);
 
         new BaseCommand(this);
+
+        try {
+            getLogger().info("Loading adapters for Minecraft " + MinecraftVersion.getCurrent().name());
+
+            TitlePacketAdapter.setAdapter(TitlePacketAdapterImpl.getInstance());
+            ParticlePacketAdapter.setAdapter(ParticlePacketAdapterImpl.getInstance());
+            ChatPacketAdapter.setAdapter(ChatPacketAdapterImpl.INSTANCE);
+            WorldEntitiesLookupAdapter.setAdapter(WorldEntitiesLookupAdapterImpl.getInstance());
+        } catch (final Exception e) {
+            e.printStackTrace();
+            getLogger().severe("Failed to load adapters for Minecraft " + SimpleLookup.getBukkitVersion());
+        }
     }
 
     @Override
