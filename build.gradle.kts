@@ -1,8 +1,8 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("org.jetbrains.dokka") version "1.6.21"
-    kotlin("jvm") version "1.6.21"
+    id("org.jetbrains.dokka") version "1.7.10"
+    kotlin("jvm") version "1.7.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
@@ -29,10 +29,10 @@ allprojects {
 
     dependencies {
         api("org.jetbrains:annotations:23.0.0")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
-        implementation("com.google.code.gson:gson:2.9.0")
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
+        implementation("com.google.code.gson:gson:2.9.1")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     }
 
     tasks.test {
