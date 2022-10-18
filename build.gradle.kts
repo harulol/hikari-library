@@ -32,7 +32,7 @@ allprojects {
         implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.20")
         implementation("com.google.code.gson:gson:2.9.1")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
     }
 
     tasks.test {
