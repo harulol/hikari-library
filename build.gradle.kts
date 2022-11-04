@@ -29,8 +29,8 @@ allprojects {
 
     dependencies {
         api("org.jetbrains:annotations:23.0.0")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.20")
-        implementation("com.google.code.gson:gson:2.9.1")
+        api("org.jetbrains.kotlin:kotlin-stdlib:1.7.20")
+        api("com.google.code.gson:gson:2.9.1")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
     }
@@ -44,7 +44,7 @@ setBuildDir("./build/parent")
 setProperty("libsDirName", project.name)
 
 dependencies {
-    implementation("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
+    api("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
     subprojects.forEach {
         @Suppress("DEPRECATION")
         compileClasspath(it)
