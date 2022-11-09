@@ -1,9 +1,8 @@
-package dev.hawu.plugins.api.impl;
+package dev.hawu.plugins.hikarilibrary.impl;
 
 import dev.hawu.plugins.api.misc.WorldEntitiesLookupAdapter;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import dev.hawu.plugins.api.reflect.UncheckedHandles;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;

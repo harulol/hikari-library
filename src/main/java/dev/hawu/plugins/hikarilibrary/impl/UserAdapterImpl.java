@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.impl;
+package dev.hawu.plugins.hikarilibrary.impl;
 
 import dev.hawu.plugins.api.collections.Property;
 import dev.hawu.plugins.api.user.ExtendedUser;

@@ -1,6 +1,6 @@
 name: HikariLibrary
 main: dev.hawu.plugins.hikarilibrary.HikariLibrary
-version: 1.7.1-SNAPSHOT
+version: 1.8-SNAPSHOT
 description: The library for my plugins thing.
 authors: [ Haru, Hikari ]
 softdepend: [ MultiJVMLang ]

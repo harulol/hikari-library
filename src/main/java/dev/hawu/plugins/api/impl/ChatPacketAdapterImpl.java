@@ -2,10 +2,8 @@ package dev.hawu.plugins.api.impl;
 
 import dev.hawu.plugins.api.chat.ChatPacketAdapter;
 import dev.hawu.plugins.api.chat.TextComponent;
-import dev.hawu.plugins.api.reflect.LookupException;
-import dev.hawu.plugins.api.reflect.SimpleLookup;
-import dev.hawu.plugins.api.reflect.UncheckedHandles;
-import dev.hawu.plugins.api.reflect.UncheckedReflects;
+import dev.hawu.plugins.api.misc.ConsoleLogger;
+import dev.hawu.plugins.api.reflect.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,42 +25,58 @@ public final class ChatPacketAdapterImpl extends ChatPacketAdapter {
     private static final MethodHandle SERIALIZER;
 
     static {
-        final MethodHandles.Lookup lookup = MethodHandles.lookup();
+        init:
+        {
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
 
-        final Class<?> CHAT_SERIALIZER = SimpleLookup.findNMS("IChatBaseComponent$ChatSerializer", "network.chat.IChatBaseComponent$ChatSerializer")
-            .orElse(SimpleLookup.lookupNMSOrNull("ChatSerializer"));
-        final Class<?> I_CHAT_BASE_COMPONENT = SimpleLookup.lookupNMS("IChatBaseComponent", "network.chat.IChatBaseComponent");
-        final Class<?> I_CHAT_MUTABLE_COMPONENT = SimpleLookup.lookupNMSOrNull("IChatMutableComponent", "network.chat.IChatMutableComponent");
-        final Class<?> PACKET_PLAY_OUT_CHAT = SimpleLookup.lookupNMS("PacketPlayOutChat", "network.protocol.game.PacketPlayOutChat");
-        final Class<?> CHAT_MESSAGE_TYPE = SimpleLookup.findNMS("ChatMessageType", "network.chat.ChatMessageType").orNull();
+            if(MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_19_R1)) {
+                ConsoleLogger.warn("Due to new chat reporting features, not a lot is known about the packet and the structure of the packets were changed drastically," +
+                    " chat packets will throw errors upon usage.");
+                CHAT_MESSAGE_TYPE_CHAT = null;
+                THREE_CONSTRUCTOR = null;
+                ONE_CONSTRUCTOR = null;
+                SERIALIZER = null;
+                break init;
+            }
 
-        if(CHAT_MESSAGE_TYPE != null) {
-            CHAT_MESSAGE_TYPE_CHAT = UncheckedHandles.findStaticGetter(lookup, CHAT_MESSAGE_TYPE, "CHAT", CHAT_MESSAGE_TYPE)
-                .either(UncheckedHandles.findStaticGetter(lookup, CHAT_MESSAGE_TYPE, "a", CHAT_MESSAGE_TYPE))
-                .map(handle -> {
-                    try {
-                        return handle.asType(UncheckedHandles.methodType(Object.class).get()).invokeExact();
-                    } catch(Throwable e) {
-                        throw new LookupException(e);
-                    }
-                })
+            final Class<?> CHAT_SERIALIZER = SimpleLookup.findNMS("IChatBaseComponent$ChatSerializer", "network.chat.IChatBaseComponent$ChatSerializer")
+                .orElse(SimpleLookup.lookupNMSOrNull("ChatSerializer"));
+            final Class<?> I_CHAT_BASE_COMPONENT = SimpleLookup.lookupNMS("IChatBaseComponent", "network.chat.IChatBaseComponent");
+            final Class<?> I_CHAT_MUTABLE_COMPONENT = SimpleLookup.lookupNMSOrNull("IChatMutableComponent", "network.chat.IChatMutableComponent");
+            final Class<?> PACKET_PLAY_OUT_CHAT = SimpleLookup.lookupNMS("PacketPlayOutChat", "network.protocol.game.PacketPlayOutChat");
+            final Class<?> CHAT_MESSAGE_TYPE = SimpleLookup.findNMS("ChatMessageType", "network.chat.ChatMessageType").orNull();
+
+            if(CHAT_MESSAGE_TYPE != null) {
+                CHAT_MESSAGE_TYPE_CHAT = UncheckedHandles.findStaticGetter(lookup, CHAT_MESSAGE_TYPE, "CHAT", CHAT_MESSAGE_TYPE)
+                    .either(UncheckedHandles.findStaticGetter(lookup, CHAT_MESSAGE_TYPE, "a", CHAT_MESSAGE_TYPE))
+                    .map(handle -> {
+                        try {
+                            return handle.asType(UncheckedHandles.methodType(Object.class).get()).invokeExact();
+                        } catch(Throwable e) {
+                            throw new LookupException(e);
+                        }
+                    })
+                    .orNull();
+                THREE_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT,
+                        UncheckedHandles.methodType(void.class, I_CHAT_BASE_COMPONENT, CHAT_MESSAGE_TYPE, UUID.class).get())
+                    .map(handle -> handle.asType(UncheckedHandles.methodType(Object.class, Object.class, Object.class, UUID.class).get()))
+                    .orNull();
+            } else {
+                CHAT_MESSAGE_TYPE_CHAT = null;
+                THREE_CONSTRUCTOR = null;
+            }
+
+            ONE_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT,
+                    UncheckedHandles.methodType(void.class, I_CHAT_BASE_COMPONENT).get())
+                .map(handle -> handle.asType(UncheckedHandles.methodType(Object.class, Object.class).get()))
                 .orNull();
-            THREE_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT,
-                    UncheckedHandles.methodType(void.class, I_CHAT_BASE_COMPONENT, CHAT_MESSAGE_TYPE, UUID.class).get())
-                .map(handle -> handle.asType(UncheckedHandles.methodType(Object.class, Object.class, Object.class, UUID.class).get()))
-                .orNull();
-        } else {
-            CHAT_MESSAGE_TYPE_CHAT = null;
-            THREE_CONSTRUCTOR = null;
+            SERIALIZER = UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER, "a",
+                    UncheckedHandles.methodType(I_CHAT_BASE_COMPONENT, String.class).orNull())
+                .either(UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER, "a",
+                    UncheckedHandles.methodType(I_CHAT_MUTABLE_COMPONENT, String.class).orNull()))
+                .map(handle -> handle.asType(UncheckedHandles.methodType(Object.class, String.class).get()))
+                .get();
         }
-
-        ONE_CONSTRUCTOR = UncheckedHandles.findConstructor(lookup, PACKET_PLAY_OUT_CHAT, UncheckedHandles.methodType(void.class, I_CHAT_BASE_COMPONENT).get())
-            .map(handle -> handle.asType(UncheckedHandles.methodType(Object.class, Object.class).get()))
-            .orNull();
-        SERIALIZER = UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER, "a", UncheckedHandles.methodType(I_CHAT_BASE_COMPONENT, String.class).orNull())
-            .either(UncheckedHandles.findStatic(lookup, CHAT_SERIALIZER, "a", UncheckedHandles.methodType(I_CHAT_MUTABLE_COMPONENT, String.class).orNull()))
-            .map(handle -> handle.asType(UncheckedHandles.methodType(Object.class, String.class).get()))
-            .get();
     }
 
     private ChatPacketAdapterImpl() {}

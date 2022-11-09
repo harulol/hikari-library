@@ -134,6 +134,13 @@ public enum MinecraftVersion {
      * @since 1.7
      */
     v1_18_R2(1, 18, 2),
+
+    /**
+     * Represents Minecraft 1.19.
+     *
+     * @since 1.8
+     */
+    v1_19_R1(1, 19, 1),
     ;
 
     private static MinecraftVersion current;

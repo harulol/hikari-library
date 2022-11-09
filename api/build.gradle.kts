@@ -6,7 +6,6 @@ plugins {
 dependencies {
     api("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
     api("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
-    api("com.github.MilkBowl:VaultAPI:1.7")
 }
 
 val libraryName = "hikari-library"
