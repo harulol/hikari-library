@@ -28,7 +28,7 @@ allprojects {
     }
 
     dependencies {
-        api("org.jetbrains:annotations:23.0.0")
+        api("org.jetbrains:annotations:23.1.0")
         api("org.jetbrains.kotlin:kotlin-stdlib:1.7.20")
         api("com.google.code.gson:gson:2.10")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
