@@ -7,7 +7,10 @@ import java.lang.invoke.*;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents a factory for creating via {@link LambdaMetafactory}
@@ -62,23 +65,44 @@ public final class LambdaFactory {
         return types;
     }
 
-    private static String getInvokedName(final @NotNull Class<?> clazz) {
-        if(!clazz.isInterface())
-            throw new IllegalArgumentException("Invalid functional interface passed in");
-        switch(clazz.getName()) {
-            case "java.util.function.Runnable":
-                return "run";
-            case "java.util.function.Supplier":
-                return "get";
-            case "java.util.function.Consumer":
-            case "java.util.function.BiConsumer":
-                return "accept";
-            case "java.util.function.Function":
-            case "java.util.function.BiFunction":
-                return "apply";
-            default:
-                throw new IllegalArgumentException("Invalid functional interface passed in");
+    private static boolean belongsToObject(final Method method) {
+        try {
+            Object.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
+            return true;
+        } catch(final Exception exception) {
+            return false;
         }
+    }
+
+    /**
+     * Attempts to find the function name of the functional interface.
+     * <p>
+     * A functional interface, by definition:
+     * <ul>
+     *     <li>Must have exactly one abstract method</li>
+     *     <li>Synthetic, native or bridge methods do not count</li>
+     *     <li>Methods belonging to {@code java.lang.Object} do not count</li>
+     *     <li>Static methods do not count</li>
+     * </ul>
+     *
+     * @param clazz The functional interface to find the name of.
+     * @return The name of the method.
+     * @since 2.0
+     */
+    public static String getInvokedName(final @NotNull Class<?> clazz) {
+        if(!clazz.isInterface())
+            throw new IllegalArgumentException("The class " + clazz.getName() + " is not an interface.");
+
+        final List<Method> abstractMethods = Arrays.stream(clazz.getDeclaredMethods())
+            .filter(m -> !m.isDefault() && !m.isBridge() && !m.isSynthetic())
+            .filter(m -> !Modifier.isStatic(m.getModifiers()) && !Modifier.isNative(m.getModifiers()))
+            .filter(m -> !belongsToObject(m))
+            .collect(Collectors.toList());
+
+        if(abstractMethods.size() != 1)
+            throw new IllegalArgumentException("The class " + clazz.getName() + " must have exactly one abstract method.");
+
+        return abstractMethods.get(0).getName();
     }
 
     /**
