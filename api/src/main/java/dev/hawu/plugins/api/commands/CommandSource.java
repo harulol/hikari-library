@@ -35,7 +35,7 @@ public final class CommandSource implements CommandSender {
      * @param base The base sender to wrap.
      * @since 1.0
      */
-    CommandSource(@NotNull final CommandSender base) {
+    public CommandSource(@NotNull final CommandSender base) {
         this.base = base;
     }
 
