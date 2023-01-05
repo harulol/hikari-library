@@ -131,9 +131,9 @@ public final class CommandRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    private static BiFunction<CommandSource, CommandArgument, List<?>> generateTabCompleter(final @NotNull CommandRegistrable instance,
-                                                                                            final @NotNull Method method,
-                                                                                            final @NotNull String[] names) {
+    private static BiFunction<CommandSource, CommandArgument, List<?>> generateTabMethod(final @NotNull CommandRegistrable instance,
+                                                                                         final @NotNull Method method,
+                                                                                         final @NotNull String[] names) {
         validateTabCompleterMethod(method);
         final CallSite callSite = LambdaFactory.generate(MethodHandles.lookup(), method);
 
@@ -187,14 +187,16 @@ public final class CommandRegistry {
     private static TabCompleter generateTabCompleter(final @NotNull CommandRegistrable instance, final @NotNull Method method) {
         final TabExecute command = method.getAnnotation(TabExecute.class);
         final CommandPermission permission = method.getAnnotation(CommandPermission.class);
-        final BiFunction<CommandSource, CommandArgument, List<?>> function = generateTabCompleter(instance, method, command.value());
+        final BiFunction<CommandSource, CommandArgument, List<?>> function = generateTabMethod(instance, method, command.value());
 
         return (sender, name, label, args) -> {
             final CommandSource source = new CommandSource(sender);
             final CommandArgument arguments = new CommandArgument(args);
 
-            if(permission != null && Arrays.stream(permission.value()).noneMatch(source::hasPermission))
+            if(Arrays.stream(command.senders()).noneMatch(type -> type.getSenderClass().isInstance(sender))
+                || (permission != null && Arrays.stream(permission.value()).noneMatch(source::hasPermission))) {
                 return null;
+            }
 
             return (List<String>) function.apply(source, arguments);
         };

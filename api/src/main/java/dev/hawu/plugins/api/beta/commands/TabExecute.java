@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.beta.commands;
 
+import dev.hawu.plugins.api.commands.SenderType;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
@@ -34,5 +35,14 @@ public @interface TabExecute {
      * @since 2.0
      */
     boolean child() default false;
+
+    /**
+     * Types of sender that are eligible to request tab completions of the command..
+     *
+     * @return said types.
+     * @since 2.0
+     */
+    @NotNull
+    SenderType[] senders() default {SenderType.PLAYER, SenderType.CONSOLE, SenderType.BLOCK, SenderType.PROXIED, SenderType.REMOTE_CONSOLE};
 
 }
