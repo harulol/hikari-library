@@ -1,6 +1,7 @@
 package dev.hawu.plugins.hikarilibrary;
 
 import dev.hawu.plugins.api.Tasks;
+import dev.hawu.plugins.api.beta.commands.CommandRegistry;
 import dev.hawu.plugins.api.chat.ChatPacketAdapter;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.events.Events;
@@ -79,6 +80,7 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
     public void onEnable() {
         instance = this;
         messagesModule = new ResourceModule("messages", this);
+
         BukkitMaterial.initialize();
         GuiClickEvents.initialize(this);
         Inventories.setPlugin(this);
@@ -109,6 +111,7 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         Tasks.cancelAllTasks(this);
         HandlerList.unregisterAll((Plugin) this);
         Bukkit.getOnlinePlayers().forEach(GuiClickEvents::safelyClose);
+        CommandRegistry.unregisterAll();
     }
 
 }
