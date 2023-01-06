@@ -2,7 +2,6 @@ package dev.hawu.plugins.api;
 
 import dev.hawu.plugins.api.collections.Property;
 import dev.hawu.plugins.api.collections.tuples.Pair;
-import jdk.vm.ci.meta.Value;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +35,21 @@ public final class Strings {
     public static String color(@Nullable final String s) {
         if(s == null) return "null";
         else return ChatColor.translateAlternateColorCodes('&', s);
+    }
+
+    /**
+     * Colorizes a {@link String} using Bukkit conversions after
+     * formatting the string with the specified arguments.
+     *
+     * @param s            The string to convert.
+     * @param replacements The replacements to use.
+     * @return {@code "null"} if {@code s} was null, a colorized {@link String} otherwise.
+     * @since 1.0
+     */
+    @NotNull
+    public static String colorf(@Nullable final String s, @NotNull final Object... replacements) {
+        if(s == null) return "null";
+        else return color(String.format(s, replacements));
     }
 
     /**
