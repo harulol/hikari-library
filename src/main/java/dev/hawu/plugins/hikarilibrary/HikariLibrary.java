@@ -1,9 +1,9 @@
 package dev.hawu.plugins.hikarilibrary;
 
 import dev.hawu.plugins.api.Tasks;
-import dev.hawu.plugins.api.beta.commands.CommandRegistry;
 import dev.hawu.plugins.api.chat.ChatPacketAdapter;
 import dev.hawu.plugins.api.collections.tuples.Pair;
+import dev.hawu.plugins.api.commands.CommandRegistry;
 import dev.hawu.plugins.api.events.Events;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
 import dev.hawu.plugins.api.i18n.Locale;

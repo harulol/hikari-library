@@ -1,9 +1,7 @@
-package dev.hawu.plugins.api.beta.commands;
+package dev.hawu.plugins.api.commands;
 
-import dev.hawu.plugins.api.beta.reflect.LambdaFactory;
-import dev.hawu.plugins.api.commands.CommandArgument;
-import dev.hawu.plugins.api.commands.CommandSource;
 import dev.hawu.plugins.api.misc.ConsoleLogger;
+import dev.hawu.plugins.api.reflect.LambdaFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 

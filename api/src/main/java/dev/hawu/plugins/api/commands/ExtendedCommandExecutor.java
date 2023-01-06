@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.beta.commands;
+package dev.hawu.plugins.api.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.beta.commands;
+package dev.hawu.plugins.api.commands;
 
 /**
  * Represents a class that can be registered

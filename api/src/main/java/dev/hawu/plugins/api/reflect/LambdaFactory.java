@@ -1,6 +1,5 @@
-package dev.hawu.plugins.api.beta.reflect;
+package dev.hawu.plugins.api.reflect;
 
-import dev.hawu.plugins.api.reflect.MetafactoryBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.*;

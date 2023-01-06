@@ -1,8 +1,6 @@
-package dev.hawu.plugins.api.beta.commands;
+package dev.hawu.plugins.api.commands;
 
 import dev.hawu.plugins.api.Strings;
-import dev.hawu.plugins.api.commands.CommandArgument;
-import dev.hawu.plugins.api.commands.CommandSource;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

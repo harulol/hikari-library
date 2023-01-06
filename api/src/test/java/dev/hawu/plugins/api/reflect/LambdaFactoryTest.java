@@ -1,6 +1,5 @@
 package dev.hawu.plugins.api.reflect;
 
-import dev.hawu.plugins.api.beta.reflect.LambdaFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.BiConsumer;

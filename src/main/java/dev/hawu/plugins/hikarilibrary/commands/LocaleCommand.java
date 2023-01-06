@@ -4,6 +4,7 @@ import dev.hawu.plugins.api.ObjectUtils;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.commands.AbstractCommandClass;
 import dev.hawu.plugins.api.commands.CommandArgument;
+import dev.hawu.plugins.api.commands.CommandRegistrable;
 import dev.hawu.plugins.api.commands.CommandSource;
 import dev.hawu.plugins.api.i18n.Locale;
 import dev.hawu.plugins.api.user.ExtendedUser;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 import static dev.hawu.plugins.hikarilibrary.HikariLibrary.tl;
 
-public final class LocaleCommand extends AbstractCommandClass {
+public final class LocaleCommand extends AbstractCommandClass implements CommandRegistrable {
 
     private final List<String> locales = Arrays.stream(Locale.values()).map(Locale::name).collect(Collectors.toList());
 

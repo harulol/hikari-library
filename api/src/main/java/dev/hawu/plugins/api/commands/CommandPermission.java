@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.beta.commands;
+package dev.hawu.plugins.api.commands;
 
 import org.jetbrains.annotations.NotNull;
 
