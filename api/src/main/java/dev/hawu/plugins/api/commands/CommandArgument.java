@@ -8,7 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * A wrapper class that represents the arguments that come with
@@ -20,7 +22,6 @@ import java.util.stream.IntStream;
 public final class CommandArgument {
 
     private final List<String> args;
-    private CommandLine cli;
 
     /**
      * Initialize the class with the arguments in a form of a {@link String} array.
@@ -40,20 +41,6 @@ public final class CommandArgument {
      */
     public CommandArgument(@NotNull final List<@NotNull String> strings) {
         this.args = strings;
-    }
-
-    /**
-     * Initialize the property {@link CommandArgument#cli} so {@link CommandArgument#parse()} can be
-     * used later.
-     *
-     * @param cli The CLI instance to initialize with.
-     * @return The same receiver.
-     * @since 1.0
-     */
-    @NotNull
-    public CommandArgument withCLI(@Nullable final CommandLine cli) {
-        this.cli = cli;
-        return this;
     }
 
     /**
@@ -156,8 +143,8 @@ public final class CommandArgument {
      * @since 1.0
      */
     @NotNull
-    public Pair<@NotNull CommandArgument, @NotNull Map<@NotNull String, @NotNull List<@NotNull String>>> parse() {
-        return Objects.requireNonNull(cli, "CLI property is not initialized.").parse(joinToString(0, args.size()));
+    public Pair<CommandArgument, Map<String, List<String>>> parse(final @NotNull CommandLine cli) {
+        return cli.parse(joinToString(0, args.size()));
     }
 
     /**
@@ -201,6 +188,29 @@ public final class CommandArgument {
         final List<String> list = new ArrayList<>();
         IntStream.range(startInclusive, endExclusive).forEach(i -> list.add(args.get(i)));
         return list;
+    }
+
+    /**
+     * Returns a sequential stream with the arguments as its source.
+     *
+     * @return A sequential {@link Stream} of {@link String}.
+     * @since 2.0
+     */
+    @NotNull
+    public Stream<String> stream() {
+        return args.stream();
+    }
+
+    /**
+     * Filters in only strings that start with the provided prefix.
+     *
+     * @param prefix The prefix to filter in.
+     * @return A {@link List} of {@link String} that start with the provided prefix.
+     * @since 2.0
+     */
+    @NotNull
+    public List<String> filterStartsWith(final @NotNull String prefix) {
+        return this.stream().filter(s -> s.startsWith(prefix)).collect(Collectors.toList());
     }
 
 }
