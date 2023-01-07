@@ -3,6 +3,7 @@ package dev.hawu.plugins.api.reflect;
 import com.google.common.collect.Sets;
 import dev.hawu.plugins.api.collections.Property;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.*;
 import java.lang.invoke.MethodHandles.Lookup;
@@ -116,10 +117,6 @@ public final class LambdaFactory {
         types[1] = MethodType.methodType(getPrimitiveClass(method.getReturnType()), objectParameters);
         types[2] = MethodType.methodType(returnType, method.getParameterTypes());
 
-        System.out.println(types[0]);
-        System.out.println(types[1]);
-        System.out.println(types[2]);
-
         return types;
     }
 
@@ -230,6 +227,46 @@ public final class LambdaFactory {
             );
         } catch(final Exception exception) {
             throw new RuntimeException(exception);
+        }
+    }
+
+    /**
+     * Attempts to invoke a callsite with the instance.
+     *
+     * @param instance   the instance to invoke the callsite with.
+     * @param callSite   the callsite to invoke.
+     * @param parameters the parameters to invoke the callsite with.
+     * @return the result of the callsite.
+     * @since 2.0
+     */
+    @Nullable
+    public static Object invoke(final @NotNull Object instance, final @NotNull CallSite callSite,
+                                final @Nullable Object... parameters) {
+        try {
+            final Object functional = callSite.getTarget().bindTo(instance).invoke();
+            final Method method = getAbstractMethods(functional.getClass()).get(0);
+            return method.invoke(functional, parameters);
+        } catch(final Throwable throwable) {
+            throw new RuntimeException(throwable);
+        }
+    }
+
+    /**
+     * Attempts to invoke a callsite without an instance for static methods.
+     *
+     * @param callSite   the callsite to invoke.
+     * @param parameters the parameters to invoke the callsite with.
+     * @return the result of the callsite.
+     * @since 2.0
+     */
+    @Nullable
+    public static Object invokeStatic(final @NotNull CallSite callSite, final @Nullable Object... parameters) {
+        try {
+            final Object functional = callSite.getTarget().invoke();
+            final Method method = getAbstractMethods(functional.getClass()).get(0);
+            return method.invoke(functional, parameters);
+        } catch(final Throwable throwable) {
+            throw new RuntimeException(throwable);
         }
     }
 

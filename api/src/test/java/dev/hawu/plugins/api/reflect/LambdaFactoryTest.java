@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.invoke.CallSite;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.IntBinaryOperator;
 
 public class LambdaFactoryTest {
 
@@ -16,8 +16,12 @@ public class LambdaFactoryTest {
         return a + b;
     }
 
-    public int threeParams(final int a, final int b, final int c) {
+    public static int threeParams(final int a, final int b, final int c) {
         return a + b + c;
+    }
+
+    public void arityParams(final int... params) {
+        System.out.println(Arrays.stream(params).sum());
     }
 
     @Test
@@ -49,9 +53,7 @@ public class LambdaFactoryTest {
     public void test_generateCallSiteTwoParams() throws Throwable {
         final Method method = LambdaFactoryTest.class.getDeclaredMethod("twoParams", int.class, int.class);
         final CallSite callSite = LambdaFactory.generate(method);
-
-        IntBinaryOperator consumer = (IntBinaryOperator) callSite.getTarget().bindTo(new LambdaFactoryTest()).invoke();
-        Assertions.assertEquals(3, consumer.applyAsInt(1, 2));
+        Assertions.assertEquals(3, LambdaFactory.invoke(new LambdaFactoryTest(), callSite, 1, 2));
     }
 
     @Test
@@ -59,9 +61,14 @@ public class LambdaFactoryTest {
         final Method method = LambdaFactoryTest.class.getDeclaredMethod("threeParams", int.class, int.class, int.class);
         LambdaFactory.registerInterface(IntTernaryOperator.class);
         final CallSite callSite = LambdaFactory.generate(method);
+        Assertions.assertEquals(6, LambdaFactory.invokeStatic(callSite, 1, 2, 3));
+    }
 
-        IntTernaryOperator consumer = (IntTernaryOperator) callSite.getTarget().bindTo(new LambdaFactoryTest()).invoke();
-        Assertions.assertEquals(6, consumer.oneFunction(1, 2, 3));
+    @Test
+    public void test_generateCallSiteArityParams() throws Throwable {
+        final Method method = LambdaFactoryTest.class.getDeclaredMethod("arityParams", int[].class);
+        final CallSite callSite = LambdaFactory.generate(method);
+        LambdaFactory.invoke(new LambdaFactoryTest(), callSite, new int[]{1, 2, 3, 4, 5});
     }
 
     @FunctionalInterface
