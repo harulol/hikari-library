@@ -1,5 +1,7 @@
 package dev.hawu.plugins.api.reflect;
 
+import com.google.common.collect.Sets;
+import dev.hawu.plugins.api.collections.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.*;
@@ -8,19 +10,82 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
 /**
- * Represents a factory for creating via {@link LambdaMetafactory}
- * for small methods, those with fewer than two parameters.
+ * Represents a factory for creating lambdas via {@link LambdaMetafactory} dynamically
+ * for any methods, provided that there is a functional interface with matching
+ * signatures.
  * <p>
- * For bigger methods, please use {@link LambdaMetafactory} directly or via
- * a builder structure with {@link MetafactoryBuilder}.
+ * Functional interfaces should be provided via {@link LambdaFactory#registerInterface(Class)}. Please be
+ * warned that Java treats primitives and other classes differently, so you actually need at least two versions
+ * of functional interfaces if any of them contain a primitive type.
+ * <p>
+ * For example, the method with signature {@code int(int, String)} will only match any functional interface
+ * with functional method {@code int(int, Object)} while failing to match {@code Object(int, Object)} or
+ * any of the sorts. But {@code byte(int, String)} will obviously not match functional method {@code int(int, Object)}.
  *
  * @since 2.0
  */
 public final class LambdaFactory {
+
+    private static final Set<Class<?>> FUNCTIONAL_INTERFACES = Sets.newHashSet(
+        BiConsumer.class, BiFunction.class, BiPredicate.class, BooleanSupplier.class, Consumer.class,
+        DoubleBinaryOperator.class, DoubleConsumer.class, DoubleFunction.class, DoublePredicate.class,
+        DoubleSupplier.class, DoubleToIntFunction.class, DoubleToLongFunction.class, DoubleUnaryOperator.class,
+        Function.class, IntBinaryOperator.class, IntConsumer.class, IntFunction.class, IntPredicate.class,
+        IntSupplier.class, IntToDoubleFunction.class, IntToLongFunction.class, IntUnaryOperator.class,
+        LongBinaryOperator.class, LongConsumer.class, LongFunction.class, LongPredicate.class,
+        LongSupplier.class, LongToDoubleFunction.class, LongToIntFunction.class, LongUnaryOperator.class,
+        ObjDoubleConsumer.class, ObjIntConsumer.class, ObjLongConsumer.class, Predicate.class,
+        Supplier.class, ToDoubleBiFunction.class, ToDoubleFunction.class, ToIntBiFunction.class,
+        ToIntFunction.class, ToLongBiFunction.class, ToLongFunction.class
+    );
+    private static final Set<Class<?>> PRIMITIVE_CLASSES = Sets.newHashSet(
+        byte.class, short.class, int.class, long.class, float.class, double.class, boolean.class, void.class, char.class
+    );
+
+    private LambdaFactory() {
+    }
+
+    @NotNull
+    private static Property<Class<?>> findFunctionalClass(final @NotNull Method method) {
+        outer:
+        for(final Class<?> cls : FUNCTIONAL_INTERFACES) {
+            final Method funcMethod = validateFunctionalInterface(cls);
+
+            if(funcMethod.getParameterCount() != method.getParameterCount()) continue;
+            if(getPrimitiveClass(funcMethod.getReturnType()) != getPrimitiveClass(method.getReturnType())) continue;
+
+            final Class<?>[] funcParams = funcMethod.getParameterTypes();
+            final Class<?>[] params = method.getParameterTypes();
+
+            for(int i = 0; i < funcParams.length; i++)
+                if(getPrimitiveClass(funcParams[i]) != getPrimitiveClass(params[i]))
+                    continue outer;
+
+            return Property.of(cls);
+        }
+
+        return Property.empty();
+    }
+
+    private static Class<?> getPrimitiveClass(final @NotNull Class<?> clazz) {
+        if(PRIMITIVE_CLASSES.contains(clazz))
+            return clazz;
+        return Object.class;
+    }
+
+    private static String getSignature(final @NotNull Method method) {
+        final StringJoiner joiner = new StringJoiner(",", "(", ")");
+        for(final Class<?> param : method.getParameterTypes()) {
+            joiner.add(param.getSimpleName());
+        }
+        return joiner + method.getReturnType().getSimpleName();
+    }
 
     /**
      * This returns an array of method types.
@@ -34,42 +99,36 @@ public final class LambdaFactory {
      */
     private static MethodType[] generateFactoryMethodType(final @NotNull Class<?> instanceType, final @NotNull Method method) {
         final MethodType[] types = new MethodType[3];
-        final boolean returnsVoid = method.getReturnType() == void.class;
-        final boolean isStatic = Modifier.isStatic(method.getModifiers());
 
-        // Generate the invokedType, which should be one of the functional interfaces.
-        switch(method.getParameterCount()) {
-            case 0:
-                types[0] = isStatic ? MethodType.methodType(returnsVoid ? Runnable.class : Supplier.class)
-                    : MethodType.methodType(returnsVoid ? Runnable.class : Supplier.class, instanceType);
-                types[1] = MethodType.methodType(returnsVoid ? void.class : Object.class);
-                types[2] = MethodType.methodType(returnsVoid ? void.class : method.getReturnType());
-                break;
-            case 1:
-                types[0] = isStatic ? MethodType.methodType(returnsVoid ? Consumer.class : Function.class)
-                    : MethodType.methodType(returnsVoid ? Consumer.class : Function.class, instanceType);
-                types[1] = MethodType.methodType(returnsVoid ? void.class : Object.class, Object.class);
-                types[2] = MethodType.methodType(returnsVoid ? void.class : method.getReturnType(), method.getParameterTypes()[0]);
-                break;
-            case 2:
-                types[0] = isStatic ? MethodType.methodType(returnsVoid ? BiConsumer.class : BiFunction.class)
-                    : MethodType.methodType(returnsVoid ? BiConsumer.class : BiFunction.class, instanceType);
-                types[1] = MethodType.methodType(returnsVoid ? void.class : Object.class, Object.class, Object.class);
-                types[2] = MethodType.methodType(returnsVoid ? void.class : method.getReturnType(), method.getParameterTypes()[0], method.getParameterTypes()[1]);
-                break;
-            default:
-                throw new IllegalArgumentException("Cannot generate a built-in lambda factory for a method with more than 2 parameters.");
-        }
+        final boolean returnsVoid = method.getReturnType() == void.class;
+        final Class<?> returnType = returnsVoid ? void.class : method.getReturnType();
+        final boolean isStatic = Modifier.isStatic(method.getModifiers());
+        final Class<?>[] objectParameters = new Class<?>[method.getParameterCount()];
+
+        // Fill with primitive types if it has to be, since int is not an Object for example.
+        for(int i = 0; i < objectParameters.length; i++)
+            objectParameters[i] = getPrimitiveClass(method.getParameterTypes()[i]);
+
+        final Class<?> funcClass = findFunctionalClass(method)
+            .orElseThrow(new IllegalArgumentException("Method has unmatchable signature. Please provide interface for " + getSignature(method)));
+
+        types[0] = isStatic ? MethodType.methodType(funcClass) : MethodType.methodType(funcClass, instanceType);
+        types[1] = MethodType.methodType(getPrimitiveClass(method.getReturnType()), objectParameters);
+        types[2] = MethodType.methodType(returnType, method.getParameterTypes());
+
+        System.out.println(types[0]);
+        System.out.println(types[1]);
+        System.out.println(types[2]);
 
         return types;
     }
 
-    private static boolean belongsToObject(final Method method) {
+    private static boolean notBelongsToObject(final Method method) {
         try {
             Object.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
-            return true;
-        } catch(final Exception exception) {
             return false;
+        } catch(final Exception exception) {
+            return true;
         }
     }
 
@@ -89,19 +148,39 @@ public final class LambdaFactory {
      * @since 2.0
      */
     public static String getInvokedName(final @NotNull Class<?> clazz) {
+        return validateFunctionalInterface(clazz).getName();
+    }
+
+    /**
+     * Attempts to register a functional interface for use in lambda factories
+     * for methods with more than two parameters.
+     * <p>
+     * A functional interface is described as in {@link LambdaFactory#getInvokedName(Class)}.
+     *
+     * @param clazz the class to register
+     * @since 2.0
+     */
+    public static void registerInterface(final @NotNull Class<?> clazz) {
+        validateFunctionalInterface(clazz);
+        FUNCTIONAL_INTERFACES.add(clazz);
+    }
+
+    private static Method validateFunctionalInterface(final Class<?> clazz) {
         if(!clazz.isInterface())
             throw new IllegalArgumentException("The class " + clazz.getName() + " is not an interface.");
 
-        final List<Method> abstractMethods = Arrays.stream(clazz.getDeclaredMethods())
-            .filter(m -> !m.isDefault() && !m.isBridge() && !m.isSynthetic())
-            .filter(m -> !Modifier.isStatic(m.getModifiers()) && !Modifier.isNative(m.getModifiers()))
-            .filter(m -> !belongsToObject(m))
-            .collect(Collectors.toList());
-
+        final List<Method> abstractMethods = getAbstractMethods(clazz);
         if(abstractMethods.size() != 1)
             throw new IllegalArgumentException("The class " + clazz.getName() + " must have exactly one abstract method.");
+        return abstractMethods.get(0);
+    }
 
-        return abstractMethods.get(0).getName();
+    private static List<Method> getAbstractMethods(final Class<?> cls) {
+        return Arrays.stream(cls.getDeclaredMethods())
+            .filter(m -> !m.isDefault() && !m.isBridge() && !m.isSynthetic())
+            .filter(m -> !Modifier.isStatic(m.getModifiers()) && !Modifier.isNative(m.getModifiers()))
+            .filter(LambdaFactory::notBelongsToObject)
+            .collect(Collectors.toList());
     }
 
     /**
