@@ -2,6 +2,10 @@ package dev.hawu.plugins.api.i18n;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Represents a type of locale for internationalization.
  */
@@ -443,6 +447,13 @@ public enum Locale {
     yo("Yoruba"),
     zu_ZA("Zulu (South Africa)"),
     zu("Zulu");
+
+    /**
+     * A list containing all locales as strings.
+     *
+     * @since 2.0
+     */
+    public static final List<String> LOCALES = Arrays.stream(Locale.values()).map(Locale::name).collect(Collectors.toList());
 
     private final String displayName;
 

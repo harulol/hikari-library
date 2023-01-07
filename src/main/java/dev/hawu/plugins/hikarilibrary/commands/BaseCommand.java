@@ -1,38 +1,37 @@
 package dev.hawu.plugins.hikarilibrary.commands;
 
-import dev.hawu.plugins.api.commands.AbstractCommandClass;
-import dev.hawu.plugins.api.commands.CommandArgument;
-import dev.hawu.plugins.api.commands.CommandSource;
+import dev.hawu.plugins.api.collections.tuples.Pair;
+import dev.hawu.plugins.api.commands.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
+import static dev.hawu.plugins.hikarilibrary.HikariLibrary.tl;
+
 /**
  * The base command of the plugin.
  */
-public final class BaseCommand extends AbstractCommandClass {
+public final class BaseCommand implements CommandRegistrable {
+
+    private final JavaPlugin plugin;
+    private final List<String> subCommands = Collections.singletonList("locale");
 
     public BaseCommand(final JavaPlugin plugin) {
-        super("hikarilibrary");
-        setPermission("hikari-library.base");
-        allowPlayers();
-
-        bind(new LocaleCommand());
-
-        register(plugin);
+        this.plugin = plugin;
     }
 
-    @Override
-    public void run(final @NotNull CommandSource sender, final @NotNull CommandArgument args) {
-        sender.sendMessage("&cUsage: /hikari <args...>");
+    @Command("hikarilibrary")
+    @CommandPermission("hikari-library.base")
+    public void runBase(final CommandSource sender, final CommandArgument args) {
+        sender.sendMessage(tl(sender.getLocale(), "current-version", Pair.of("version", plugin.getDescription().getVersion())));
     }
 
-    @Override
-    public @NotNull List<String> tab(final @NotNull CommandSource sender, final @NotNull CommandArgument args) {
-        if(args.size() == 1) return Collections.singletonList("locale");
-        else return Collections.emptyList();
+    @TabExecute("hikarilibrary")
+    @CommandPermission("hikari-library.base")
+    public List<String> baseTab(final CommandSource sender, final CommandArgument args) {
+        if(args.size() == 1) return subCommands;
+        else return null;
     }
 
 }

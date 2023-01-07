@@ -6,8 +6,8 @@ import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.commands.CommandRegistry;
 import dev.hawu.plugins.api.events.Events;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
+import dev.hawu.plugins.api.i18n.LanguageModule;
 import dev.hawu.plugins.api.i18n.Locale;
-import dev.hawu.plugins.api.i18n.ResourceModule;
 import dev.hawu.plugins.api.impl.ChatPacketAdapterImpl;
 import dev.hawu.plugins.api.impl.ParticlePacketAdapterImpl;
 import dev.hawu.plugins.api.impl.TitlePacketAdapterImpl;
@@ -20,6 +20,7 @@ import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import dev.hawu.plugins.api.reflect.SimpleLookup;
 import dev.hawu.plugins.api.title.TitlePacketAdapter;
 import dev.hawu.plugins.hikarilibrary.commands.BaseCommand;
+import dev.hawu.plugins.hikarilibrary.commands.LocaleCommand;
 import dev.hawu.plugins.hikarilibrary.impl.UserAdapterImpl;
 import dev.hawu.plugins.hikarilibrary.impl.WorldEntitiesLookupAdapterImpl;
 import org.bukkit.Bukkit;
@@ -36,7 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class HikariLibrary extends JavaPlugin implements Listener {
 
     private static HikariLibrary instance;
-    private ResourceModule messagesModule;
+    private LanguageModule module;
 
     /**
      * Retrieves the instance of the library.
@@ -54,8 +55,8 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
      * @return the messages module
      * @since 1.6
      */
-    public static ResourceModule getModule() {
-        return getInstance().messagesModule;
+    public static LanguageModule getModule() {
+        return getInstance().module;
     }
 
     /**
@@ -79,7 +80,7 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         instance = this;
-        messagesModule = new ResourceModule("messages", this);
+        module = new LanguageModule(this, "messages");
 
         BukkitMaterial.initialize();
         GuiClickEvents.initialize(this);
@@ -89,7 +90,7 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         ConfigurationSerialization.registerClass(CraftUser.class);
         UserAdapterImpl.init(this);
 
-        new BaseCommand(this);
+        CommandRegistry.register(this, new BaseCommand(this), new LocaleCommand());
 
         try {
             getLogger().info("Loading adapters for Minecraft " + MinecraftVersion.getCurrent().name());
@@ -108,10 +109,11 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
     public void onDisable() {
         UserAdapterImpl.save();
         GuiClickEvents.onDisable();
-        Tasks.cancelAllTasks(this);
         HandlerList.unregisterAll((Plugin) this);
         Bukkit.getOnlinePlayers().forEach(GuiClickEvents::safelyClose);
         CommandRegistry.unregisterAll();
+
+        Tasks.cancelAllTasks(this);
     }
 
 }
