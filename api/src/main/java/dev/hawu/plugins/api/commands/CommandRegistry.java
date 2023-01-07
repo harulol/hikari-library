@@ -45,13 +45,13 @@ public final class CommandRegistry {
      * as well as those public.
      * <p>
      * For best performance, make sure that the methods are public or provide your
-     * own version of {@link MethodHandles#lookup()} in {@link CommandRegistry#register(Lookup, JavaPlugin, CommandRegistrable)}
+     * own version of {@link MethodHandles#lookup()} in {@link CommandRegistry#register(Lookup, JavaPlugin, CommandRegistrable...)}
      *
-     * @param plugin      The plugin that is registering the commands.
-     * @param registrable The class that contains the methods to be registered.
+     * @param plugin       The plugin that is registering the commands.
+     * @param registrables The class(es) that contains the methods to be registered.
      */
-    public static void register(final @NotNull JavaPlugin plugin, final @NotNull CommandRegistrable registrable) {
-        register(MethodHandles.lookup(), plugin, registrable);
+    public static void register(final @NotNull JavaPlugin plugin, final @NotNull CommandRegistrable... registrables) {
+        register(MethodHandles.lookup(), plugin, registrables);
     }
 
     /**
@@ -61,27 +61,30 @@ public final class CommandRegistry {
      * You should provide your own lookup instance by invoking {@link MethodHandles#lookup()}
      * if you have executors as private methods to reduce overhead for Reflections.
      *
-     * @param lookup      The lookup of the class, manually provided.
-     * @param plugin      The plugin instance.
-     * @param registrable The class to register.
+     * @param lookup       The lookup of the class, manually provided.
+     * @param plugin       The plugin instance.
+     * @param registrables The class(es) to register.
      * @since 2.0
      */
     public static void register(final @NotNull MethodHandles.Lookup lookup,
-                                final @NotNull JavaPlugin plugin, final @NotNull CommandRegistrable registrable) {
-        final List<Method> commandMethods = new ArrayList<>();
-        final List<Method> tabMethods = new ArrayList<>();
+                                final @NotNull JavaPlugin plugin, final @NotNull CommandRegistrable... registrables) {
         REGISTRIES.putIfAbsent(plugin, new CommandRegistry());
         final CommandRegistry registry = REGISTRIES.get(plugin);
 
-        for(final Method method : registrable.getClass().getDeclaredMethods()) {
-            if(registry.checkCommandMethod(plugin, method))
-                commandMethods.add(method);
-            else if(registry.checkTabMethod(plugin, method))
-                tabMethods.add(method);
-        }
+        for(final CommandRegistrable registrable : registrables) {
+            final List<Method> commandMethods = new ArrayList<>();
+            final List<Method> tabMethods = new ArrayList<>();
 
-        commandMethods.forEach(method -> registry.registerCommandMethod(lookup, registrable, plugin, method));
-        tabMethods.forEach(method -> registry.registerTabCompleter(lookup, registrable, plugin, method));
+            for(final Method method : registrable.getClass().getDeclaredMethods()) {
+                if(registry.checkCommandMethod(plugin, method))
+                    commandMethods.add(method);
+                else if(registry.checkTabMethod(plugin, method))
+                    tabMethods.add(method);
+            }
+
+            commandMethods.forEach(method -> registry.registerCommandMethod(lookup, registrable, plugin, method));
+            tabMethods.forEach(method -> registry.registerTabCompleter(lookup, registrable, plugin, method));
+        }
 
         registry.bindChildMethods(plugin);
     }

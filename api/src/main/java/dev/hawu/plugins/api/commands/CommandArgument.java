@@ -8,9 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * A wrapper class that represents the arguments that come with
@@ -188,29 +186,6 @@ public final class CommandArgument {
         final List<String> list = new ArrayList<>();
         IntStream.range(startInclusive, endExclusive).forEach(i -> list.add(args.get(i)));
         return list;
-    }
-
-    /**
-     * Returns a sequential stream with the arguments as its source.
-     *
-     * @return A sequential {@link Stream} of {@link String}.
-     * @since 2.0
-     */
-    @NotNull
-    public Stream<String> stream() {
-        return args.stream();
-    }
-
-    /**
-     * Filters in only strings that start with the provided prefix.
-     *
-     * @param prefix The prefix to filter in.
-     * @return A {@link List} of {@link String} that start with the provided prefix.
-     * @since 2.0
-     */
-    @NotNull
-    public List<String> filterStartsWith(final @NotNull String prefix) {
-        return this.stream().filter(s -> s.startsWith(prefix)).collect(Collectors.toList());
     }
 
 }

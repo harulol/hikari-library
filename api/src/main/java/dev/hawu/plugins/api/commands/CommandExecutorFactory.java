@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.commands;
 
+import dev.hawu.plugins.api.ObjectUtils;
 import dev.hawu.plugins.api.Strings;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 /**
  * Factory to generate executors as wrappers for commands.
@@ -45,7 +47,7 @@ final class CommandExecutorFactory {
                     return true;
                 }
 
-                if(permission != null && Arrays.stream(permission.value()).noneMatch(source::hasPermission)) {
+                if(permission != null && Arrays.stream(permission.value()).noneMatch(source::isAuthorized)) {
                     sender.sendMessage(Strings.color(permission.message()));
                     return true;
                 }
@@ -81,10 +83,16 @@ final class CommandExecutorFactory {
                         Arrays.copyOfRange(args, 1, args.length));
 
                 if(Arrays.stream(execute.senders()).noneMatch(type -> type.getSenderClass().isInstance(sender))
-                    || (permission != null && Arrays.stream(permission.value()).noneMatch(source::hasPermission)))
+                    || (permission != null && Arrays.stream(permission.value()).noneMatch(source::isAuthorized)))
                     return null;
 
-                return function.apply(source, arguments);
+                final String lastArgument = ObjectUtils.elvis(arguments.lastOrNull(), "").toLowerCase();
+                return execute.autoFilter()
+                    ? function.apply(source, arguments)
+                    .stream()
+                    .filter(s -> s.toLowerCase().startsWith(lastArgument))
+                    .collect(Collectors.toList())
+                    : function.apply(source, arguments);
             }
         };
     }

@@ -42,6 +42,15 @@ public @interface TabExecute {
     String[] aliases() default {};
 
     /**
+     * Attempts to automate the filtering of the list of strings returned
+     * to match the nearest argument.
+     *
+     * @return whether to filter the list of strings.
+     * @since 2.0
+     */
+    boolean autoFilter() default true;
+
+    /**
      * Types of sender that are eligible to request tab completions of the command..
      *
      * @return said types.
