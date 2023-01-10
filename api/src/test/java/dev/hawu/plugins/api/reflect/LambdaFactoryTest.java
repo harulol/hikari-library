@@ -1,6 +1,7 @@
 package dev.hawu.plugins.api.reflect;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.invoke.CallSite;
@@ -25,39 +26,46 @@ public class LambdaFactoryTest {
     }
 
     @Test
-    public void test_getInvokedNameRunnable() {
-        assert "run".equals(LambdaFactory.getInvokedName(Runnable.class));
+    @DisplayName("GetInvokedName with Runnable class")
+    public void getInvokedNameRunnable() {
+        Assertions.assertEquals("run", LambdaFactory.getInvokedName(Runnable.class));
     }
 
     @Test
-    public void test_getInvokedNameConsumer() {
-        assert "accept".equals(LambdaFactory.getInvokedName(Consumer.class));
+    @DisplayName("GetInvokedName with Consumer class")
+    public void getInvokedNameConsumer() {
+        Assertions.assertEquals("accept", LambdaFactory.getInvokedName(Consumer.class));
     }
 
     @Test
-    public void test_getInvokedNameFunction() {
-        assert "apply".equals(LambdaFactory.getInvokedName(Function.class));
+    @DisplayName("GetInvokedName with Function class")
+    public void getInvokedNameFunction() {
+        Assertions.assertEquals("apply", LambdaFactory.getInvokedName(Function.class));
     }
 
     @Test
-    public void test_getInvokedNameBiConsumer() {
-        assert "accept".equals(LambdaFactory.getInvokedName(BiConsumer.class));
+    @DisplayName("GetInvokedName with BiConsumer class")
+    public void getInvokedNameBiConsumer() {
+        Assertions.assertEquals("accept", LambdaFactory.getInvokedName(BiConsumer.class));
     }
 
     @Test
-    public void test_getInvokedNameRandomTest() {
-        assert "oneFunction".equals(LambdaFactory.getInvokedName(IntTernaryOperator.class));
+    @DisplayName("GetInvokedName with custom IntTernaryOperator")
+    public void getInvokedNameRandomTest() {
+        Assertions.assertEquals("oneFunction", LambdaFactory.getInvokedName(IntTernaryOperator.class));
     }
 
     @Test
-    public void test_generateCallSiteTwoParams() throws Throwable {
+    @DisplayName("Generate with two parameters method")
+    public void generateTwoParams() throws Throwable {
         final Method method = LambdaFactoryTest.class.getDeclaredMethod("twoParams", int.class, int.class);
         final CallSite callSite = LambdaFactory.generate(method);
         Assertions.assertEquals(3, LambdaFactory.invoke(new LambdaFactoryTest(), callSite, 1, 2));
     }
 
     @Test
-    public void test_generateCallSiteThreeParams() throws Throwable {
+    @DisplayName("Generate with three parameters method")
+    public void generateThreeParams() throws Throwable {
         final Method method = LambdaFactoryTest.class.getDeclaredMethod("threeParams", int.class, int.class, int.class);
         LambdaFactory.registerInterface(IntTernaryOperator.class);
         final CallSite callSite = LambdaFactory.generate(method);
@@ -65,7 +73,8 @@ public class LambdaFactoryTest {
     }
 
     @Test
-    public void test_generateCallSiteArityParams() throws Throwable {
+    @DisplayName("Generate with arity parameters method")
+    public void generateArityParams() throws Throwable {
         final Method method = LambdaFactoryTest.class.getDeclaredMethod("arityParams", int[].class);
         final CallSite callSite = LambdaFactory.generate(method);
         LambdaFactory.invoke(new LambdaFactoryTest(), callSite, new int[]{1, 2, 3, 4, 5});
