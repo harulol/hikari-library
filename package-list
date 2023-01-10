@@ -1,0 +1,53 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:dev.hawu.plugins.api.dsl.particles/ParticleEffectSpec.IParticleEnumOption///PointingToDeclaration/dev/hawu/plugins/api/dsl/particles/ParticleEffectSpec.IParticleEnumOption.html
+$dokka.location:dev.hawu.plugins.api.dsl.particles/ParticleEffectSpec.IParticleLocationOption///PointingToDeclaration/dev/hawu/plugins/api/dsl/particles/ParticleEffectSpec.IParticleLocationOption.html
+$dokka.location:dev.hawu.plugins.api.dsl.particles/ParticleEffectSpec.IParticleOffsetOption///PointingToDeclaration/dev/hawu/plugins/api/dsl/particles/ParticleEffectSpec.IParticleOffsetOption.html
+$dokka.location:dev.hawu.plugins.api.dsl.particles/ParticleEffectSpec.IParticleOption///PointingToDeclaration/dev/hawu/plugins/api/dsl/particles/ParticleEffectSpec.IParticleOption.html
+$dokka.location:dev.hawu.plugins.api.dsl.potions/PotionEffectSpec.IPotionEffectOption///PointingToDeclaration/dev/hawu/plugins/api/dsl/potions/PotionEffectSpec.IPotionEffectOption.html
+$dokka.location:dev.hawu.plugins.api.dsl.time/TimeMillisSpec.TimeUnitValue///PointingToDeclaration/dev/hawu/plugins/api/dsl/time/TimeMillisSpec.TimeUnitValue.html
+$dokka.location:dev.hawu.plugins.api.dsl.time/TimeStringSpec.ITimeStringOption///PointingToDeclaration/dev/hawu/plugins/api/dsl/time/TimeStringSpec.ITimeStringOption.html
+$dokka.location:dev.hawu.plugins.api.dsl.title/TitleComponentSpec.ITitleAnimationsOptions///PointingToDeclaration/dev/hawu/plugins/api/dsl/title/TitleComponentSpec.ITitleAnimationsOptions.html
+$dokka.location:dev.hawu.plugins.api.gui.brushes/LayoutBrush.Builder///PointingToDeclaration/dev/hawu/plugins/api/gui/brushes/LayoutBrush.Builder.html
+$dokka.location:dev.hawu.plugins.api/Tasks.TaskType///PointingToDeclaration/dev/hawu/plugins/api/Tasks.TaskType.html
+$dokka.location:dev.hawu.plugins.api/TimeConversions.TimeMillisBuilder///PointingToDeclaration/dev/hawu/plugins/api/TimeConversions.TimeMillisBuilder.html
+$dokka.location:dev.hawu.plugins.api/TimeConversions.TimeStringBuilder///PointingToDeclaration/dev/hawu/plugins/api/TimeConversions.TimeStringBuilder.html
+dev.hawu.plugins.api
+dev.hawu.plugins.api.beta.gui
+dev.hawu.plugins.api.beta.gui.templates
+dev.hawu.plugins.api.beta.gui.transitions
+dev.hawu.plugins.api.chat
+dev.hawu.plugins.api.collections
+dev.hawu.plugins.api.collections.progressions
+dev.hawu.plugins.api.collections.ranges
+dev.hawu.plugins.api.collections.tuples
+dev.hawu.plugins.api.commands
+dev.hawu.plugins.api.dsl
+dev.hawu.plugins.api.dsl.events
+dev.hawu.plugins.api.dsl.gui
+dev.hawu.plugins.api.dsl.gui.brushes
+dev.hawu.plugins.api.dsl.items
+dev.hawu.plugins.api.dsl.misc
+dev.hawu.plugins.api.dsl.nbt
+dev.hawu.plugins.api.dsl.particles
+dev.hawu.plugins.api.dsl.potions
+dev.hawu.plugins.api.dsl.tasks
+dev.hawu.plugins.api.dsl.time
+dev.hawu.plugins.api.dsl.title
+dev.hawu.plugins.api.events
+dev.hawu.plugins.api.events.listener
+dev.hawu.plugins.api.exceptions
+dev.hawu.plugins.api.gui
+dev.hawu.plugins.api.gui.brushes
+dev.hawu.plugins.api.gui.pagination
+dev.hawu.plugins.api.gui.templates
+dev.hawu.plugins.api.i18n
+dev.hawu.plugins.api.inventories
+dev.hawu.plugins.api.items
+dev.hawu.plugins.api.misc
+dev.hawu.plugins.api.nbt
+dev.hawu.plugins.api.particles
+dev.hawu.plugins.api.reflect
+dev.hawu.plugins.api.title
+dev.hawu.plugins.api.user
+
