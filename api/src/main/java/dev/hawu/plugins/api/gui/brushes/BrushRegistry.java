@@ -1,9 +1,7 @@
 package dev.hawu.plugins.api.gui.brushes;
 
-import dev.hawu.plugins.api.gui.GuiModel;
-
 /**
- * The registry to hold all usable brushes for {@link GuiModel}.
+ * The registry to hold all usable brushes for {@link dev.hawu.plugins.api.gui.GuiModel}.
  *
  * @since 1.7
  */

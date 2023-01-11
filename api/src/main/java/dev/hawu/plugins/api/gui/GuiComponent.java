@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.beta.gui;
+package dev.hawu.plugins.api.gui;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;

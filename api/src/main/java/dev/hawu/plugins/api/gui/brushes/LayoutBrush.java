@@ -1,7 +1,5 @@
 package dev.hawu.plugins.api.gui.brushes;
 
-import dev.hawu.plugins.api.gui.GuiElement;
-import dev.hawu.plugins.api.gui.GuiModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

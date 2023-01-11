@@ -1,7 +1,7 @@
-package dev.hawu.plugins.api.beta.gui.transitions;
+package dev.hawu.plugins.api.gui.transitions;
 
-import dev.hawu.plugins.api.beta.gui.GuiModel;
-import dev.hawu.plugins.api.beta.gui.templates.StaticComponent;
+import dev.hawu.plugins.api.gui.GuiModel;
+import dev.hawu.plugins.api.gui.templates.StaticComponent;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

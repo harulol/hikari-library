@@ -1,7 +1,6 @@
 package dev.hawu.plugins.api.dsl.gui.brushes
 
 import dev.hawu.plugins.api.collections.MutableProperty
-import dev.hawu.plugins.api.gui.GuiModel
 import dev.hawu.plugins.api.gui.brushes.LayoutBrush
 
 /**

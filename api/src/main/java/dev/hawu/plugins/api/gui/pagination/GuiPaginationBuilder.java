@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api.gui.pagination;
 
-import dev.hawu.plugins.api.gui.GuiElement;
+import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.Material;
@@ -29,7 +29,7 @@ public final class GuiPaginationBuilder<T> {
     private Collection<? extends T> collection;
     private Supplier<GuiModel> modelSupplier;
     private List<Integer> allowedSlots;
-    private BiFunction<T, Integer, GuiElement<?>> itemGenerator;
+    private BiFunction<T, Integer, GuiComponent<?>> itemGenerator;
 
     private ItemStack backTemplate;
     private Consumer<InventoryClickEvent> backAction;
@@ -50,9 +50,9 @@ public final class GuiPaginationBuilder<T> {
     {
         // Create a default value for modelSupplier.
         modelSupplier = () -> {
-            final GuiModel model = new GuiModel(54);
+            final GuiModel model = new GuiModel(54, "Inventory");
 
-            model.mount(49, new GuiElement<Void>() {
+            model.mount(49, new GuiComponent<Void>() {
                 @Override
                 public void handleClick(final @NotNull InventoryClickEvent event) {
                     event.setCancelled(true);
@@ -190,7 +190,7 @@ public final class GuiPaginationBuilder<T> {
      * @since 1.2
      */
     @NotNull
-    public GuiPaginationBuilder<T> setItemGenerator(final @NotNull BiFunction<@NotNull T, @NotNull Integer, @Nullable GuiElement<?>> itemGenerator) {
+    public GuiPaginationBuilder<T> setItemGenerator(final @NotNull BiFunction<@NotNull T, @NotNull Integer, @Nullable GuiComponent<?>> itemGenerator) {
         this.itemGenerator = itemGenerator;
         return this;
     }

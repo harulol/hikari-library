@@ -1,10 +1,10 @@
-package dev.hawu.plugins.api.beta.gui.transitions;
+package dev.hawu.plugins.api.gui.transitions;
 
 import dev.hawu.plugins.api.Tasks;
-import dev.hawu.plugins.api.beta.gui.GuiComponent;
-import dev.hawu.plugins.api.beta.gui.GuiModel;
-import dev.hawu.plugins.api.beta.gui.templates.StaticComponent;
-import dev.hawu.plugins.api.beta.gui.templates.TemporaryComponent;
+import dev.hawu.plugins.api.gui.GuiComponent;
+import dev.hawu.plugins.api.gui.GuiModel;
+import dev.hawu.plugins.api.gui.templates.StaticComponent;
+import dev.hawu.plugins.api.gui.templates.TemporaryComponent;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import dev.hawu.plugins.api.misc.PluginAdapter;
 import org.bukkit.Material;

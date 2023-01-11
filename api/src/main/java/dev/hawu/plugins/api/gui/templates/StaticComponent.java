@@ -1,6 +1,6 @@
-package dev.hawu.plugins.api.beta.gui.templates;
+package dev.hawu.plugins.api.gui.templates;
 
-import dev.hawu.plugins.api.beta.gui.GuiComponent;
+import dev.hawu.plugins.api.gui.GuiComponent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 

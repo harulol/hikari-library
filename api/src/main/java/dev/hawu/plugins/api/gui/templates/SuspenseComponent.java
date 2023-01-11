@@ -1,7 +1,7 @@
-package dev.hawu.plugins.api.beta.gui.templates;
+package dev.hawu.plugins.api.gui.templates;
 
 import dev.hawu.plugins.api.Tasks;
-import dev.hawu.plugins.api.beta.gui.GuiComponent;
+import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import dev.hawu.plugins.api.misc.PluginAdapter;
 import org.bukkit.Material;

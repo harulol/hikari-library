@@ -1,5 +1,6 @@
 .gradle
 /build/
+docs
 .idea
 changelog.md
 gradlew.bat

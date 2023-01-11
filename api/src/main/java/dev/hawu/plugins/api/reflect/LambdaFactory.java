@@ -210,8 +210,6 @@ public final class LambdaFactory {
      * @since 2.0
      */
     public static CallSite generate(final @NotNull MethodHandles.Lookup lookup, final @NotNull Method method) {
-        method.setAccessible(true);
-
         try {
             final MethodHandle handle = lookup.unreflect(method);
             final MethodType[] types = generateFactoryMethodType(method.getDeclaringClass(), method);

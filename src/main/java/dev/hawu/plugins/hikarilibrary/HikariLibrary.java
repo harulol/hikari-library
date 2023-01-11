@@ -1,7 +1,9 @@
 package dev.hawu.plugins.hikarilibrary;
 
 import dev.hawu.plugins.api.Tasks;
+import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.chat.ChatPacketAdapter;
+import dev.hawu.plugins.api.collections.CooldownMap;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.commands.CommandRegistry;
 import dev.hawu.plugins.api.events.Events;
@@ -30,14 +32,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public final class HikariLibrary extends JavaPlugin implements Listener {
 
     private static HikariLibrary instance;
     private LanguageModule module;
+    private final CooldownMap<GuiModel> modelCooldownMap = new CooldownMap<>(500);
 
     /**
      * Retrieves the instance of the library.
@@ -77,6 +84,32 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         UserAdapterImpl.addUser(player.getUniqueId());
     }
 
+    @EventHandler
+    private void onClick(final InventoryClickEvent event) {
+        if(event.getInventory().getHolder() instanceof GuiModel) {
+            final GuiModel model = (GuiModel) event.getInventory().getHolder();
+            if(modelCooldownMap.isOnCooldown(model)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            ((GuiModel) event.getInventory().getHolder()).handleClick(event);
+            modelCooldownMap.putOnCooldown(model);
+        }
+    }
+
+    @EventHandler
+    private void onDrag(final InventoryDragEvent event) {
+        if(event.getInventory().getHolder() instanceof GuiModel)
+            ((GuiModel) event.getInventory().getHolder()).handleDrag(event);
+    }
+
+    @EventHandler
+    private void onClose(final @NotNull InventoryCloseEvent event) {
+        if(event.getInventory().getHolder() instanceof GuiModel)
+            ((GuiModel) event.getInventory().getHolder()).handleClose();
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -110,10 +143,19 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         UserAdapterImpl.save();
         GuiClickEvents.onDisable();
         HandlerList.unregisterAll((Plugin) this);
-        Bukkit.getOnlinePlayers().forEach(GuiClickEvents::safelyClose);
         CommandRegistry.unregisterAll();
 
-        Tasks.cancelAllTasks(this);
+        try {
+            Bukkit.getOnlinePlayers().stream()
+                .filter(p -> p.getOpenInventory().getTopInventory() != null && p.getOpenInventory().getTopInventory().getHolder() instanceof GuiModel)
+                .forEach(Player::closeInventory);
+
+            Bukkit.getOnlinePlayers().forEach(GuiClickEvents::safelyClose);
+            Tasks.cancelAllTasks(this);
+        } catch(final NoClassDefFoundError error) {
+            error.printStackTrace();
+            this.getLogger().severe("An error occurred. Did you /reload or hot-swap?");
+        }
     }
 
 }
