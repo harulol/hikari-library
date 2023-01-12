@@ -16,7 +16,7 @@ public final class BrushRegistry {
      * @return the layout brush
      * @since 1.7
      */
-    public static LayoutBrush.Builder newLayoutBrush() {
+    public static LayoutBrush.Builder layout() {
         return new LayoutBrush.Builder();
     }
 

@@ -81,6 +81,15 @@ public final class CooldownMap<K> {
     }
 
     /**
+     * Clears the underlying map.
+     *
+     * @since 2.0
+     */
+    public void clear() {
+        map.clear();
+    }
+
+    /**
      * Retrieves the formatted cooldown for the key.
      *
      * @param key the key to retrieve the cooldown for

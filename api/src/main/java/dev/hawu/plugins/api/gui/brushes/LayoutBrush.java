@@ -1,5 +1,7 @@
 package dev.hawu.plugins.api.gui.brushes;
 
+import dev.hawu.plugins.api.gui.GuiComponent;
+import dev.hawu.plugins.api.gui.GuiModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -62,8 +64,8 @@ public final class LayoutBrush {
      * @param element The element to apply
      * @since 1.7
      */
-    public void apply(final char key, final @NotNull Supplier<GuiElement<?>> element) {
-        if (!layout.containsKey(String.valueOf(key))) {
+    public void apply(final char key, final @NotNull Supplier<GuiComponent<?>> element) {
+        if(!layout.containsKey(String.valueOf(key))) {
             return;
         }
         layout.get(String.valueOf(key)).forEach(index -> model.mount(index, element.get()));

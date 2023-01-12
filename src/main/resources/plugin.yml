@@ -8,6 +8,8 @@ commands:
   hikarilibrary:
     aliases: [ hlib ]
     description: The main command for the library.
+  test:
+    description: A testing command
 permissions:
   hikari-library.base:
     default: op
