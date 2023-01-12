@@ -1,5 +1,6 @@
-package dev.hawu.plugins.api.reflect;
+package dev.hawu.plugins.api.exceptions;
 
+import dev.hawu.plugins.api.reflect.SimpleLookup;
 import org.jetbrains.annotations.NotNull;
 
 /**

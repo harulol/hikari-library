@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api.nbt;
 
-import dev.hawu.plugins.api.reflect.LookupException;
+import dev.hawu.plugins.api.exceptions.LookupException;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

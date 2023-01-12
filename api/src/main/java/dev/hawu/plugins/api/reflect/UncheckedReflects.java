@@ -1,6 +1,7 @@
 package dev.hawu.plugins.api.reflect;
 
 import dev.hawu.plugins.api.collections.Property;
+import dev.hawu.plugins.api.exceptions.LookupException;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

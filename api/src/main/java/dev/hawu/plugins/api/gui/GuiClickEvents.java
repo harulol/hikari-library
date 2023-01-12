@@ -124,9 +124,9 @@ public final class GuiClickEvents implements Listener {
         event.setCancelled(true);
         final Pair<Boolean, Consumer<String>> pair = textInputs.get(event.getPlayer().getUniqueId());
         if(pair.getFirst()) {
-            Tasks.scheduleAsync(plugin, runnable -> pair.getSecond().accept(event.getMessage()));
+            Tasks.scheduleAsync(runnable -> pair.getSecond().accept(event.getMessage()));
         } else {
-            Tasks.schedule(plugin, runnable -> pair.getSecond().accept(event.getMessage()));
+            Tasks.schedule(runnable -> pair.getSecond().accept(event.getMessage()));
         }
         textInputs.remove(event.getPlayer().getUniqueId());
     }
