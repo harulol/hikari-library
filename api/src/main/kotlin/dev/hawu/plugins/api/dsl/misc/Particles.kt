@@ -2,7 +2,7 @@ package dev.hawu.plugins.api.dsl.misc
 
 import dev.hawu.plugins.api.dsl.particles.ParticleEffectSpec
 import dev.hawu.plugins.api.particles.ParticleEffect
-import dev.hawu.plugins.api.particles.ParticlePacketAdapter
+import dev.hawu.plugins.api.adapters.ParticlePacketAdapter
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

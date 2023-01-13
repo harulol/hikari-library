@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.v1_11_R1;
 
+import dev.hawu.plugins.api.adapters.NBTRegistry;
 import dev.hawu.plugins.api.nbt.*;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;

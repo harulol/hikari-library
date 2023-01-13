@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.title;
 
+import dev.hawu.plugins.api.adapters.TitlePacketAdapter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

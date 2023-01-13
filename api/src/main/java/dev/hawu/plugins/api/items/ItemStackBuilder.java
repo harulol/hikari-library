@@ -3,7 +3,7 @@ package dev.hawu.plugins.api.items;
 import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.nbt.NBTCompound;
-import dev.hawu.plugins.api.nbt.NBTRegistry;
+import dev.hawu.plugins.api.adapters.NBTRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

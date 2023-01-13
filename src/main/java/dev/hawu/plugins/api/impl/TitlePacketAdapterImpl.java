@@ -9,7 +9,7 @@ import dev.hawu.plugins.api.reflect.SimpleLookup;
 import dev.hawu.plugins.api.reflect.UncheckedHandles;
 import dev.hawu.plugins.api.reflect.UncheckedReflects;
 import dev.hawu.plugins.api.title.TitleComponent;
-import dev.hawu.plugins.api.title.TitlePacketAdapter;
+import dev.hawu.plugins.api.adapters.TitlePacketAdapter;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

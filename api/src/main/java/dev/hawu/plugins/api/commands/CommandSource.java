@@ -4,7 +4,7 @@ import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.collections.Property;
 import dev.hawu.plugins.api.i18n.Locale;
 import dev.hawu.plugins.api.user.ExtendedUser;
-import dev.hawu.plugins.api.user.UserAdapter;
+import dev.hawu.plugins.api.adapters.UserAdapter;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;

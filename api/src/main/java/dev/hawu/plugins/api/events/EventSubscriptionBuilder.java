@@ -1,7 +1,6 @@
 package dev.hawu.plugins.api.events;
 
 import dev.hawu.plugins.api.TimeConversions;
-import dev.hawu.plugins.api.events.listener.ClosableListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;

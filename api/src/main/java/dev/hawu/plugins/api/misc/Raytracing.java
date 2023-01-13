@@ -1,6 +1,7 @@
 package dev.hawu.plugins.api.misc;
 
 import com.google.common.base.Preconditions;
+import dev.hawu.plugins.api.adapters.WorldEntitiesLookupAdapter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;

@@ -5,7 +5,7 @@ import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.gui.templates.StaticComponent;
 import dev.hawu.plugins.api.gui.templates.TemporaryComponent;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
-import dev.hawu.plugins.api.misc.PluginAdapter;
+import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;

@@ -1,10 +1,11 @@
 package dev.hawu.plugins.api.chat;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 /**
@@ -15,55 +16,75 @@ import java.util.StringJoiner;
  */
 public final class TextComponentPart {
 
-    private final String text;
-    private final List<TextComponentPart> extras;
+    @Internal
+    static class Content {
 
-    private final String color;
-    private final String font;
-    private final TextFormattingOption bold;
-    private final TextFormattingOption italic;
-    private final TextFormattingOption underlined;
-    private final TextFormattingOption strikethrough;
-    private final TextFormattingOption obfuscated;
+        private final String text;
+        private final List<TextComponentPart> extras;
 
-    private final String insertion;
-    private final TextClickEvent clickEvent;
-    private final TextHoverEvent hoverEvent;
+        Content(final String text, final List<TextComponentPart> extras) {
+            this.text = text;
+            this.extras = extras;
+        }
+
+    }
+
+    @Internal
+    static class Formatting {
+
+        private final String color;
+        private final String font;
+
+        private final TextFormattingOption bold;
+        private final TextFormattingOption italic;
+        private final TextFormattingOption underlined;
+        private final TextFormattingOption strikethrough;
+        private final TextFormattingOption obfuscated;
+
+        Formatting(final String color, final String font, final Map<String, TextFormattingOption> formattingOptionMap) {
+            this.color = color;
+            this.font = font;
+
+            this.bold = formattingOptionMap.getOrDefault("bold", TextFormattingOption.INHERIT);
+            this.italic = formattingOptionMap.getOrDefault("italic", TextFormattingOption.INHERIT);
+            this.underlined = formattingOptionMap.getOrDefault("underlined", TextFormattingOption.INHERIT);
+            this.strikethrough = formattingOptionMap.getOrDefault("strikethrough", TextFormattingOption.INHERIT);
+            this.obfuscated = formattingOptionMap.getOrDefault("obfuscated", TextFormattingOption.INHERIT);
+        }
+
+    }
+
+    @Internal
+    static class Event {
+
+        private final String insertion;
+        private final TextClickEvent clickEvent;
+        private final TextHoverEvent hoverEvent;
+
+        Event(final String insertion, final TextClickEvent clickEvent, final TextHoverEvent hoverEvent) {
+            this.insertion = insertion;
+            this.clickEvent = clickEvent;
+            this.hoverEvent = hoverEvent;
+        }
+
+    }
+
+    private final Content content;
+    private final Formatting formatting;
+    private final Event event;
 
     /**
      * Creates a part of a chat component.
      *
-     * @param text          The content of this part.
-     * @param extras        The children of this part.
-     * @param color         The color to render the content in.
-     * @param font          The font to render the content in.
-     * @param bold          Whether to render this part as bold.
-     * @param italic        Whether to render this part as italic.
-     * @param underlined    Whether to render this part as underlined.
-     * @param strikethrough Whether to render this part as strikethrough.
-     * @param obfuscated    Whether to render this part as obfuscated.
-     * @param insertion     The text to insert into the chat box when clicked.
-     * @param clickEvent    The event to trigger when this part is clicked.
-     * @param hoverEvent    The event to trigger when this part is hovered over.
+     * @param content       the content of this part
+     * @param event         the click, hover and insertion events
+     * @param formatting    the formatting of this part
      * @since 1.5
      */
-    public TextComponentPart(final @NotNull String text, final @NotNull List<@NotNull TextComponentPart> extras,
-                             final @Nullable String color, final @Nullable String font, final @NotNull TextFormattingOption bold,
-                             final @NotNull TextFormattingOption italic, final @NotNull TextFormattingOption underlined, final @NotNull TextFormattingOption strikethrough,
-                             final @NotNull TextFormattingOption obfuscated, final @Nullable String insertion,
-                             final @Nullable TextClickEvent clickEvent, final @Nullable TextHoverEvent hoverEvent) {
-        this.text = text;
-        this.extras = extras;
-        this.color = color;
-        this.font = font;
-        this.bold = bold;
-        this.italic = italic;
-        this.underlined = underlined;
-        this.strikethrough = strikethrough;
-        this.obfuscated = obfuscated;
-        this.insertion = insertion;
-        this.clickEvent = clickEvent;
-        this.hoverEvent = hoverEvent;
+    public TextComponentPart(final @NotNull Content content, final @NotNull Formatting formatting, final @NotNull Event event) {
+        this.content = content;
+        this.formatting = formatting;
+        this.event = event;
     }
 
     private void addFormatting(final String field, final TextFormattingOption option, final StringBuilder builder) {
@@ -86,23 +107,24 @@ public final class TextComponentPart {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("{\"text\":\"").append(StringEscapeUtils.escapeJava(text)).append("\"");
+        sb.append("{\"text\":\"").append(StringEscapeUtils.escapeJava(content.text)).append("\"");
 
-        addNotNull("color", color, sb);
-        addFormatting("bold", bold, sb);
-        addFormatting("italic", italic, sb);
-        addFormatting("underlined", underlined, sb);
-        addFormatting("strikethrough", strikethrough, sb);
-        addFormatting("obfuscated", obfuscated, sb);
+        addNotNull("color", formatting.color, sb);
+        addFormatting("bold", formatting.bold, sb);
+        addFormatting("italic", formatting.italic, sb);
+        addFormatting("underlined", formatting.underlined, sb);
+        addFormatting("strikethrough", formatting.strikethrough, sb);
+        addFormatting("obfuscated", formatting.obfuscated, sb);
+        addNotNull("font", formatting.font, sb);
 
-        addNotNull("font", font, sb);
-        addNotNull("insertion", insertion, sb);
-        if(clickEvent != null) sb.append(",").append(clickEvent);
-        if(hoverEvent != null) sb.append(",").append(hoverEvent);
-        if(extras.size() >= 1) {
+        addNotNull("insertion", event.insertion, sb);
+        if(event.clickEvent != null) sb.append(",").append(event.clickEvent);
+        if(event.hoverEvent != null) sb.append(",").append(event.hoverEvent);
+
+        if(content.extras.size() >= 1) {
             sb.append("\"extras\":[");
             final StringJoiner joiner = new StringJoiner(",");
-            extras.stream().map(TextComponentPart::toString).forEach(joiner::add);
+            content.extras.stream().map(TextComponentPart::toString).forEach(joiner::add);
             sb.append(joiner).append("]");
         }
 

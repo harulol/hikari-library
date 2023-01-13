@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.v1_12_R1;
 
+import dev.hawu.plugins.api.adapters.NBTRegistry;
 import dev.hawu.plugins.api.nbt.*;
 import dev.hawu.plugins.api.reflect.UncheckedHandles;
 import dev.hawu.plugins.api.reflect.UncheckedReflects;

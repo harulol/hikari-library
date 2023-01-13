@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.misc;
+package dev.hawu.plugins.api.adapters;
 
 import dev.hawu.plugins.api.exceptions.AlreadyInitializedException;
 import org.bukkit.plugin.java.JavaPlugin;

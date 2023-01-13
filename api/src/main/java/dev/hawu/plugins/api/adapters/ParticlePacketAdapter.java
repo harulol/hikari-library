@@ -1,5 +1,8 @@
-package dev.hawu.plugins.api.particles;
+package dev.hawu.plugins.api.adapters;
 
+import dev.hawu.plugins.api.exceptions.LookupException;
+import dev.hawu.plugins.api.particles.ParticleEffect;
+import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +26,15 @@ public abstract class ParticlePacketAdapter {
      */
     @NotNull
     public static ParticlePacketAdapter getAdapter() {
-        return adapter;
+        try {
+            if(adapter == null) {
+                final String version = MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_9_R1) ? "v1_9_R1" : MinecraftVersion.getCurrent().name();
+                return adapter = (ParticlePacketAdapter) Class.forName("dev.hawu.plugins.api." + version + ".SimpleParticlePacketAdapter")
+                    .getConstructor().newInstance();
+            } else return adapter;
+        } catch(final Exception exception) {
+            throw new LookupException(exception);
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api;
 
-import dev.hawu.plugins.api.misc.PluginAdapter;
+import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;

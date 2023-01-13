@@ -1,5 +1,6 @@
-package dev.hawu.plugins.api.chat;
+package dev.hawu.plugins.api.adapters;
 
+import dev.hawu.plugins.api.chat.TextComponent;
 import dev.hawu.plugins.api.exceptions.AlreadyInitializedException;
 import dev.hawu.plugins.api.exceptions.LookupException;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;

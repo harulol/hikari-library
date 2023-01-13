@@ -3,7 +3,7 @@ package dev.hawu.plugins.api.dsl.events
 import dev.hawu.plugins.api.collections.MutableProperty
 import dev.hawu.plugins.api.dsl.ScopeControlMarker
 import dev.hawu.plugins.api.events.Events
-import dev.hawu.plugins.api.events.listener.ClosableListener
+import dev.hawu.plugins.api.events.ClosableListener
 import org.bukkit.event.Event
 import org.bukkit.plugin.java.JavaPlugin
 

@@ -1,6 +1,7 @@
-package dev.hawu.plugins.api.user;
+package dev.hawu.plugins.api.adapters;
 
 import dev.hawu.plugins.api.collections.Property;
+import dev.hawu.plugins.api.user.ExtendedUser;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 

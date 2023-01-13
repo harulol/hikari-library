@@ -1,4 +1,4 @@
-package dev.hawu.plugins.api.events.listener;
+package dev.hawu.plugins.api.events;
 
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;

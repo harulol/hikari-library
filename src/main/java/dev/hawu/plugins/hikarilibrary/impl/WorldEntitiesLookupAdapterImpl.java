@@ -1,6 +1,6 @@
 package dev.hawu.plugins.hikarilibrary.impl;
 
-import dev.hawu.plugins.api.misc.WorldEntitiesLookupAdapter;
+import dev.hawu.plugins.api.adapters.WorldEntitiesLookupAdapter;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import dev.hawu.plugins.api.reflect.UncheckedHandles;
 import org.bukkit.Location;

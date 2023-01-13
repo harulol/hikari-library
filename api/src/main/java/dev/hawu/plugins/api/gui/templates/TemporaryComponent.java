@@ -2,7 +2,7 @@ package dev.hawu.plugins.api.gui.templates;
 
 import dev.hawu.plugins.api.Tasks;
 import dev.hawu.plugins.api.gui.GuiComponent;
-import dev.hawu.plugins.api.misc.PluginAdapter;
+import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 

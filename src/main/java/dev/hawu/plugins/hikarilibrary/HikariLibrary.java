@@ -1,24 +1,23 @@
 package dev.hawu.plugins.hikarilibrary;
 
 import dev.hawu.plugins.api.Tasks;
-import dev.hawu.plugins.api.chat.ChatPacketAdapter;
+import dev.hawu.plugins.api.adapters.ChatPacketAdapter;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.commands.CommandRegistry;
 import dev.hawu.plugins.api.events.Events;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
 import dev.hawu.plugins.api.i18n.LanguageModule;
 import dev.hawu.plugins.api.i18n.Locale;
-import dev.hawu.plugins.api.impl.ParticlePacketAdapterImpl;
 import dev.hawu.plugins.api.impl.TitlePacketAdapterImpl;
 import dev.hawu.plugins.api.inventories.Inventories;
 import dev.hawu.plugins.api.items.BukkitMaterial;
 import dev.hawu.plugins.api.misc.ConsoleLogger;
-import dev.hawu.plugins.api.misc.PluginAdapter;
-import dev.hawu.plugins.api.misc.WorldEntitiesLookupAdapter;
-import dev.hawu.plugins.api.particles.ParticlePacketAdapter;
+import dev.hawu.plugins.api.adapters.PluginAdapter;
+import dev.hawu.plugins.api.adapters.WorldEntitiesLookupAdapter;
+import dev.hawu.plugins.api.adapters.ParticlePacketAdapter;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import dev.hawu.plugins.api.reflect.SimpleLookup;
-import dev.hawu.plugins.api.title.TitlePacketAdapter;
+import dev.hawu.plugins.api.adapters.TitlePacketAdapter;
 import dev.hawu.plugins.hikarilibrary.commands.BaseCommand;
 import dev.hawu.plugins.hikarilibrary.commands.LocaleCommand;
 import dev.hawu.plugins.hikarilibrary.impl.UserAdapterImpl;
@@ -104,15 +103,10 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         // Attempt to load necessary registries and adapters.
         ConsoleLogger.logf("Loading adapters for %s", MinecraftVersion.getCurrent().name());
         tryLoading("ChatPacketAdapter", ChatPacketAdapter::getAdapter);
+        tryLoading("ParticlePacketAdapter", ParticlePacketAdapter::getAdapter);
 
         try {
-            getLogger().info("Loading adapters for Minecraft " + MinecraftVersion.getCurrent().name());
-
-            // Attempts to retrieve an instance of each registry.
-            ChatPacketAdapter.getAdapter();
-
             TitlePacketAdapter.setAdapter(TitlePacketAdapterImpl.getInstance());
-            ParticlePacketAdapter.setAdapter(ParticlePacketAdapterImpl.getInstance());
             WorldEntitiesLookupAdapter.setAdapter(WorldEntitiesLookupAdapterImpl.getInstance());
         } catch (final Exception e) {
             e.printStackTrace();

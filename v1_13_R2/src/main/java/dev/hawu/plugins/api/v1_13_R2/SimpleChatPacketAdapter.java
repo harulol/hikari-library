@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api.v1_13_R2;
 
-import dev.hawu.plugins.api.chat.ChatPacketAdapter;
+import dev.hawu.plugins.api.adapters.ChatPacketAdapter;
 import dev.hawu.plugins.api.chat.TextComponent;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.PacketPlayOutChat;

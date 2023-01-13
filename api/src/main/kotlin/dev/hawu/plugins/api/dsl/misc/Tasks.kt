@@ -1,7 +1,7 @@
 package dev.hawu.plugins.api.dsl.misc
 
 import dev.hawu.plugins.api.dsl.tasks.TaskSpec
-import dev.hawu.plugins.api.misc.PluginAdapter
+import dev.hawu.plugins.api.adapters.PluginAdapter
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 
