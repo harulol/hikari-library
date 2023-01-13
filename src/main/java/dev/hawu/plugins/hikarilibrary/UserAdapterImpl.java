@@ -1,9 +1,8 @@
-package dev.hawu.plugins.hikarilibrary.impl;
+package dev.hawu.plugins.hikarilibrary;
 
+import dev.hawu.plugins.api.adapters.UserAdapter;
 import dev.hawu.plugins.api.collections.Property;
 import dev.hawu.plugins.api.user.ExtendedUser;
-import dev.hawu.plugins.api.adapters.UserAdapter;
-import dev.hawu.plugins.hikarilibrary.CraftUser;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;

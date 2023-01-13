@@ -1,11 +1,11 @@
 package dev.hawu.plugins.api.adapters;
 
+import dev.hawu.plugins.api.exceptions.LookupException;
+import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import dev.hawu.plugins.api.title.TitleComponent;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * A base abstracted packet adapter for sending and
@@ -26,7 +26,16 @@ public abstract class TitlePacketAdapter {
      */
     @NotNull
     public static TitlePacketAdapter getAdapter() {
-        return Objects.requireNonNull(adapter, "Title Packet adapter is not set");
+        try {
+            if(adapter == null) {
+                final String version = MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_18_R1) ? "v1_18_R1" : MinecraftVersion.getCurrent().name();
+                return adapter = (TitlePacketAdapter) Class.forName("dev.hawu.plugins.api." + version + ".SimpleTitlePacketAdapter")
+                    .getConstructor().newInstance();
+            }
+            return adapter;
+        } catch(final Exception exception) {
+            throw new LookupException(exception);
+        }
     }
 
     /**
