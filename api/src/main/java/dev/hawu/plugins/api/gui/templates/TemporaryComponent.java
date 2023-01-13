@@ -2,7 +2,6 @@ package dev.hawu.plugins.api.gui.templates;
 
 import dev.hawu.plugins.api.Tasks;
 import dev.hawu.plugins.api.gui.GuiComponent;
-import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +33,7 @@ public final class TemporaryComponent extends GuiComponent<Object> {
 
     @Override
     public void componentDidMount() {
-        Tasks.scheduleLater(PluginAdapter.getPlugin(), this.ticks, run -> this.swap(partner));
+        Tasks.scheduleLater(this.ticks, run -> this.swap(partner));
     }
 
     @Override

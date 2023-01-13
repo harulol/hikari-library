@@ -12,7 +12,6 @@ public final class TitleComponentBuilder {
 
     private String title;
     private String subtitle;
-    private boolean dontWrap;
     private long fadeIn = 20;
     private long stay = 60;
     private long fadeOut = 20;
@@ -102,19 +101,6 @@ public final class TitleComponentBuilder {
     }
 
     /**
-     * Configures the component's data to not be wrapped via
-     * {@link org.apache.commons.lang.StringEscapeUtils}.
-     *
-     * @return The builder.
-     * @since 1.3
-     */
-    @NotNull
-    public TitleComponentBuilder noWraps() {
-        this.dontWrap = true;
-        return this;
-    }
-
-    /**
      * Builds the title component from set values.
      *
      * @return The built component.
@@ -122,7 +108,7 @@ public final class TitleComponentBuilder {
      */
     @NotNull
     public TitleComponent build() {
-        return new TitleComponent(title, subtitle, fadeIn, stay, fadeOut, dontWrap);
+        return new TitleComponent(title, subtitle, fadeIn, stay, fadeOut);
     }
 
 }

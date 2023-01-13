@@ -3,7 +3,6 @@ package dev.hawu.plugins.api.gui.templates;
 import dev.hawu.plugins.api.Tasks;
 import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
-import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +74,7 @@ public final class SuspenseComponent extends GuiComponent<ItemStack> {
     @Override
     public void componentDidMount() {
         this.swap(this.loading);
-        Tasks.scheduleAsync(PluginAdapter.getPlugin(), runnable -> {
+        Tasks.scheduleAsync(runnable -> {
             try {
                 this.setState(supplier.get());
                 this.loading.swap(this);

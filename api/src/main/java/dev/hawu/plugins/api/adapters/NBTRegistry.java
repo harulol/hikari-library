@@ -28,8 +28,9 @@ public abstract class NBTRegistry {
     public static NBTRegistry getRegistry() {
         if(registry != null) return registry;
         try {
-            return registry = (NBTRegistry) Class.forName("dev.hawu.plugins.api." + MinecraftVersion.getCurrent().name() + ".SimpleNBTRegistry").newInstance();
-        } catch(final ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            return registry = (NBTRegistry) Class.forName("dev.hawu.plugins.api." + MinecraftVersion.getCurrent().name() + ".SimpleNBTRegistry")
+                .getConstructor().newInstance();
+        } catch(final Exception ex) {
             throw new LookupException(ex);
         }
     }

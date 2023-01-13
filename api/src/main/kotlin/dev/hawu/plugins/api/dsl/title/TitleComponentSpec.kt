@@ -11,8 +11,6 @@ import dev.hawu.plugins.api.title.TitleComponent
 @ScopeControlMarker
 class TitleComponentSpec internal constructor() {
 
-    private var _dontWrap = false
-
     /**
      * The main title of this title.
      */
@@ -44,16 +42,7 @@ class TitleComponentSpec internal constructor() {
      */
     val fadeOut = MutableProperty.of<Long>(20L)
 
-    /**
-     * The packet adapter should not wrap this title
-     * in `{"text":"..."}`.
-     */
-    val dontWrap: Unit
-        get() {
-            _dontWrap = true
-        }
-
-    internal fun build() = TitleComponent(title.get(), subtitle.get(), fadeIn.get(), stay.get(), fadeOut.get(), _dontWrap)
+    internal fun build() = TitleComponent(title.get(), subtitle.get(), fadeIn.get(), stay.get(), fadeOut.get())
 
     /**
      * For chaining infix calls to set animations.

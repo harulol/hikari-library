@@ -6,7 +6,6 @@ import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.gui.templates.StaticComponent;
 import dev.hawu.plugins.api.gui.templates.TemporaryComponent;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
-import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
@@ -74,7 +73,7 @@ public final class DissolveTransition extends Transition {
         Collections.shuffle(slots);
         final int size = slots.size();
 
-        final BukkitTask task = Tasks.scheduleTimer(PluginAdapter.getPlugin(), 2, 1, runnable -> {
+        final BukkitTask task = Tasks.scheduleTimer(2, 1, runnable -> {
             for(int i = 0; i < batches; i++) {
                 if(slots.size() == 0) {
                     dummy.updateAll();
@@ -93,7 +92,7 @@ public final class DissolveTransition extends Transition {
     }
 
     private void dissolveIn(final @NotNull HumanEntity entity, final @NotNull GuiModel dummy, final @NotNull GuiModel destination) {
-        Tasks.scheduleLater(PluginAdapter.getPlugin(), dummy.getInventory().getSize() / batches, runnable -> {
+        Tasks.scheduleLater(dummy.getInventory().getSize() / batches, runnable -> {
             if(entity.getOpenInventory().getTopInventory().getHolder() != dummy) return;
             destination.open(entity);
         });
