@@ -8,11 +8,11 @@ import dev.hawu.plugins.api.events.Events;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
 import dev.hawu.plugins.api.i18n.LanguageModule;
 import dev.hawu.plugins.api.i18n.Locale;
-import dev.hawu.plugins.api.impl.ChatPacketAdapterImpl;
 import dev.hawu.plugins.api.impl.ParticlePacketAdapterImpl;
 import dev.hawu.plugins.api.impl.TitlePacketAdapterImpl;
 import dev.hawu.plugins.api.inventories.Inventories;
 import dev.hawu.plugins.api.items.BukkitMaterial;
+import dev.hawu.plugins.api.misc.ConsoleLogger;
 import dev.hawu.plugins.api.misc.PluginAdapter;
 import dev.hawu.plugins.api.misc.WorldEntitiesLookupAdapter;
 import dev.hawu.plugins.api.particles.ParticlePacketAdapter;
@@ -77,6 +77,15 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         UserAdapterImpl.addUser(player.getUniqueId());
     }
 
+    private void tryLoading(final String name, final Runnable runnable) {
+        try {
+            runnable.run();
+        } catch(final Throwable t) {
+            t.printStackTrace();
+            ConsoleLogger.severef("Couldn't load %s: %s", name, t.getMessage());
+        }
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -92,12 +101,18 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
 
         CommandRegistry.register(this, new BaseCommand(this), new LocaleCommand());
 
+        // Attempt to load necessary registries and adapters.
+        ConsoleLogger.logf("Loading adapters for %s", MinecraftVersion.getCurrent().name());
+        tryLoading("ChatPacketAdapter", ChatPacketAdapter::getAdapter);
+
         try {
             getLogger().info("Loading adapters for Minecraft " + MinecraftVersion.getCurrent().name());
 
+            // Attempts to retrieve an instance of each registry.
+            ChatPacketAdapter.getAdapter();
+
             TitlePacketAdapter.setAdapter(TitlePacketAdapterImpl.getInstance());
             ParticlePacketAdapter.setAdapter(ParticlePacketAdapterImpl.getInstance());
-            ChatPacketAdapter.setAdapter(ChatPacketAdapterImpl.INSTANCE);
             WorldEntitiesLookupAdapter.setAdapter(WorldEntitiesLookupAdapterImpl.getInstance());
         } catch (final Exception e) {
             e.printStackTrace();

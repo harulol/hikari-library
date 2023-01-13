@@ -4,16 +4,15 @@ import dev.hawu.plugins.api.nbt.*;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Extension for the NBT registry for Bukkit v1_8_R3.
- *
- * @deprecated See {@link NBTRegistry#getRegistry()}
  */
 @SuppressWarnings("DuplicatedCode")
-@Deprecated
+@Internal
 public final class SimpleNBTRegistry extends NBTRegistry {
 
     @NotNull

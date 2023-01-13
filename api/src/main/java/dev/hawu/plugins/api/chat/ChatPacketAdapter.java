@@ -1,11 +1,10 @@
 package dev.hawu.plugins.api.chat;
 
 import dev.hawu.plugins.api.exceptions.AlreadyInitializedException;
+import dev.hawu.plugins.api.exceptions.LookupException;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * The adapter for sending customized
@@ -59,7 +58,17 @@ public abstract class ChatPacketAdapter {
      */
     @NotNull
     public static ChatPacketAdapter getAdapter() {
-        return Objects.requireNonNull(adapter, "ChatPacketAdapter is not yet initialized.");
+        try {
+            if(adapter == null) {
+                // Since v1_18_R1, the abstraction delegates to Spigot's sending instead. Older versions still use NMS
+                // as a way to support native CraftBukkit.
+                final String version = MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_18_R1) ? "v1_18_R1" : MinecraftVersion.getCurrent().name();
+                return adapter = (ChatPacketAdapter) Class.forName("dev.hawu.plugins.api." + version + ".SimpleChatPacketAdapter")
+                    .getConstructor().newInstance();
+            } else return adapter;
+        } catch(final Exception exception) {
+            throw new LookupException(exception);
+        }
     }
 
     /**
@@ -76,7 +85,7 @@ public abstract class ChatPacketAdapter {
     /**
      * Attempts to resolve for an implementation of the
      * chat packet adapter based on the server's current version.
-     *
+     * <p>
      * Usually, these kinds of implementations are repeated
      * and they might be replaced with just one class using
      * static final method handles soon.

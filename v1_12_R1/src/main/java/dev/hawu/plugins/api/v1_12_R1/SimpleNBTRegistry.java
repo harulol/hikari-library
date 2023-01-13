@@ -6,6 +6,7 @@ import dev.hawu.plugins.api.reflect.UncheckedReflects;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,18 +17,17 @@ import java.util.Objects;
 
 /**
  * Extension for the NBT registry for Bukkit v1_12_R1.
- *
- * @deprecated See {@link NBTRegistry#getRegistry()}
  */
 @SuppressWarnings("DuplicatedCode")
-@Deprecated
+@Internal
 public final class SimpleNBTRegistry extends NBTRegistry {
 
+    /**
+     * No one knows why the thing is private and there's no getter for it but because
+     * the constructor is available, so the NBT tag should be supported.
+     */
     private static final Field LONG_ARRAY_FIELD = UncheckedReflects.getField(NBTTagLongArray.class, true, "b")
-        .map(field -> {
-            field.setAccessible(true);
-            return field;
-        })
+        .ifPresent(field -> field.setAccessible(true))
         .orElseThrow(new IllegalStateException("Could not find field 'b' in NBTTagLongArray"));
     private static final MethodHandle TAG_LONG_ARRAY_GETTER = UncheckedHandles.unreflectGetter(MethodHandles.lookup(), LONG_ARRAY_FIELD).get();
 

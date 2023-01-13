@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.chat;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,7 +86,7 @@ public final class TextComponentPart {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("{\"text\":\"").append(text).append("\"");
+        sb.append("{\"text\":\"").append(StringEscapeUtils.escapeJava(text)).append("\"");
 
         addNotNull("color", color, sb);
         addFormatting("bold", bold, sb);
