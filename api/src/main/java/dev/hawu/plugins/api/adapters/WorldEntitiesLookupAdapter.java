@@ -1,13 +1,14 @@
 package dev.hawu.plugins.api.adapters;
 
 import dev.hawu.plugins.api.exceptions.AlreadyInitializedException;
+import dev.hawu.plugins.api.exceptions.LookupException;
+import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * The class for looking up entities around a location.
@@ -52,7 +53,15 @@ public abstract class WorldEntitiesLookupAdapter {
      */
     @NotNull
     public static WorldEntitiesLookupAdapter getAdapter() {
-        return Objects.requireNonNull(adapter, "Entities lookup adapter is not yet initialized.");
+        try {
+            if(adapter == null) {
+                final String version = MinecraftVersion.getCurrent().isAtLeast(MinecraftVersion.v1_8_R2) ? "v1_8_R2" : MinecraftVersion.getCurrent().name();
+                return adapter = (WorldEntitiesLookupAdapter) Class.forName("dev.hawu.plugins.api." + version + ".SimpleWorldEntitiesLookupAdapter")
+                    .getConstructor().newInstance();
+            } else return adapter;
+        } catch(final Exception exception) {
+            throw new LookupException(exception);
+        }
     }
 
     /**
