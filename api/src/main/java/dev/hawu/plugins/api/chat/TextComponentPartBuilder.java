@@ -4,7 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A builder to build {@link TextComponentPart}s.
@@ -191,9 +193,18 @@ public final class TextComponentPartBuilder {
      */
     @NotNull
     public TextComponentPart build() {
-        return new TextComponentPart(this.text, this.extras, this.color, this.font, this.bold,
-            this.italic, this.underlined, this.strikethrough, this.obfuscated, this.insertion,
-            this.clickEvent, this.hoverEvent);
+        final Map<String, TextFormattingOption> formattingOptionMap = new HashMap<>();
+        formattingOptionMap.put("bold", bold);
+        formattingOptionMap.put("italic", italic);
+        formattingOptionMap.put("underlined", underlined);
+        formattingOptionMap.put("strikethrough", strikethrough);
+        formattingOptionMap.put("obfuscated", obfuscated);
+
+        return new TextComponentPart(
+            new TextComponentPart.Content(text, extras),
+            new TextComponentPart.Formatting(color, font, formattingOptionMap),
+            new TextComponentPart.Event(insertion, clickEvent, hoverEvent)
+        );
     }
 
 }

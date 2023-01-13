@@ -1,6 +1,6 @@
 package dev.hawu.plugins.api.gui.pagination;
 
-import dev.hawu.plugins.api.gui.GuiElement;
+import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +17,13 @@ final class PaginationData<T> {
     private final Collection<? extends T> collection;
     private final Supplier<GuiModel> modelSupplier;
     private final List<Integer> allowedSlots;
-    private final BiFunction<T, Integer, GuiElement<?>> itemGenerator;
+    private final BiFunction<T, Integer, GuiComponent<?>> itemGenerator;
 
-    public PaginationData(final @NotNull Collection<? extends @NotNull T> collection, final @NotNull Supplier<@NotNull GuiModel> modelSupplier,
-                          final @NotNull List<@NotNull Integer> allowedSlots, final @NotNull BiFunction<@NotNull T, @NotNull Integer, @Nullable GuiElement<?>> itemGenerator) {
+    public PaginationData(final @NotNull Collection<? extends @NotNull T> collection,
+                          final @NotNull Supplier<@NotNull GuiModel> modelSupplier,
+                          final @NotNull List<@NotNull Integer> allowedSlots,
+                          final @NotNull BiFunction<@NotNull T, @NotNull Integer, @Nullable GuiComponent<?>> itemGenerator
+    ) {
         this.collection = collection;
         this.modelSupplier = modelSupplier;
         this.allowedSlots = allowedSlots;
@@ -43,7 +46,7 @@ final class PaginationData<T> {
     }
 
     @NotNull
-    public BiFunction<@NotNull T, @NotNull Integer, @Nullable GuiElement<?>> getItemGenerator() {
+    public BiFunction<@NotNull T, @NotNull Integer, @Nullable GuiComponent<?>> getItemGenerator() {
         return itemGenerator;
     }
 

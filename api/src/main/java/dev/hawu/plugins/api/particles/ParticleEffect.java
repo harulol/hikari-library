@@ -1,12 +1,12 @@
 package dev.hawu.plugins.api.particles;
 
+import dev.hawu.plugins.api.adapters.ParticlePacketAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -16,15 +16,6 @@ import java.util.Random;
  * @since 1.0
  */
 public final class ParticleEffect {
-
-    /**
-     * Represents the name of the particle effect
-     * that will be passed in.
-     *
-     * @since 1.0
-     */
-    @Deprecated
-    public final String particle;
 
     /**
      * Represents the particle effect.
@@ -156,7 +147,6 @@ public final class ParticleEffect {
                           final float offsetX, final float offsetY, final float offsetZ,
                           final float particleData, final int particleCount, final int @NotNull ... data) {
         this.effect = effect;
-        this.particle = Objects.toString(effect);
         this.longDistance = longDistance;
         this.x = x;
         this.y = y;
@@ -196,7 +186,7 @@ public final class ParticleEffect {
      * @since 1.5
      */
     public ParticleEffectBuilder toBuilder() {
-        return ParticleEffect.of(particle)
+        return ParticleEffect.of(effect)
             .setOffset(new Vector(offsetX, offsetY, offsetZ))
             .longDistance(longDistance)
             .setLocation(new Vector(x, y, z))

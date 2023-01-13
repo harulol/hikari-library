@@ -20,7 +20,6 @@ import java.util.stream.IntStream;
 public final class CommandArgument {
 
     private final List<String> args;
-    private CommandLine cli;
 
     /**
      * Initialize the class with the arguments in a form of a {@link String} array.
@@ -40,20 +39,6 @@ public final class CommandArgument {
      */
     public CommandArgument(@NotNull final List<@NotNull String> strings) {
         this.args = strings;
-    }
-
-    /**
-     * Initialize the property {@link CommandArgument#cli} so {@link CommandArgument#parse()} can be
-     * used later.
-     *
-     * @param cli The CLI instance to initialize with.
-     * @return The same receiver.
-     * @since 1.0
-     */
-    @NotNull
-    public CommandArgument withCLI(@Nullable final CommandLine cli) {
-        this.cli = cli;
-        return this;
     }
 
     /**
@@ -156,8 +141,8 @@ public final class CommandArgument {
      * @since 1.0
      */
     @NotNull
-    public Pair<@NotNull CommandArgument, @NotNull Map<@NotNull String, @NotNull List<@NotNull String>>> parse() {
-        return Objects.requireNonNull(cli, "CLI property is not initialized.").parse(joinToString(0, args.size()));
+    public Pair<CommandArgument, Map<String, List<String>>> parse(final @NotNull CommandLine cli) {
+        return cli.parse(joinToString(0, args.size()));
     }
 
     /**

@@ -1,9 +1,9 @@
 package dev.hawu.plugins.api.gui.pagination;
 
+import dev.hawu.plugins.api.gui.GuiComponent;
+import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
-import dev.hawu.plugins.api.gui.GuiElement;
-import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -91,7 +91,7 @@ public final class GuiPaginator<T> {
     private void finish(final @NotNull GuiModel model, final @Nullable String filter) {
         // Put the button to go "back".
         if(options.getBackAction() != null && options.getBackSlots().size() > 0 && options.getBackTemplate() != null) {
-            final GuiElement<?> backButton = new GuiElement<Object>() {
+            final GuiComponent<?> backButton = new GuiComponent<Object>() {
                 @Override
                 public void handleClick(final @NotNull InventoryClickEvent event) {
                     event.setCancelled(true);
@@ -109,7 +109,7 @@ public final class GuiPaginator<T> {
 
         // Put the button to filter elements if specified.
         if(filterOptions.getFilterTemplate() != null && filterOptions.getFilterSlots().size() > 0 && options.getPredicate() != null) {
-            final GuiElement<?> filterButton = new GuiElement<Object>() {
+            final GuiComponent<?> filterButton = new GuiComponent<Object>() {
                 @Override
                 public void handleClick(final @NotNull InventoryClickEvent event) {
                     event.setCancelled(true);
@@ -146,8 +146,8 @@ public final class GuiPaginator<T> {
         return models.size() > 1 && pageIndex > 0;
     }
 
-    private GuiElement<?> generateNextButton(final int currentIndex) {
-        return new GuiElement<Object>() {
+    private GuiComponent<?> generateNextButton(final int currentIndex) {
+        return new GuiComponent<Object>() {
             @Override
             public void handleClick(final @NotNull InventoryClickEvent event) {
                 event.setCancelled(true);
@@ -164,8 +164,8 @@ public final class GuiPaginator<T> {
         };
     }
 
-    private GuiElement<?> generatePreviousButton(final int currentIndex) {
-        return new GuiElement<Object>() {
+    private GuiComponent<?> generatePreviousButton(final int currentIndex) {
+        return new GuiComponent<Object>() {
             @Override
             public void handleClick(final @NotNull InventoryClickEvent event) {
                 event.setCancelled(true);

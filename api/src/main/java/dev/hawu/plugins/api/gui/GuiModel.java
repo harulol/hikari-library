@@ -1,16 +1,18 @@
 package dev.hawu.plugins.api.gui;
 
 import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.gui.transitions.Transition;
+import dev.hawu.plugins.api.collections.Property;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,72 +22,76 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 /**
- * Represents a virtual inventory that can act as
- * an interactive GUI.
+ * Represents an inventory model
+ * for interactive UIs.
  *
- * @since 1.2
+ * @since 2.0
  */
 public final class GuiModel implements InventoryHolder {
 
     private final Inventory inventory;
-    private final GuiElement<?>[] elements;
-    private final Map<String, GuiElement<?>> identifiersMap = new HashMap<>();
+    private final GuiComponent<?>[] components;
+    private final Map<String, GuiComponent<?>> refs = new HashMap<>();
 
-    private Consumer<InventoryClickEvent> outsideClickHandler = event -> event.setCancelled(true);
-    private Consumer<InventoryDragEvent> dragHandler = event -> event.setCancelled(true);
+    private Consumer<InventoryClickEvent> outsideConsumer = event -> event.setCancelled(true);
+    private Consumer<InventoryDragEvent> dragEventConsumer = event -> event.setCancelled(true);
     private Runnable onCloseHook;
     private boolean cooldown = true;
     private boolean unmountOnClose = false;
 
     /**
-     * Constructs a model using a chest inventory with given size.
-     * <p>
-     * Size must be a multiple of 9, ranging from 9 (1 row)
-     * to 54 (6 rows).
+     * Creates an inventory with the given size
      *
-     * @param size The size of the inventory.
-     * @since 1.2
-     */
-    public GuiModel(final int size) {
-        this.inventory = Bukkit.createInventory(this, size);
-        this.elements = new GuiElement<?>[inventory.getSize()];
-    }
-
-    /**
-     * Constructs a model using a chest inventory with given size
-     * and custom colorized title.
-     *
-     * @param size  The size of the inventory.
-     * @param title The title of the inventory.
-     * @since 1.2
+     * @param size  the size
+     * @param title the title colorized
+     * @since 2.0
      */
     public GuiModel(final int size, final @NotNull String title) {
         this.inventory = Bukkit.createInventory(this, size, Strings.color(title));
-        this.elements = new GuiElement<?>[inventory.getSize()];
+        this.components = new GuiComponent[size];
     }
 
     /**
-     * Constructs a model using a different inventory type.
+     * Creates an inventory with the given type
      *
-     * @param type The inventory type.
-     * @since 1.2
-     */
-    public GuiModel(final @NotNull InventoryType type) {
-        this.inventory = Bukkit.createInventory(this, type);
-        this.elements = new GuiElement<?>[inventory.getSize()];
-    }
-
-    /**
-     * Constructs a model using a different inventory type and
-     * a custom colorized title.
-     *
-     * @param type  The inventory type.
-     * @param title The title of the inventory.
-     * @since 1.2
+     * @param type  the type
+     * @param title the title colorized
+     * @since 2.0
      */
     public GuiModel(final @NotNull InventoryType type, final @NotNull String title) {
         this.inventory = Bukkit.createInventory(this, type, Strings.color(title));
-        this.elements = new GuiElement<?>[inventory.getSize()];
+        this.components = new GuiComponent[inventory.getSize()];
+    }
+
+    /**
+     * Retrieves the component mounted at the specified index.
+     *
+     * @param index the index
+     * @param <T>   the type of the GuiComponent
+     * @return the component
+     * @since 2.0
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public <T> GuiComponent<T> get(final int index) {
+        if(index < 0 || index >= inventory.getSize())
+            throw new IndexOutOfBoundsException(String.format("Index %d is out of bounds for inventory of size %d", index, inventory.getSize()));
+
+        return (GuiComponent<T>) components[index];
+    }
+
+    /**
+     * Retrieves the component mounted with the specified ref.
+     *
+     * @param ref the ref
+     * @param <T> the type of the GuiComponent
+     * @return the component
+     * @since 2.0
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public <T> GuiComponent<T> get(final @Nullable String ref) {
+        return (GuiComponent<T>) this.refs.get(ref);
     }
 
     /**
@@ -100,39 +106,6 @@ public final class GuiModel implements InventoryHolder {
     }
 
     /**
-     * Mounts an element at the given index (slot). Any elements
-     * at this index will be unmounted before mounting
-     * this new element.
-     *
-     * @param index   The index of the slot.
-     * @param element The element to mount.
-     * @since 1.2
-     */
-    public void mount(final int index, final @Nullable GuiElement<?> element) {
-        unmount(index);
-        this.elements[index] = element;
-        if(element != null) {
-            if(element.getIdentifier() != null)
-                identifiersMap.put(element.getIdentifier().toLowerCase(), element);
-            element.mount(this, index);
-        }
-    }
-
-    /**
-     * Mounts an element at the given coordinates. Any elements
-     * at this index will be unmounted before mounting
-     * this new element.
-     *
-     * @param x       The x coordinate.
-     * @param y       The y coordinate.
-     * @param element The element to mount.
-     * @since 1.6
-     */
-    public void mount(final int x, final int y, final @Nullable GuiElement<?> element) {
-        mount(x + y * 9, element);
-    }
-
-    /**
      * Checks if the model is currently affected
      * by the cooldown checks in inventory click events.
      *
@@ -144,14 +117,13 @@ public final class GuiModel implements InventoryHolder {
     }
 
     /**
-     * Specifies that this model should not be logged
-     * in inventory click events, and all events will
-     * pass through this model's handler.
+     * Specifies whether clicks on this model should be put
+     * on cooldowns, in case of bugs while users spamming clicks.
      *
      * @since 1.2
      */
-    public void noCooldown() {
-        this.cooldown = false;
+    public void setCooldown(final boolean cooldown) {
+        this.cooldown = cooldown;
     }
 
     /**
@@ -172,8 +144,8 @@ public final class GuiModel implements InventoryHolder {
      * @param handler The handler to run.
      * @since 1.2
      */
-    public void onDrag(final @NotNull Consumer<@NotNull InventoryDragEvent> handler) {
-        this.dragHandler = handler;
+    public void onDrag(final @NotNull Consumer<InventoryDragEvent> handler) {
+        this.dragEventConsumer = handler;
     }
 
     /**
@@ -183,168 +155,165 @@ public final class GuiModel implements InventoryHolder {
      * @param handler The consumer to invoke.
      * @since 1.2
      */
-    public void onOutsideClick(final @NotNull Consumer<@NotNull InventoryClickEvent> handler) {
-        this.outsideClickHandler = handler;
+    public void onOutsideClick(final @NotNull Consumer<InventoryClickEvent> handler) {
+        this.outsideConsumer = handler;
     }
 
     /**
-     * Unmounts the element at the given index.
+     * Mounts a component on a specified index.
      *
-     * @param index The index of the slot.
-     * @since 1.2
+     * @param index     the index
+     * @param component the component
+     * @since 2.0
+     */
+    public void mount(final int index, final @Nullable GuiComponent<?> component) {
+        this.unmount(index);
+        if(component == null) return;
+
+        this.components[index] = component;
+        component.apply(this, index);
+        try {
+            inventory.setItem(index, component.render());
+            component.componentDidMount();
+            this.refs.put(component.getRef(), component);
+        } catch(final Throwable throwable) {
+            throwable.printStackTrace();
+            component.componentDidCatch(throwable);
+        }
+    }
+
+    /**
+     * Unmounts the component currently mounted at the specified index
+     *
+     * @param index the index
+     * @since 2.0
      */
     public void unmount(final int index) {
-        final GuiElement<?> element = this.elements[index];
-        if(element != null) {
-            element.unmount();
-            if(element.getIdentifier() != null)
-                identifiersMap.remove(element.getIdentifier().toLowerCase());
+        final GuiComponent<?> component = get(index);
+        if(component != null) {
+            component.dismount();
+            component.componentWillUnmount();
+            this.refs.remove(standardize(component.getRef()));
         }
-        this.elements[index] = null;
+        components[index] = null;
     }
 
     /**
-     * Unmounts the element at the given coordinates.
+     * Forcefully updates the component at the index.
+     * <p>
+     * Using this function to invoke an update will not
+     * fire event listeners like {@link GuiComponent#componentDidUpdate(Object)}.
+     * <p>
+     * Only {@link GuiComponent#componentDidCatch(Throwable)} will be invoked.
      *
-     * @param x The x coordinate.
-     * @param y The y coordinate.
-     * @since 1.6
+     * @param index the index
+     * @since 2.0
      */
-    public void unmount(final int x, final int y) {
-        unmount(x + y * 9);
-    }
-
-    /**
-     * Updates and re-renders the item at the given index.
-     *
-     * @param index The index to re-render at.
-     * @since 1.2
-     */
+    @SuppressWarnings("deprecation")
     public void update(final int index) {
-        final GuiElement<?> element = elements[index];
+        final GuiComponent<?> component = get(index);
         try {
-            if(element != null) {
-                inventory.setItem(index, element.render());
-            } else {
-                inventory.setItem(index, new ItemStack(Material.AIR));
-            }
-        } catch(final Exception e) {
-            if(element != null) element.elementDidCatch(e);
-            else throw e;
+            inventory.setItem(index, Property.of(component).map(GuiComponent::render).orNull());
+        } catch(final Throwable throwable) {
+            Property.of(component).ifPresent(comp -> comp.componentDidCatch(throwable));
         }
+
+        inventory.getViewers().stream()
+            .filter(player -> player instanceof Player)
+            .map(entity -> (Player) entity)
+            .forEach(Player::updateInventory);
     }
 
     /**
-     * Updates every slot.
+     * Updates at all indicies.
      *
-     * @since 1.2
+     * @since 2.0
      */
-    public void update() {
-        IntStream.range(0, elements.length).forEach(this::update);
+    public void updateAll() {
+        IntStream.range(0, inventory.getSize()).forEach(this::update);
     }
 
     /**
-     * Get the overall size of the inventory.
+     * Updates all and renders the inventory to a human entity.
      *
-     * @return The size of this inventory.
-     * @since 1.2
-     */
-    public int getSize() {
-        return this.inventory.getSize();
-    }
-
-    /**
-     * Retrieves the element at the index.
-     *
-     * @param index The index to retrieve at.
-     * @return The element there, nullable.
-     * @since 1.2
-     */
-    @Nullable
-    public GuiElement<?> getElement(final int index) {
-        return elements[index];
-    }
-
-    /**
-     * Retrieves the element that has the ID provided.
-     *
-     * @param id The ID to search for.
-     * @return The element with the ID, nullable.
-     * @since 1.6
-     */
-    @Nullable
-    public GuiElement<?> getElement(final @NotNull String id) {
-        return identifiersMap.getOrDefault(id.toLowerCase(), null);
-    }
-
-    /**
-     * Retrieves the element at the provided index.
-     *
-     * @param index The index to retrieve at.
-     * @param <K>   The type of the element to cast to.
-     * @return The element there, nullable.
-     * @since 1.6
-     */
-    @SuppressWarnings("unchecked")
-    @Nullable
-    public <K> GuiElement<K> getTypedElement(final int index) {
-        return (GuiElement<K>) elements[index];
-    }
-
-    /**
-     * Retrieves the element that has the ID provided.
-     *
-     * @param id  The ID to search for.
-     * @param <K> The type of the element to cast to.
-     * @return The element with the ID, nullable.
-     * @since 1.6
-     */
-    @SuppressWarnings("unchecked")
-    @Nullable
-    public <K> GuiElement<K> getTypedElement(final @NotNull String id) {
-        return (GuiElement<K>) identifiersMap.getOrDefault(id.toLowerCase(), null);
-    }
-
-    /**
-     * Get the object's inventory.
-     *
-     * @return The inventory.
-     * @since 1.2
-     */
-    @Override
-    @NotNull
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    /**
-     * Opens this inventory to a player.
-     *
-     * @param entity The entity to open to.
-     * @since 1.2
+     * @param entity the entity
+     * @since 2.0
      */
     public void open(final @NotNull HumanEntity entity) {
-        update();
-        entity.openInventory(this.getInventory());
+        updateAll();
+        entity.openInventory(inventory);
     }
 
-    void handleClose() {
+    /**
+     * Applies a transition to a new inventory.
+     *
+     * @param entity     the entity
+     * @param transition the transition
+     * @param target     the target inventory
+     * @since 2.0
+     */
+    public void useTransition(final @NotNull HumanEntity entity, final @NotNull Transition transition, final @NotNull GuiModel target) {
+        transition.startTransition(entity, this, target);
+    }
+
+    @Nullable
+    private String standardize(final @Nullable String ref) {
+        if(ref == null) return null;
+        return ref.trim().toLowerCase().replaceAll("\\s+", "_").replaceAll("[^a-zA-Z1-9_$]", "");
+    }
+
+    /**
+     * Handles the close event.
+     *
+     * @since 2.0
+     */
+    @Internal
+    public void handleClose() {
         if(this.onCloseHook != null) this.onCloseHook.run();
-        if(unmountOnClose) IntStream.range(0, elements.length).forEach(this::unmount);
+        if(unmountOnClose) IntStream.range(0, components.length).forEach(this::unmount);
     }
 
-    void handleClick(final @NotNull InventoryClickEvent event) {
-        if(event.getSlotType() == SlotType.OUTSIDE || event.getRawSlot() >= getSize()) {
-            if(outsideClickHandler != null) outsideClickHandler.accept(event);
+    /**
+     * Handles the click event.
+     *
+     * @param event the event
+     * @since 2.0
+     */
+    @Internal
+    public void handleClick(final @NotNull InventoryClickEvent event) {
+        if(event.getSlotType() == SlotType.OUTSIDE || event.getRawSlot() >= inventory.getSize()) {
+            if(outsideConsumer != null) outsideConsumer.accept(event);
             return;
         }
 
-        final GuiElement<?> element = elements[event.getRawSlot()];
-        if(element != null) element.handleClick(event);
+        final GuiComponent<?> component = get(event.getRawSlot());
+        if(component != null) component.handleClick(event);
+        else event.setCancelled(true);
     }
 
-    void handleDrag(final @NotNull InventoryDragEvent event) {
-        if(dragHandler != null) dragHandler.accept(event);
+    /**
+     * Handles the drag event.
+     * <p>
+     * Would not recommend messing with this event since it introduces
+     * a ton of loopholes for users to exploit the GUI.
+     *
+     * @param event the event
+     * @since 2.0
+     */
+    @Internal
+    public void handleDrag(final @NotNull InventoryDragEvent event) {
+        if(dragEventConsumer != null) dragEventConsumer.accept(event);
+    }
+
+    /**
+     * Retrieves the object's inventory.
+     *
+     * @return the inventory
+     * @since 2.0
+     */
+    @Override
+    public Inventory getInventory() {
+        return this.inventory;
     }
 
 }

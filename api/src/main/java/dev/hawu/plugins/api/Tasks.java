@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api;
 
+import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,14 +23,13 @@ public final class Tasks {
      * Schedule a runnable.
      *
      * @param type     The type of the task.
-     * @param plugin   The plugin to schedule with.
      * @param consumer The consumer that takes in the runnable.
      * @return The link {@link BukkitTask} after scheduling.
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask schedule(@NotNull final TaskType type, @NotNull final JavaPlugin plugin, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return schedule(type, plugin, 0, 0, consumer);
+    public static BukkitTask schedule(@NotNull final TaskType type, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
+        return schedule(type, 0, 0, consumer);
     }
 
     @NotNull
@@ -56,63 +56,58 @@ public final class Tasks {
     /**
      * Schedules a runnable that runs instantly synchronously.
      *
-     * @param plugin   The plugin to schedule with.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask schedule(@NotNull final JavaPlugin plugin, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return consume(consumer).runTask(plugin);
+    public static BukkitTask schedule(@NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
+        return consume(consumer).runTask(PluginAdapter.getPlugin());
     }
 
     /**
      * Schedules a runnable that runs instantly and asynchronously.
      *
-     * @param plugin   The plugin to schedule with.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask scheduleAsync(@NotNull final JavaPlugin plugin, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return consume(consumer).runTaskAsynchronously(plugin);
+    public static BukkitTask scheduleAsync(@NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
+        return consume(consumer).runTaskAsynchronously(PluginAdapter.getPlugin());
     }
 
     /**
      * Schedules a runnable that runs in the future after a certain number of ticks.
      *
-     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask scheduleLater(@NotNull final JavaPlugin plugin, final long delay, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return consume(consumer).runTaskLater(plugin, delay);
+    public static BukkitTask scheduleLater(final long delay, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
+        return consume(consumer).runTaskLater(PluginAdapter.getPlugin(), delay);
     }
 
     /**
      * Schedules a runnable that runs in the future after a certain number of ticks,
      * and this runnable executes the code asynchronously.
      *
-     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait.
      * @param consumer The consumer that takes in the runnable.
      * @return The {@link BukkitTask} after scheduling.
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask scheduleLaterAsync(@NotNull final JavaPlugin plugin, final long delay, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return consume(consumer).runTaskLaterAsynchronously(plugin, delay);
+    public static BukkitTask scheduleLaterAsync(final long delay, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
+        return consume(consumer).runTaskLaterAsynchronously(PluginAdapter.getPlugin(), delay);
     }
 
     /**
      * Schedules a runnable that runs in the future after a certain number of ticks,
      * repeatedly in intervals.
      *
-     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait until the first execution.
      * @param interval Amount of ticks to wait between executions.
      * @param consumer The consumer that takes in the runnable every run.
@@ -120,15 +115,14 @@ public final class Tasks {
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask scheduleTimer(@NotNull final JavaPlugin plugin, final long delay, final long interval, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return consume(consumer).runTaskTimer(plugin, delay, interval);
+    public static BukkitTask scheduleTimer(final long delay, final long interval, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
+        return consume(consumer).runTaskTimer(PluginAdapter.getPlugin(), delay, interval);
     }
 
     /**
      * Schedules a runnable that runs in the future after a certain number of ticks,
      * repeatedly in intervals and all executions will be done asynchronously.
      *
-     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait until the first execution.
      * @param interval Amount of ticks to wait between executions.
      * @param consumer The consumer that takes in the runnable every run.
@@ -136,32 +130,30 @@ public final class Tasks {
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask scheduleTimerAsync(@NotNull final JavaPlugin plugin, final long delay, final long interval,
+    public static BukkitTask scheduleTimerAsync(final long delay, final long interval,
                                                 @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return consume(consumer).runTaskTimerAsynchronously(plugin, delay, interval);
+        return consume(consumer).runTaskTimerAsynchronously(PluginAdapter.getPlugin(), delay, interval);
     }
 
     /**
      * Schedule a runnable.
      *
      * @param type     The type of the task.
-     * @param plugin   The plugin to schedule with.
      * @param consumer The consumer that takes in the runnable.
      * @param delay    Amount of ticks to wait until first execution.
      * @return The link {@link BukkitTask} after scheduling.
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask schedule(@NotNull final TaskType type, @NotNull final JavaPlugin plugin, final long delay,
+    public static BukkitTask schedule(@NotNull final TaskType type, final long delay,
                                       @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
-        return schedule(type, plugin, delay, 0, consumer);
+        return schedule(type, delay, 0, consumer);
     }
 
     /**
      * Schedules a runnable.
      *
      * @param type     The type of the task.
-     * @param plugin   The plugin to schedule with.
      * @param delay    Amount of ticks to wait until the first execution.
      * @param interval Amount of ticks to wait between executions.
      * @param consumer The consumer that takes in the runnable.
@@ -169,21 +161,21 @@ public final class Tasks {
      * @since 1.0
      */
     @NotNull
-    public static BukkitTask schedule(@NotNull final TaskType type, @NotNull final JavaPlugin plugin, final long delay,
-                                      final long interval, @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
+    public static BukkitTask schedule(@NotNull final TaskType type, final long delay, final long interval,
+                                      @NotNull final Consumer<@NotNull BukkitRunnable> consumer) {
         switch(type) {
             case ASYNC:
-                return scheduleAsync(plugin, consumer);
+                return scheduleAsync(consumer);
             case TIMER_SYNC:
-                return scheduleTimer(plugin, delay, interval, consumer);
+                return scheduleTimer(delay, interval, consumer);
             case TIMER_ASYNC:
-                return scheduleTimerAsync(plugin, delay, interval, consumer);
+                return scheduleTimerAsync(delay, interval, consumer);
             case LATER_SYNC:
-                return scheduleLater(plugin, delay, consumer);
+                return scheduleLater(delay, consumer);
             case LATER_ASYNC:
-                return scheduleLaterAsync(plugin, delay, consumer);
+                return scheduleLaterAsync(delay, consumer);
             default:
-                return schedule(plugin, consumer);
+                return schedule(consumer);
         }
     }
 

@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.title;
 
+import dev.hawu.plugins.api.adapters.TitlePacketAdapter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +14,6 @@ public final class TitleComponent {
 
     private final String title;
     private final String subtitle;
-    private final boolean dontWrap;
     private final long fadeIn;
     private final long stay;
     private final long fadeOut;
@@ -41,27 +41,11 @@ public final class TitleComponent {
      * @since 1.0
      */
     public TitleComponent(final @NotNull String title, final @NotNull String subtitle, final long fadeIn, final long stay, final long fadeOut) {
-        this(title, subtitle, fadeIn, stay, fadeOut, false);
-    }
-
-    /**
-     * Creates a new title component.
-     *
-     * @param title    The title to send.
-     * @param subtitle The subtitle to send.
-     * @param fadeIn   How long the title should fade in for, in ticks.
-     * @param stay     How long the title should stay for, in ticks.
-     * @param fadeOut  How long the title should fade out for, in ticks.
-     * @param dontWrap Whether the text should be escaped.
-     * @since 1.3
-     */
-    public TitleComponent(final @NotNull String title, final @NotNull String subtitle, final long fadeIn, final long stay, final long fadeOut, final boolean dontWrap) {
         this.title = title;
         this.subtitle = subtitle;
         this.fadeIn = fadeIn;
         this.stay = stay;
         this.fadeOut = fadeOut;
-        this.dontWrap = dontWrap;
     }
 
     /**
@@ -126,16 +110,6 @@ public final class TitleComponent {
      */
     public long getFadeOut() {
         return fadeOut;
-    }
-
-    /**
-     * Whether the text should be escaped.
-     *
-     * @return Whether the text should be escaped.
-     * @since 1.3
-     */
-    public boolean shouldNotWrap() {
-        return dontWrap;
     }
 
     /**

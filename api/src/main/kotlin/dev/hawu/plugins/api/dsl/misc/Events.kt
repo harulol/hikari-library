@@ -1,7 +1,7 @@
 package dev.hawu.plugins.api.dsl.misc
 
 import dev.hawu.plugins.api.dsl.events.EventsSubscriptionSpec
-import dev.hawu.plugins.api.events.listener.ClosableListener
+import dev.hawu.plugins.api.events.ClosableListener
 import org.bukkit.event.Event
 
 /**

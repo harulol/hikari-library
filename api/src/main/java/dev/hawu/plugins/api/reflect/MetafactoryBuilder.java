@@ -23,7 +23,7 @@ public final class MetafactoryBuilder {
     private MethodHandle implMethod;
     private MethodType instantiatedMethodType;
 
-    MetafactoryBuilder(final @NotNull MethodHandles.Lookup caller) {
+    public MetafactoryBuilder(final @NotNull MethodHandles.Lookup caller) {
         this.caller = caller;
     }
 

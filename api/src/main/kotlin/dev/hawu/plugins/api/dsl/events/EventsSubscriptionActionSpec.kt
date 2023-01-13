@@ -1,7 +1,7 @@
 package dev.hawu.plugins.api.dsl.events
 
 import dev.hawu.plugins.api.dsl.ScopeControlMarker
-import dev.hawu.plugins.api.events.listener.ClosableListener
+import dev.hawu.plugins.api.events.ClosableListener
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 

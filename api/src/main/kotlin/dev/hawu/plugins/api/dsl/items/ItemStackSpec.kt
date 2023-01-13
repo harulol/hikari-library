@@ -4,7 +4,7 @@ import dev.hawu.plugins.api.collections.MutableProperty
 import dev.hawu.plugins.api.dsl.ScopeControlMarker
 import dev.hawu.plugins.api.dsl.nbt.NBTCompoundSpec
 import dev.hawu.plugins.api.nbt.NBTCompound
-import dev.hawu.plugins.api.nbt.NBTRegistry
+import dev.hawu.plugins.api.adapters.NBTRegistry
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta

@@ -1,8 +1,8 @@
 package dev.hawu.plugins.api.gui.pagination;
 
-import dev.hawu.plugins.api.gui.GuiModel;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import dev.hawu.plugins.api.gui.GuiModel;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

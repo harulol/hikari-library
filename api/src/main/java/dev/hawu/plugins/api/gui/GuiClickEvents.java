@@ -1,6 +1,7 @@
 package dev.hawu.plugins.api.gui;
 
 import dev.hawu.plugins.api.Tasks;
+import dev.hawu.plugins.api.collections.CooldownMap;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.events.Events;
 import org.bukkit.Bukkit;
@@ -31,6 +32,7 @@ public final class GuiClickEvents implements Listener {
 
     private static final GuiClickEvents INSTANCE = new GuiClickEvents();
     private static final Map<UUID, Pair<Boolean, Consumer<String>>> textInputs = new HashMap<>(); // UUID -> <async, callback>
+    private static final CooldownMap<GuiModel> modelCooldownMap = new CooldownMap<>(500);
 
     private static JavaPlugin plugin;
 
@@ -68,6 +70,7 @@ public final class GuiClickEvents implements Listener {
      */
     public static void onDisable() {
         textInputs.clear();
+        modelCooldownMap.clear();
     }
 
     /**
@@ -121,9 +124,9 @@ public final class GuiClickEvents implements Listener {
         event.setCancelled(true);
         final Pair<Boolean, Consumer<String>> pair = textInputs.get(event.getPlayer().getUniqueId());
         if(pair.getFirst()) {
-            Tasks.scheduleAsync(plugin, runnable -> pair.getSecond().accept(event.getMessage()));
+            Tasks.scheduleAsync(runnable -> pair.getSecond().accept(event.getMessage()));
         } else {
-            Tasks.schedule(plugin, runnable -> pair.getSecond().accept(event.getMessage()));
+            Tasks.schedule(runnable -> pair.getSecond().accept(event.getMessage()));
         }
         textInputs.remove(event.getPlayer().getUniqueId());
     }
@@ -133,7 +136,13 @@ public final class GuiClickEvents implements Listener {
     private void onClick(final @NotNull InventoryClickEvent event) {
         if(event.getInventory().getHolder() instanceof GuiModel) {
             final GuiModel model = (GuiModel) event.getInventory().getHolder();
-            model.handleClick(event);
+            if(modelCooldownMap.isOnCooldown(model)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            ((GuiModel) event.getInventory().getHolder()).handleClick(event);
+            modelCooldownMap.putOnCooldown(model);
         }
     }
 

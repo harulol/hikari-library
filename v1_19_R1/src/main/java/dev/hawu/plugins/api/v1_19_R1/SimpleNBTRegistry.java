@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.v1_19_R1;
 
+import dev.hawu.plugins.api.adapters.NBTRegistry;
 import dev.hawu.plugins.api.nbt.NBTList;
 import dev.hawu.plugins.api.nbt.*;
 import net.minecraft.nbt.*;

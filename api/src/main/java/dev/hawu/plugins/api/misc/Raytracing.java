@@ -1,16 +1,15 @@
 package dev.hawu.plugins.api.misc;
 
 import com.google.common.base.Preconditions;
+import dev.hawu.plugins.api.adapters.WorldEntitiesLookupAdapter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.BreakIterator;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Raytracing stuff, i guess?

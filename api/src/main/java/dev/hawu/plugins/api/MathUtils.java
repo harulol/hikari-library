@@ -162,8 +162,12 @@ public final class MathUtils {
     public static Vector rotateAroundAxis(final @NotNull Vector v, final @NotNull Vector axis, final double cos, final double sin) {
         axis.normalize();
 
-        double x = v.getX(), y = v.getY(), z = v.getZ();
-        double x2 = axis.getX(), y2 = axis.getY(), z2 = axis.getZ();
+        double x = v.getX();
+        double y = v.getY();
+        double z = v.getZ();
+        double x2 = axis.getX();
+        double y2 = axis.getY();
+        double z2 = axis.getZ();
         double dotProduct = v.dot(axis);
 
         double xPrime = x2 * dotProduct * (1d - cos)
