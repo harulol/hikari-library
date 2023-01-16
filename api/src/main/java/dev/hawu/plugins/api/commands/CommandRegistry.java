@@ -89,6 +89,24 @@ public final class CommandRegistry {
         registry.bindChildMethods(plugin);
     }
 
+    private static void unregister(final CommandRegistry registry) {
+        registry.CHECKED_TAB_COMPLETERS.clear();
+        registry.CHECKED_COMMAND_EXECUTORS.clear();
+        registry.TAB_COMPLETER_MAP.clear();
+        registry.COMMAND_EXECUTOR_MAP.clear();
+    }
+
+    /**
+     * Unregisters a plugin from the command registry.
+     *
+     * @param plugin the plugin
+     * @since 2.0
+     */
+    public static void unregister(final JavaPlugin plugin) {
+        final CommandRegistry registry = REGISTRIES.remove(plugin);
+        if(registry != null) unregister(registry);
+    }
+
     /**
      * Clears all registries.
      * <p>
@@ -97,12 +115,7 @@ public final class CommandRegistry {
      * @since 2.0
      */
     public static void unregisterAll() {
-        REGISTRIES.forEach((plugin, registry) -> {
-            registry.CHECKED_TAB_COMPLETERS.clear();
-            registry.CHECKED_COMMAND_EXECUTORS.clear();
-            registry.TAB_COMPLETER_MAP.clear();
-            registry.COMMAND_EXECUTOR_MAP.clear();
-        });
+        REGISTRIES.forEach((plugin, registry) -> unregister(registry));
         REGISTRIES.clear();
     }
 
@@ -296,7 +309,7 @@ public final class CommandRegistry {
         }
     }
 
-    private void bindChildMethods(final @NotNull JavaPlugin plugin) {
+    private void bindCommandExecutors(final @NotNull JavaPlugin plugin) {
         for(Entry<String, ExtendedCommandExecutor> entry : COMMAND_EXECUTOR_MAP.entrySet()) {
             if(CHECKED_COMMAND_EXECUTORS.contains(entry.getKey()))
                 continue;
@@ -325,7 +338,9 @@ public final class CommandRegistry {
             parentExecutor.subCommands.put(childCommand, entry.getValue());
             CHECKED_COMMAND_EXECUTORS.add(entry.getKey());
         }
+    }
 
+    private void bindTabExecutors(final @NotNull JavaPlugin plugin) {
         for(Entry<String, ExtendedTabCompleter> entry : TAB_COMPLETER_MAP.entrySet()) {
             if(CHECKED_TAB_COMPLETERS.contains(entry.getKey()))
                 continue;
@@ -354,6 +369,11 @@ public final class CommandRegistry {
             parentCompleter.subCompleters.put(childCommand, entry.getValue());
             CHECKED_TAB_COMPLETERS.add(entry.getKey());
         }
+    }
+
+    private void bindChildMethods(final @NotNull JavaPlugin plugin) {
+        bindCommandExecutors(plugin);
+        bindTabExecutors(plugin);
     }
 
 }

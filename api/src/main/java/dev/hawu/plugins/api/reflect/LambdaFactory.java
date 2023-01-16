@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.reflect;
 
 import com.google.common.collect.Sets;
 import dev.hawu.plugins.api.collections.Property;
+import dev.hawu.plugins.api.exceptions.LambdaCreationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  * <p>
  * For example, the method with signature {@code int(int, String)} will only match any functional interface
  * with functional method {@code int(int, Object)} while failing to match {@code Object(int, Object)} or
- * any of the sorts. But {@code byte(int, String)} will obviously not match functional method {@code int(int, Object)}.
+ * any of the sorts. And also {@code byte(int, String)} will obviously not match functional method {@code int(int, Object)}.
  *
  * @since 2.0
  */
@@ -224,7 +225,7 @@ public final class LambdaFactory {
                 types[2]
             );
         } catch(final Exception exception) {
-            throw new RuntimeException(exception);
+            throw new LambdaCreationException(exception);
         }
     }
 
@@ -245,7 +246,7 @@ public final class LambdaFactory {
             final Method method = getAbstractMethods(functional.getClass()).get(0);
             return method.invoke(functional, parameters);
         } catch(final Throwable throwable) {
-            throw new RuntimeException(throwable);
+            throw new LambdaCreationException(throwable);
         }
     }
 
@@ -264,7 +265,7 @@ public final class LambdaFactory {
             final Method method = getAbstractMethods(functional.getClass()).get(0);
             return method.invoke(functional, parameters);
         } catch(final Throwable throwable) {
-            throw new RuntimeException(throwable);
+            throw new LambdaCreationException(throwable);
         }
     }
 

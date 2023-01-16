@@ -22,6 +22,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,6 +67,12 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
     private void onLogin(final PlayerLoginEvent event) {
         final Player player = event.getPlayer();
         UserAdapterImpl.addUser(player.getUniqueId());
+    }
+
+    @EventHandler
+    private void onPluginDisable(final PluginDisableEvent event) {
+        if(event.getPlugin() instanceof JavaPlugin)
+            CommandRegistry.unregister((JavaPlugin) event.getPlugin());
     }
 
     private void tryLoading(final String name, final Runnable runnable) {
