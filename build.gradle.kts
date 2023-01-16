@@ -6,7 +6,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-version = "2.0-SNAPSHOT"
+version = "2.0.1-SNAPSHOT"
 
 // Configuring main stuff for all projects.
 allprojects {
@@ -49,6 +49,7 @@ dependencies {
         @Suppress("DEPRECATION")
         compileClasspath(it)
     }
+    testImplementation(project(":api"))
 }
 
 tasks.shadowJar {

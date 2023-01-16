@@ -188,7 +188,7 @@ public final class Strings {
             stringBuilder.append(" ").append(str);
         }
 
-        if(stringBuilder.length() > 0) result.add(stringBuilder.toString());
+        if(stringBuilder.length() > 0) result.add(stringBuilder.toString().trim());
         return result;
     }
 

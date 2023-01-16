@@ -12,6 +12,12 @@ private val formatter = DecimalFormat("#,###.##")
 fun String.color() = Strings.color(this)
 
 /**
+ * Chops a string into a list of Strings
+ * with each line not surpassing [limit] chars.
+ */
+fun String.chop(limit: Int = 32) = Strings.chop(this, limit)
+
+/**
  * Fills the string with the given placeholders.
  * Does the same thing as [Strings.fillPlaceholders].
  */
