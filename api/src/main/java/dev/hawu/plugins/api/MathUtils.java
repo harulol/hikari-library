@@ -213,4 +213,34 @@ public final class MathUtils {
         return onto.clone().multiply(onto.dot(u) / onto.lengthSquared());
     }
 
+    /**
+     * Retrieves the unit vector that points to the immediate left of a vector.
+     * <p>
+     * This returns a new instance, and does not mutate the provided vector.
+     *
+     * @param vector the vector to get the left unit of
+     * @return the left unit vector
+     * @since 2.0
+     */
+    @NotNull
+    public static Vector getLeftUnit(final @NotNull Vector vector) {
+        final Vector direction = vector.clone().normalize();
+        return new Vector(-direction.getZ(), 0, direction.getX()).normalize();
+    }
+
+    /**
+     * Retrieves the unit vector that points to the immediate right of a vector.
+     * <p>
+     * This returns a new instance, and does not mutate the provided vector.
+     *
+     * @param vector the vector to get the right unit of
+     * @return the right unit vector
+     * @since 2.0
+     */
+    @NotNull
+    public static Vector getRightUnit(final @NotNull Vector vector) {
+        final Vector direction = vector.normalize();
+        return new Vector(direction.getZ(), 0, -direction.getX()).normalize();
+    }
+
 }

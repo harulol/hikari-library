@@ -38,7 +38,10 @@ public final class NBTList extends NBTType implements List<NBTType> {
     @Override
     @NotNull
     public String toString() {
-        return list.toString();
+        final StringJoiner joiner = new StringJoiner(",", "[", "]");
+        for(final NBTType type : list)
+            joiner.add(type.toString());
+        return joiner.toString();
     }
 
     @Override

@@ -83,25 +83,4 @@ public abstract class ChatPacketAdapter {
         adapter = packetAdapter;
     }
 
-    /**
-     * Attempts to resolve for an implementation of the
-     * chat packet adapter based on the server's current version.
-     * <p>
-     * Usually, these kinds of implementations are repeated
-     * and they might be replaced with just one class using
-     * static final method handles soon.
-     *
-     * @since 1.5
-     */
-    @Deprecated
-    public static void resolve() {
-        if(adapter != null) return;
-
-        try {
-            adapter = (ChatPacketAdapter) Class.forName("dev.hawu.plugins.api." + MinecraftVersion.getCurrent() + ".SimpleChatRegistry").newInstance();
-        } catch(final Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

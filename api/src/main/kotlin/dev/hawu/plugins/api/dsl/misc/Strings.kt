@@ -35,7 +35,7 @@ fun Number.format() = formatter.format(this)
  *
  * @param sign the sign to place after the number
  */
-fun Number.pecentage(sign: String = "%") = "${(this.toDouble() * 100.0).format()}$sign"
+fun Number.percentage(sign: String = "%") = "${(this.toDouble() * 100.0).format()}$sign"
 
 /**
  * Attempts to convert a [String] to a [java.util.UUID].

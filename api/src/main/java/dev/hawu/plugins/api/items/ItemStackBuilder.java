@@ -1,9 +1,9 @@
 package dev.hawu.plugins.api.items;
 
 import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.adapters.NBTRegistry;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.nbt.NBTCompound;
-import dev.hawu.plugins.api.adapters.NBTRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -45,6 +45,7 @@ public final class ItemStackBuilder {
         this.meta = itemStack.getItemMeta();
         this.amount = itemStack.getAmount();
         this.durability = itemStack.getDurability();
+        this.compound = NBTRegistry.getRegistry().getCompound(itemStack);
     }
 
     /**
@@ -138,6 +139,35 @@ public final class ItemStackBuilder {
     @NotNull
     public ItemStackBuilder lore(final @NotNull String... lore) {
         return this.lore(Arrays.asList(lore));
+    }
+
+    /**
+     * Appends the provided list to the lore instead of
+     * overwriting it.
+     *
+     * @param lore the lore
+     * @return the same builder
+     * @since 2.0
+     */
+    @NotNull
+    public ItemStackBuilder appendLore(final @NotNull Collection<String> lore) {
+        final List<String> current = this.meta.hasLore() ? this.meta.getLore() : new ArrayList<>();
+        lore.stream().map(Strings::color).forEach(current::add);
+        this.meta.setLore(current);
+        return this;
+    }
+
+    /**
+     * Appends the provided array to the lore instead
+     * of overwriting it.
+     *
+     * @param lore the lore
+     * @return the same builder
+     * @since 2.0
+     */
+    @NotNull
+    public ItemStackBuilder appendLore(final @NotNull String... lore) {
+        return this.appendLore(Arrays.asList(lore));
     }
 
     /**

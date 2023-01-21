@@ -119,8 +119,7 @@ public final class Players {
      */
     @NotNull
     public static Vector getLeftUnit(final @NotNull Player player) {
-        final Vector direction = player.getLocation().getDirection().normalize();
-        return new Vector(-direction.getZ(), 0, direction.getX()).normalize();
+        return MathUtils.getLeftUnit(player.getLocation().getDirection());
     }
 
     /**
@@ -133,8 +132,7 @@ public final class Players {
      */
     @NotNull
     public static Vector getRightUnit(final @NotNull Player player) {
-        final Vector direction = player.getLocation().getDirection().normalize();
-        return new Vector(direction.getZ(), 0, -direction.getX()).normalize();
+        return MathUtils.getRightUnit(player.getLocation().getDirection());
     }
 
 }

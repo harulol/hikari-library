@@ -3,10 +3,7 @@ package dev.hawu.plugins.api.nbt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -43,7 +40,10 @@ public final class NBTCompound extends NBTType implements Map<@NotNull String, @
 
     @Override
     public @NotNull String toString() {
-        return map.toString();
+        final StringJoiner joiner = new StringJoiner(",", "{", "}");
+        for(final Entry<String, NBTType> entry : map.entrySet())
+            joiner.add(entry.getKey() + ":" + entry.getValue().toString());
+        return joiner.toString();
     }
 
     @Override

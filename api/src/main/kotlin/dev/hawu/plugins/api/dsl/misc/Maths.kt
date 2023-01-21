@@ -64,3 +64,15 @@ fun Vector.perpendicular(other: Vector) = MathUtils.perpendicular(this, other)
  * Finds the projection of [this] onto [other].
  */
 fun Vector.project(other: Vector) = MathUtils.projection(this, other)
+
+/**
+ * Retrieves the unit vector that points to the right
+ * of [this] vector.
+ */
+fun Vector.right() = MathUtils.getRightUnit(this)
+
+/**
+ * Retrieves the unit vector that points to the left
+ * of [this] vector.
+ */
+fun Vector.left() = MathUtils.getLeftUnit(this)
