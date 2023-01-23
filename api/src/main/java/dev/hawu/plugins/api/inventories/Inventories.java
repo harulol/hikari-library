@@ -50,7 +50,7 @@ public final class Inventories {
      * @since 1.2
      */
     public static void safeCloseInventory(final @NotNull HumanEntity entity) {
-        Tasks.schedule(runnable -> entity.closeInventory());
+        Tasks.run(entity::closeInventory).run();
     }
 
     /**
@@ -60,7 +60,7 @@ public final class Inventories {
      * @since 1.2
      */
     public static void safeClose(final @NotNull InventoryView view) {
-        Tasks.schedule(runnable -> view.close());
+        Tasks.run(view::close).run();
     }
 
     /**
@@ -75,7 +75,7 @@ public final class Inventories {
     @NotNull
     public static CompletableFuture<@NotNull InventoryView> safeOpenInventory(final @NotNull HumanEntity entity, final @NotNull Inventory inventory) {
         final CompletableFuture<InventoryView> future = new CompletableFuture<>();
-        Tasks.schedule(runnable -> future.complete(entity.openInventory(inventory)));
+        Tasks.run(() -> future.complete(entity.openInventory(inventory))).run();
         return future;
     }
 
@@ -87,7 +87,7 @@ public final class Inventories {
      * @since 1.2
      */
     public static void safeOpenInventory(final @NotNull HumanEntity entity, final @NotNull InventoryView view) {
-        Tasks.schedule(runnable -> entity.openInventory(view));
+        Tasks.run(() -> entity.openInventory(view)).run();
     }
 
     /**
@@ -104,7 +104,7 @@ public final class Inventories {
     @NotNull
     public static CompletableFuture<@Nullable InventoryView> openWorkbench(final @NotNull HumanEntity entity, final @NotNull Location location, final boolean force) {
         final CompletableFuture<InventoryView> future = new CompletableFuture<>();
-        Tasks.schedule(runnable -> future.complete(entity.openWorkbench(location, force)));
+        Tasks.run(() -> future.complete(entity.openWorkbench(location, force))).run();
         return future;
     }
 
@@ -121,7 +121,7 @@ public final class Inventories {
     @NotNull
     public static CompletableFuture<@Nullable InventoryView> openEnchanting(final @NotNull HumanEntity entity, final @NotNull Location location, final boolean force) {
         final CompletableFuture<InventoryView> future = new CompletableFuture<>();
-        Tasks.schedule(runnable -> future.complete(entity.openEnchanting(location, force)));
+        Tasks.run(runnable -> future.complete(entity.openEnchanting(location, force))).run();
         return future;
     }
 

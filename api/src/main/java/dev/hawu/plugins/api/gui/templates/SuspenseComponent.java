@@ -74,7 +74,7 @@ public final class SuspenseComponent extends GuiComponent<ItemStack> {
     @Override
     public void componentDidMount() {
         this.swap(this.loading);
-        Tasks.scheduleAsync(runnable -> {
+        Tasks.run(runnable -> {
             try {
                 this.setState(supplier.get());
                 this.loading.swap(this);
@@ -82,7 +82,7 @@ public final class SuspenseComponent extends GuiComponent<ItemStack> {
                 exception.printStackTrace();
                 this.loading.swap(this.failed);
             }
-        });
+        }).async(true).run();
     }
 
     @Override

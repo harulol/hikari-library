@@ -2,7 +2,9 @@ package dev.hawu.plugins.hikarilibrary.commands;
 
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.commands.*;
-import dev.hawu.plugins.api.reflect.ClassVisitor;
+import dev.hawu.plugins.api.items.ItemStackBuilder;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
@@ -24,7 +26,15 @@ public final class BaseCommand implements CommandRegistrable {
 
     @Command("test")
     public void testCommand(final CommandSource sender, final CommandArgument args) {
-        ClassVisitor.scavenge();
+        final ItemStack item = ItemStackBuilder.of(Material.DIAMOND)
+            .name("&e&lDiamond! %hehe% %haha%")
+            .lore("&7Diamonds...", "&7%hehe%", "&7%haha%")
+            .replaceText(Pair.of("haha", "Hello Mom!"))
+            .build();
+        final ItemStack clone = ItemStackBuilder.from(item)
+            .replaceText(Pair.of("hehe", "Hello World!"))
+            .build();
+        sender.getPlayer().get().getInventory().addItem(clone);
     }
 
     @Command("hikarilibrary")

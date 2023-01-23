@@ -33,7 +33,7 @@ public final class TemporaryComponent extends GuiComponent<Object> {
 
     @Override
     public void componentDidMount() {
-        Tasks.scheduleLater(this.ticks, run -> this.swap(partner));
+        Tasks.run(() -> this.swap(partner)).delay(ticks).run();
     }
 
     @Override

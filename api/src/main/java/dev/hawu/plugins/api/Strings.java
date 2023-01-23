@@ -263,7 +263,9 @@ public final class Strings {
         String curr = message;
         for(Pair<?, ?> param : params) {
             if(param.getFirstOption().orElse(null) == null) continue;
-            curr = curr.replace("%" + param.getFirst() + "%", param.getSecondOption().orElse(null) == null ? "null" : param.getSecond().toString());
+            final String placeholder = "%" + param.getFirst() + "%";
+            final String value = param.getSecondOption().map(Object::toString).orElse("null");
+            curr = curr.replace(placeholder, value);
         }
         return color(curr);
     }

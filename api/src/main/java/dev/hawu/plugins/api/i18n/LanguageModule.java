@@ -5,7 +5,6 @@ import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import dev.hawu.plugins.api.misc.ConsoleLogger;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +58,7 @@ public final class LanguageModule {
         this.defaultLocale = defaultLocale;
         this.messages = new HashMap<>();
 
-        this.saveResources();
+        this.saveResources(false);
     }
 
     /**
@@ -142,7 +141,7 @@ public final class LanguageModule {
      * @since 2.0
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void saveResources() {
+    public void saveResources(final boolean force) {
         final String path = String.format("lang/%s", moduleName);
         final File folder = new File(plugin.getDataFolder(), path);
         if(!folder.exists()) folder.mkdirs();
@@ -152,7 +151,7 @@ public final class LanguageModule {
             final String fileName = String.format("%s_%s.properties", moduleName, locale.name());
             final File file = new File(folder, fileName);
 
-            if(!file.exists()) {
+            if(!file.exists() || force) {
                 final InputStream stream = plugin.getResource(String.format("%s/%s", path, fileName));
                 if(stream == null) continue;
                 plugin.saveResource(String.format("%s/%s", path, fileName), true);
@@ -187,7 +186,8 @@ public final class LanguageModule {
                 if(line.endsWith("\\"))
                     continue;
 
-                map.put(key, StringEscapeUtils.unescapeJava(joiner.toString()));
+                map.put(key, joiner.toString().trim());
+                joiner = new StringJoiner("\n");
                 inMultiLines = false;
                 continue;
             }
@@ -209,16 +209,16 @@ public final class LanguageModule {
 
                 final String toAdd = matcher.group(2).trim().replaceAll("\\\\{0,1}$", "");
                 if(toAdd.length() > 0)
-                    joiner.add(StringEscapeUtils.escapeJava(toAdd));
+                    joiner.add(toAdd);
             } else {
-                map.put(key, StringEscapeUtils.escapeJava(matcher.group(2).trim()));
+                map.put(key, matcher.group(2).trim());
             }
         }
 
         reader.close();
 
         if(joiner.length() > 0)
-            map.put(key, StringEscapeUtils.escapeJava(joiner.toString()));
+            map.put(key, joiner.toString());
 
         this.messages.put(locale, map);
     }

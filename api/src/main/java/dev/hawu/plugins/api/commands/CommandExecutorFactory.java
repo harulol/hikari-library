@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -87,12 +88,15 @@ final class CommandExecutorFactory {
                     return null;
 
                 final String lastArgument = ObjectUtils.elvis(arguments.lastOrNull(), "").toLowerCase();
+                List<String> completions = function.apply(source, arguments);
+                if(completions == null)
+                    completions = new ArrayList<>();
+
                 return execute.autoFilter()
-                    ? function.apply(source, arguments)
-                    .stream()
+                    ? completions.stream()
                     .filter(s -> s.toLowerCase().startsWith(lastArgument))
                     .collect(Collectors.toList())
-                    : function.apply(source, arguments);
+                    : completions;
             }
         };
     }

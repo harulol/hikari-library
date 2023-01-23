@@ -79,7 +79,7 @@ public final class ClassVisitor {
 
         synchronized(PACKAGES) {
             synchronized(CLASSES) {
-                Tasks.scheduleAsync(runnable -> scan());
+                Tasks.run(ClassVisitor::scan).async(true).run();
             }
         }
     }

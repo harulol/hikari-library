@@ -73,7 +73,7 @@ public final class DissolveTransition extends Transition {
         Collections.shuffle(slots);
         final int size = slots.size();
 
-        final BukkitTask task = Tasks.scheduleTimer(2, 1, runnable -> {
+        final BukkitTask task = Tasks.run(runnable -> {
             for(int i = 0; i < batches; i++) {
                 if(slots.size() == 0) {
                     dummy.updateAll();
@@ -87,15 +87,15 @@ public final class DissolveTransition extends Transition {
                 dummy.mount(slot, new TemporaryComponent(item, size / batches, component));
             }
             dummy.updateAll();
-        });
+        }).period(1).delay(2).run();
         dummy.onClose(task::cancel);
     }
 
     private void dissolveIn(final @NotNull HumanEntity entity, final @NotNull GuiModel dummy, final @NotNull GuiModel destination) {
-        Tasks.scheduleLater(dummy.getInventory().getSize() / batches, runnable -> {
+        Tasks.run(runnable -> {
             if(entity.getOpenInventory().getTopInventory().getHolder() != dummy) return;
             destination.open(entity);
-        });
+        }).delay(dummy.getInventory().getSize() / batches).run();
     }
 
     @Override

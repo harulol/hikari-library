@@ -245,12 +245,12 @@ public final class ItemStackBuilder {
     @NotNull
     public ItemStackBuilder replaceText(final @NotNull Pair<?, ?> @NotNull ... args) {
         if(this.meta.hasDisplayName()) {
-            final String newName = Strings.color(Strings.fillPlaceholders(this.meta.getDisplayName(), args));
+            final String newName = Strings.fillPlaceholders(this.meta.getDisplayName(), args);
             this.meta.setDisplayName(newName);
         }
         if(this.meta.hasLore()) {
             final List<String> newLore = this.meta.getLore().stream()
-                .map(s -> Strings.color(Strings.fillPlaceholders(s, args)))
+                .map(s -> Strings.fillPlaceholders(s, args))
                 .collect(Collectors.toList());
             this.meta.setLore(newLore);
         }
@@ -323,11 +323,12 @@ public final class ItemStackBuilder {
     @NotNull
     public ItemStack build() {
         final ItemStack itemStack = new ItemStack(material, amount, durability);
+        final NBTCompound currentCompound = NBTRegistry.getRegistry().getCompound(itemStack);
+        if(currentCompound != null && this.compound != null) currentCompound.putAll(this.compound);
 
-        itemStack.setItemMeta(this.meta);
-        final NBTCompound compound = NBTRegistry.getRegistry().getCompound(itemStack);
-        if(compound != null && this.compound != null) compound.putAll(this.compound);
-        return NBTRegistry.getRegistry().applyCompound(itemStack, compound);
+        final ItemStack item = NBTRegistry.getRegistry().applyCompound(itemStack, currentCompound);
+        item.setItemMeta(this.meta);
+        return item;
     }
 
 }
