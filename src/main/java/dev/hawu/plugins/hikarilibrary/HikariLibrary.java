@@ -14,6 +14,7 @@ import dev.hawu.plugins.api.misc.ConsoleLogger;
 import dev.hawu.plugins.api.reflect.MinecraftVersion;
 import dev.hawu.plugins.hikarilibrary.commands.BaseCommand;
 import dev.hawu.plugins.hikarilibrary.commands.LocaleCommand;
+import dev.hawu.plugins.hikarilibrary.commands.TestCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
@@ -97,7 +98,7 @@ public final class HikariLibrary extends JavaPlugin implements Listener {
         ConfigurationSerialization.registerClass(CraftUser.class);
         UserAdapterImpl.init(this);
 
-        CommandRegistry.register(this, new BaseCommand(this), new LocaleCommand());
+        CommandRegistry.register(this, new BaseCommand(this), new LocaleCommand(), new TestCommand());
 
         // Attempt to load necessary registries and adapters.
         ConsoleLogger.logf("Loading adapters for %s", MinecraftVersion.getCurrent().name());

@@ -5,6 +5,7 @@ import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import dev.hawu.plugins.api.misc.ConsoleLogger;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -87,7 +88,8 @@ public final class LanguageModule {
         if(map == null) return key;
 
         final String message = map.get(key);
-        if(message == null) return key;
+        if(message == null)
+            return locale == defaultLocale ? key : translate(defaultLocale, key, args);
         return Strings.fillPlaceholders(message, args);
     }
 
@@ -124,14 +126,58 @@ public final class LanguageModule {
         if(map == null) return item;
 
         final String displayName = map.getOrDefault(key + ".name", key + ".name");
-        final List<String> lore = Arrays.stream(map.getOrDefault(key + ".lore", key + ".lore")
-                .split("\n"))
-            .collect(Collectors.toList());
+        final List<String> rawLore = Arrays.stream(map.getOrDefault(key + ".lore", key + ".lore")
+            .split("\n")).collect(Collectors.toList());
+
+        // Replace lore in case of special spread placeholder.
+        final List<String> lore = new ArrayList<>();
+        for(final String rawLine : rawLore) {
+            String line = rawLine;
+
+            // Manually replacing args since the fillPlaceholders option does not support spread placeholders.
+            // This is pretty much the same as fillPlaceholders except we're dealing with the spread placeholders ourselves.
+            for(final Pair<?, ?> param : args) {
+                final String target = String.valueOf(param.getFirst());
+
+                // If second option is null, it doesn't matter.
+                if(!param.getSecondOption().isPresent()) {
+                    line = line.replace("%" + target + "%", "null");
+                    continue;
+                }
+
+                // If the second option is NOT a COLLECTION, this is a normal placeholder, do normally.
+                if(!(param.getSecond() instanceof Collection<?>)) {
+                    line = line.replace("%" + target + "%", String.valueOf(param.getSecond()));
+                    continue;
+                }
+
+                // This is a SPREAD placeholder. This can be spread out multiple lines.
+                final Collection<?> collection = (Collection<?>) param.getSecond();
+                final String[] sides = line.split("%" + target + "%");
+                final StringBuilder currentLine = new StringBuilder();
+                for(int i = 0; i < sides.length; i++) {
+                    currentLine.append(sides[i]);
+                    if(i != sides.length - 1) {
+                        final String color = ChatColor.getLastColors(Strings.color(sides[i]));
+                        final StringJoiner joiner = new StringJoiner("\n");
+                        collection.stream().map(String::valueOf).map(s -> color + s).forEach(joiner::add);
+                        currentLine.append(joiner);
+                    }
+                }
+
+                line = currentLine.toString();
+            }
+
+            Arrays.stream(line.split("\\n"))
+                .map(String::trim)
+                .map(Strings::color)
+                .forEach(lore::add);
+        }
 
         return ItemStackBuilder.from(item)
             .name(displayName)
             .lore(lore)
-            .replaceText(args)
+            .replaceText(args) // Just to rename the display name, kinda inefficient I guess.
             .build();
     }
 
@@ -153,12 +199,11 @@ public final class LanguageModule {
 
             if(!file.exists() || force) {
                 final InputStream stream = plugin.getResource(String.format("%s/%s", path, fileName));
-                if(stream == null) continue;
-                plugin.saveResource(String.format("%s/%s", path, fileName), true);
+                if(stream != null) plugin.saveResource(String.format("%s/%s", path, fileName), true);
             }
 
             try {
-                reload(locale, file);
+                if(file.exists()) reload(locale, file);
             } catch(final Exception e) {
                 e.printStackTrace();
             }

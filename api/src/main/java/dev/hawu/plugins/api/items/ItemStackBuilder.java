@@ -3,6 +3,7 @@ package dev.hawu.plugins.api.items;
 import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.adapters.NBTRegistry;
 import dev.hawu.plugins.api.collections.tuples.Pair;
+import dev.hawu.plugins.api.gui.templates.StaticComponent;
 import dev.hawu.plugins.api.nbt.NBTCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -329,6 +330,17 @@ public final class ItemStackBuilder {
         final ItemStack item = NBTRegistry.getRegistry().applyCompound(itemStack, currentCompound);
         item.setItemMeta(this.meta);
         return item;
+    }
+
+    /**
+     * Constructs a static component from this item stack builder.
+     *
+     * @return the static component
+     * @since 2.0
+     */
+    @NotNull
+    public StaticComponent toStaticComponent() {
+        return new StaticComponent(build());
     }
 
 }
