@@ -1,8 +1,8 @@
 package dev.hawu.plugins.api.gui;
 
 import dev.hawu.plugins.api.Strings;
-import dev.hawu.plugins.api.gui.transitions.Transition;
 import dev.hawu.plugins.api.collections.Property;
+import dev.hawu.plugins.api.gui.transitions.Transition;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -37,7 +37,7 @@ public final class GuiModel implements InventoryHolder {
     private Consumer<InventoryDragEvent> dragEventConsumer = event -> event.setCancelled(true);
     private Runnable onCloseHook;
     private boolean cooldown = true;
-    private boolean unmountOnClose = false;
+    private boolean unmountOnClose = true;
 
     /**
      * Creates an inventory with the given size

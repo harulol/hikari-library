@@ -1,9 +1,9 @@
 package dev.hawu.plugins.api.gui.pagination;
 
-import dev.hawu.plugins.api.gui.GuiComponent;
-import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
+import dev.hawu.plugins.api.gui.GuiComponent;
+import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -207,6 +207,7 @@ public final class GuiPaginator<T> {
     public void build(final @NotNull HumanEntity entity, final int knownPage, final @Nullable String filter) {
         models.clear();
         GuiModel current = data.getModelSupplier().get();
+        current.setUnmountOnClose(false);
         int currentPage = 0;
         int pointer = 0;
 
