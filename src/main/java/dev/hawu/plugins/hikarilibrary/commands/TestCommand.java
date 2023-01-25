@@ -1,44 +1,53 @@
 package dev.hawu.plugins.hikarilibrary.commands;
 
 import dev.hawu.plugins.api.commands.*;
+import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
-import dev.hawu.plugins.api.gui.brushes.BrushRegistry;
+import dev.hawu.plugins.api.gui.pagination.GuiPaginator;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * The command handler for testing the library's features.
- *
- * @since 2.0
- */
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public final class TestCommand implements CommandRegistrable {
 
-    @Command(value = "hikarilibrary test", senders = {SenderType.PLAYER})
-    @CommandPermission("hikari-library.test")
-    public void run(final CommandSource sender, final CommandArgument args) {
-        final GuiModel model = new GuiModel(54, "Test Inventory");
-        BrushRegistry.border()
-            .model(model)
-            .addComponent(() -> ItemStackBuilder.of(Material.STAINED_GLASS_PANE)
-                .name("&a")
-                .durability((short) 5)
-                .toStaticComponent())
-            .addComponent(() -> ItemStackBuilder.of(Material.STAINED_GLASS_PANE)
-                .name("&a")
-                .durability((short) 4)
-                .toStaticComponent())
-            .addComponent(() -> ItemStackBuilder.of(Material.STAINED_GLASS_PANE)
-                .name("&a")
-                .durability((short) 6)
-                .toStaticComponent())
-            .addComponent(() -> ItemStackBuilder.of(Material.STAINED_GLASS_PANE)
-                .name("&a")
-                .durability((short) 9)
-                .toStaticComponent())
-            .build()
-            .apply();
+    private GuiModel getModel() {
+        final GuiModel model = new GuiModel(54, "Test Single");
+        model.mount(53, new GuiComponent<Object>() {
+            @Override
+            public void componentWillUnmount() {
+                System.out.println("A component has been unmounted.");
+            }
 
-        sender.getPlayer().ifPresent(model::open);
+            @Override
+            public @NotNull ItemStack render() {
+                return ItemStackBuilder.of(Material.DIAMOND)
+                    .name("&e&lHello!")
+                    .build();
+            }
+        });
+
+        return model;
+    }
+
+    private void openPagination(final Player player) {
+        GuiPaginator.<Integer>newBuilder()
+            .setCollection(IntStream.range(1, 100).boxed().collect(Collectors.toList()))
+            .setItemGenerator((item, it) -> null)
+            .setModelSupplier(this::getModel)
+            .build(player);
+    }
+
+    @Command("hikarilibrary test")
+    @CommandPermission("hikari-library.test")
+    public void runTest(final CommandSource sender, final CommandArgument args) {
+        if(args.size() == 1)
+            openPagination(sender.getPlayer().get());
+        else getModel().open(sender.getPlayer().get());
     }
 
 }

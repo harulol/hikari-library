@@ -1,19 +1,29 @@
 package dev.hawu.plugins.api.gui.pagination;
 
+import dev.hawu.plugins.api.Tasks;
+import dev.hawu.plugins.api.adapters.PluginAdapter;
 import dev.hawu.plugins.api.collections.tuples.Pair;
+import dev.hawu.plugins.api.events.Events;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
 import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents a simple paginator to paginate
@@ -217,6 +227,7 @@ public final class GuiPaginator<T> {
                 models.add(current);
                 currentPage++;
                 current = data.getModelSupplier().get();
+                current.setUnmountOnClose(false);
                 pointer = 0;
             }
 
@@ -231,6 +242,53 @@ public final class GuiPaginator<T> {
 
         if(knownPage >= 0 && knownPage < models.size()) models.get(knownPage).open(entity);
         else models.get(0).open(entity);
+
+        scheduleUnmount(entity.getUniqueId());
+    }
+
+    // Since we disable "unmountOnClose" for all pagination system.
+    // We need to schedule some sort of events to unmount everything
+    // once the player has closed out of the pagination.
+    // Close buttons are not reliable as they can use ESC, or E.
+    private void scheduleUnmount(final UUID uuid) {
+        final Listener listener = new Listener() {
+            BukkitTask task;
+
+            private void unmountAll() {
+                models.forEach(model -> {
+                    for(int i = 0; i < model.getInventory().getSize(); i++)
+                        model.unmount(i);
+                });
+            }
+
+            @EventHandler
+            public void onClose(final InventoryCloseEvent event) {
+                if(!event.getPlayer().getUniqueId().equals(uuid)) return;
+
+                // A task to unmount all if the player does not have another page open in 5 ticks.
+                // Idk just to account for lag?
+                task = Tasks.run(this::unmountAll).delay(5).async(true).run();
+            }
+
+            @EventHandler
+            public void onQuit(final PlayerQuitEvent event) {
+                if(!event.getPlayer().getUniqueId().equals(uuid)) return;
+                if(task != null) task.cancel();
+                Tasks.run(this::unmountAll).async(true).run();
+            }
+
+            @EventHandler
+            public void onOpen(final InventoryOpenEvent event) {
+                if(!event.getPlayer().getUniqueId().equals(uuid)) return;
+                if(!(event.getInventory().getHolder() instanceof GuiModel)) return;
+
+                final GuiModel model = (GuiModel) event.getInventory().getHolder();
+                if(models.contains(model) && task != null)
+                    task.cancel();
+            }
+        };
+
+        Events.registerEvents(PluginAdapter.getPlugin(), listener);
     }
 
 }
