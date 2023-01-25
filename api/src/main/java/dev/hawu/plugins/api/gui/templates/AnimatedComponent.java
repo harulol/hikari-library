@@ -31,6 +31,7 @@ public abstract class AnimatedComponent extends GuiComponent<Integer> {
      * @since 2.0
      */
     public AnimatedComponent(final long delay, final long period, final @NotNull ItemStack template) {
+        super(0);
         this.delay = delay;
         this.period = period;
         this.template = template;

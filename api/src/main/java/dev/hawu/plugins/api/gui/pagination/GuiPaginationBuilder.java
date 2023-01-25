@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.gui.pagination;
 
 import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
+import dev.hawu.plugins.api.gui.templates.CloseInventoryComponent;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -51,22 +52,7 @@ public final class GuiPaginationBuilder<T> {
         // Create a default value for modelSupplier.
         modelSupplier = () -> {
             final GuiModel model = new GuiModel(54, "Inventory");
-
-            model.mount(49, new GuiComponent<Void>() {
-                @Override
-                public void handleClick(final @NotNull InventoryClickEvent event) {
-                    event.setCancelled(true);
-                    event.getWhoClicked().closeInventory();
-                }
-
-                @Override
-                public @NotNull ItemStack render() {
-                    return ItemStackBuilder.of(Material.BARRIER)
-                        .name("&cClose")
-                        .lore("&7Close this menu")
-                        .build();
-                }
-            });
+            model.mount(49, new CloseInventoryComponent());
             return model;
         };
 
@@ -78,7 +64,7 @@ public final class GuiPaginationBuilder<T> {
 
         // Create default value for backTemplate.
         backTemplate = ItemStackBuilder.of(Material.SIGN)
-            .name("&aGo Back")
+            .name("&a&lGo Back")
             .lore("&7Go back to the previous menu.")
             .build();
 
@@ -93,7 +79,7 @@ public final class GuiPaginationBuilder<T> {
 
         // Create default value for the previous button template.
         previousButtonTemplate = ItemStackBuilder.of(Material.ARROW)
-            .name("&aPrevious Page")
+            .name("&a&lPrevious Page")
             .lore("&7Go back to page %prev%.")
             .build();
 
@@ -102,7 +88,7 @@ public final class GuiPaginationBuilder<T> {
 
         // Create default value for the next button template.
         nextButtonTemplate = ItemStackBuilder.of(Material.ARROW)
-            .name("&aNext Page")
+            .name("&a&lNext Page")
             .lore("&7Go to page %next%.")
             .build();
 
@@ -111,7 +97,7 @@ public final class GuiPaginationBuilder<T> {
 
         // Create default value for the filter template.
         filterTemplate = ItemStackBuilder.of(Material.HOPPER)
-            .name("&eFilter")
+            .name("&e&lFilter")
             .lore(
                 "&7Returns only the elements",
                 "&7that matches the given",

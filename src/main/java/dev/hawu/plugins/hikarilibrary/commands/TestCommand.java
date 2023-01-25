@@ -1,53 +1,48 @@
 package dev.hawu.plugins.hikarilibrary.commands;
 
+import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.commands.*;
-import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
-import dev.hawu.plugins.api.gui.pagination.GuiPaginator;
+import dev.hawu.plugins.api.gui.templates.AnimatedComponent;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Collections;
+import java.util.List;
 
 public final class TestCommand implements CommandRegistrable {
 
     private GuiModel getModel() {
-        final GuiModel model = new GuiModel(54, "Test Single");
-        model.mount(53, new GuiComponent<Object>() {
+        final GuiModel model = new GuiModel(9, "Test Single");
+        model.mount(4, new AnimatedComponent(ItemStackBuilder.of(Material.DIAMOND).build()) {
+            final String NAME = "A very shiny diamond";
+            long wait = 0;
+
             @Override
-            public void componentWillUnmount() {
-                System.out.println("A component has been unmounted.");
+            public @NotNull String getDisplayName() {
+                if(wait >= this.state) return "&3" + NAME;
+
+                int index = this.state % NAME.length();
+                if(index == NAME.length() - 1) wait = this.state + 20;
+                return "&3" + NAME.substring(0, index) +
+                    "&b&l" + NAME.substring(index, Math.min(index + 2, NAME.length())) +
+                    "&3" + NAME.substring(Math.min(NAME.length(), index + 2));
             }
 
             @Override
-            public @NotNull ItemStack render() {
-                return ItemStackBuilder.of(Material.DIAMOND)
-                    .name("&e&lHello!")
-                    .build();
+            public @NotNull List<String> getLore() {
+                final String seconds = Strings.format(this.state / 20);
+                return Collections.singletonList("&c" + seconds + "s");
             }
         });
-
         return model;
-    }
-
-    private void openPagination(final Player player) {
-        GuiPaginator.<Integer>newBuilder()
-            .setCollection(IntStream.range(1, 100).boxed().collect(Collectors.toList()))
-            .setItemGenerator((item, it) -> null)
-            .setModelSupplier(this::getModel)
-            .build(player);
     }
 
     @Command("hikarilibrary test")
     @CommandPermission("hikari-library.test")
     public void runTest(final CommandSource sender, final CommandArgument args) {
-        if(args.size() == 1)
-            openPagination(sender.getPlayer().get());
-        else getModel().open(sender.getPlayer().get());
+        sender.getPlayer().ifPresent(getModel()::open);
     }
 
 }
