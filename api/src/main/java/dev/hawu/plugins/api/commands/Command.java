@@ -55,6 +55,6 @@ public @interface Command {
      * @since 2.0
      */
     @NotNull
-    String message() default "&c&l(!) &cYou are not allowed to run this command.";
+    String message() default "";
 
 }

@@ -2,6 +2,7 @@ package dev.hawu.plugins.api.commands;
 
 import dev.hawu.plugins.api.ObjectUtils;
 import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.adapters.PluginAdapter;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,12 +45,16 @@ final class CommandExecutorFactory {
                     return this.subCommands.get(args[0]).onCommand(sender, cmd, label, Arrays.copyOfRange(args, 1, args.length));
 
                 if(Arrays.stream(command.senders()).noneMatch(type -> type.getSenderClass().isInstance(sender))) {
-                    sender.sendMessage(Strings.color(command.message()));
+                    if(command.message().isEmpty())
+                        source.translate(PluginAdapter.getModule(), "bad-senders");
+                    else sender.sendMessage(Strings.color(command.message()));
                     return true;
                 }
 
                 if(permission != null && Arrays.stream(permission.value()).noneMatch(source::isAuthorized)) {
-                    sender.sendMessage(Strings.color(permission.message()));
+                    if(permission.message().isEmpty())
+                        source.translate(PluginAdapter.getModule(), "no-permissions");
+                    else sender.sendMessage(Strings.color(permission.message()));
                     return true;
                 }
 

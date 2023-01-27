@@ -1,7 +1,18 @@
 package dev.hawu.plugins.hikarilibrary;
 
+import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.adapters.ChatPacketAdapter;
+import dev.hawu.plugins.api.adapters.TitlePacketAdapter;
+import dev.hawu.plugins.api.chat.TextComponent;
+import dev.hawu.plugins.api.collections.Property;
+import dev.hawu.plugins.api.collections.tuples.Pair;
+import dev.hawu.plugins.api.i18n.LanguageModule;
 import dev.hawu.plugins.api.i18n.Locale;
+import dev.hawu.plugins.api.title.TitleComponent;
 import dev.hawu.plugins.api.user.ExtendedUser;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
@@ -39,6 +50,16 @@ public final class CraftUser implements ExtendedUser {
     }
 
     @Override
+    public @NotNull OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(uuid);
+    }
+
+    @Override
+    public @NotNull Property<Player> getPlayer() {
+        return Property.of(uuid).map(Bukkit::getPlayer);
+    }
+
+    @Override
     public @NotNull Locale getLocale() {
         return locale;
     }
@@ -46,6 +67,43 @@ public final class CraftUser implements ExtendedUser {
     @Override
     public void setLocale(final @NotNull Locale locale) {
         this.locale = locale;
+    }
+
+    @Override
+    public void sendMessage(final @NotNull LanguageModule module, final @NotNull String key, final @NotNull Pair<?, ?>... replacements) {
+        final String message = module.translate(locale, key, replacements);
+        getPlayer().ifPresent(p -> p.sendMessage(message));
+    }
+
+    @Override
+    public void sendMessage(final @NotNull String message) {
+        getPlayer().ifPresent(p -> p.sendMessage(Strings.color(message)));
+    }
+
+    @Override
+    public void sendComponent(final @NotNull TextComponent component) {
+        getPlayer().ifPresent(p -> ChatPacketAdapter.getAdapter().sendPlayer(p, component));
+    }
+
+    @Override
+    public void sendTitle(final @NotNull String title, final @NotNull String subtitle, final long fadeIn, final long stay, final long fadeOut) {
+        final TitleComponent component = TitleComponent.builder()
+            .title(Strings.color(title))
+            .subtitle(Strings.color(subtitle))
+            .timing(fadeIn, stay, fadeOut)
+            .build();
+        getPlayer().ifPresent(p -> TitlePacketAdapter.getAdapter().send(p, component));
+    }
+
+    @Override
+    public void sendTitle(final @NotNull LanguageModule module, final @NotNull String titleKey, final @NotNull String subtitleKey,
+                          final long fadeIn, final long stay, final long fadeOut, final @NotNull Pair<?, ?>... replacements) {
+        final TitleComponent component = TitleComponent.builder()
+            .title(module.translate(locale, titleKey, replacements))
+            .subtitle(module.translate(locale, subtitleKey, replacements))
+            .timing(fadeIn, stay, fadeOut)
+            .build();
+        getPlayer().ifPresent(p -> TitlePacketAdapter.getAdapter().send(p, component));
     }
 
     @Override

@@ -2,12 +2,11 @@ package dev.hawu.plugins.hikarilibrary.commands;
 
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.commands.*;
+import dev.hawu.plugins.hikarilibrary.HikariLibrary;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static dev.hawu.plugins.hikarilibrary.HikariLibrary.tl;
 
 /**
  * The base command of the plugin.
@@ -15,7 +14,7 @@ import static dev.hawu.plugins.hikarilibrary.HikariLibrary.tl;
 public final class BaseCommand implements CommandRegistrable {
 
     private final JavaPlugin plugin;
-    private final List<String> subCommands = Arrays.asList("locale", "test");
+    private final List<String> subCommands = Arrays.asList("locale", "test", "reload");
 
     public BaseCommand(final JavaPlugin plugin) {
         this.plugin = plugin;
@@ -24,7 +23,8 @@ public final class BaseCommand implements CommandRegistrable {
     @Command("hikarilibrary")
     @CommandPermission("hikari-library.base")
     public void runBase(final CommandSource sender, final CommandArgument args) {
-        sender.sendMessage(tl(sender.getLocale(), "current-version", Pair.of("version", plugin.getDescription().getVersion())));
+        sender.translate(HikariLibrary.getModule(), "current-version",
+            Pair.of("version", plugin.getDescription().getVersion()));
     }
 
     @TabExecute("hikarilibrary")

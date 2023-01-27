@@ -37,6 +37,6 @@ public @interface CommandPermission {
      * @since 2.0
      */
     @NotNull
-    String message() default "&c&l(!) &cYou do not have permission(s) to run this command.";
+    String message() default "";
 
 }

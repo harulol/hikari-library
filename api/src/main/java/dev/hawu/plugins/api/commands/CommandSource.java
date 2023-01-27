@@ -1,10 +1,12 @@
 package dev.hawu.plugins.api.commands;
 
 import dev.hawu.plugins.api.Strings;
+import dev.hawu.plugins.api.adapters.UserAdapter;
 import dev.hawu.plugins.api.collections.Property;
+import dev.hawu.plugins.api.collections.tuples.Pair;
+import dev.hawu.plugins.api.i18n.LanguageModule;
 import dev.hawu.plugins.api.i18n.Locale;
 import dev.hawu.plugins.api.user.ExtendedUser;
-import dev.hawu.plugins.api.adapters.UserAdapter;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -191,6 +193,21 @@ public final class CommandSource {
         for(final String s : messages) {
             if(s != null) base.sendMessage(Strings.color(s));
         }
+    }
+
+    /**
+     * Sends a translated message if the sender is a player with a set locale.
+     *
+     * @param module    the module to translate with
+     * @param key       the key to lookup
+     * @param arguments the arguments to replace
+     * @since 2.0
+     */
+    public void translate(final @NotNull LanguageModule module, final @NotNull String key, final @NotNull Pair<?, ?>... arguments) {
+        final Property<Player> player = getPlayer();
+        if(player.isPresent())
+            sendMessage(module.translate(getLocale(), key, arguments));
+        else sendMessage(module.translate(key, arguments));
     }
 
 }

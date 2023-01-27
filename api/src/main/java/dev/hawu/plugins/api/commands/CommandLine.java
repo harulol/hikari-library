@@ -146,8 +146,21 @@ public final class CommandLine {
      * @since 1.0
      */
     @NotNull
-    public Pair<@NotNull CommandArgument, @NotNull Map<@NotNull String, @NotNull List<@NotNull String>>> parse(@NotNull final String args) {
+    public Pair<CommandArgument, Map<String, List<String>>> parse(@NotNull final String args) {
         return parseProperties(parseQuotedArguments(args));
+    }
+
+    /**
+     * Parse a {@link CommandArgument} that represents the user's command input
+     * and retrieves parsed properties and arguments.
+     *
+     * @param argument The {@link CommandArgument} representation of the arguments list.
+     * @return A pair that holds a list of leftover arguments and a map of properties.
+     * @since 2.0
+     */
+    @NotNull
+    public Pair<CommandArgument, Map<String, List<String>>> parse(final @NotNull CommandArgument argument) {
+        return argument.parse(this);
     }
 
 }
