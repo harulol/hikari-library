@@ -1,6 +1,8 @@
 package dev.hawu.plugins.api.gui.templates;
 
 import dev.hawu.plugins.api.gui.GuiComponent;
+import dev.hawu.plugins.api.i18n.Locale;
+import dev.hawu.plugins.api.items.ItemCreator;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -29,6 +31,17 @@ public final class CloseInventoryComponent extends GuiComponent<Object> {
             .name("&c&lClose")
             .lore("&7Close the menu")
             .build());
+    }
+
+    /**
+     * Creates a close-inventory component that has the static item
+     * translated using the provided locale.
+     *
+     * @param locale the locale
+     * @since 2.0
+     */
+    public CloseInventoryComponent(final @NotNull Locale locale) {
+        this(ItemCreator.getCloseButton(locale));
     }
 
     /**

@@ -2,12 +2,16 @@ package dev.hawu.plugins.api.gui.pagination;
 
 import dev.hawu.plugins.api.Tasks;
 import dev.hawu.plugins.api.adapters.PluginAdapter;
+import dev.hawu.plugins.api.adapters.UserAdapter;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.events.Events;
 import dev.hawu.plugins.api.gui.GuiClickEvents;
 import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
+import dev.hawu.plugins.api.i18n.Locale;
+import dev.hawu.plugins.api.items.ItemCreator;
 import dev.hawu.plugins.api.items.ItemStackBuilder;
+import dev.hawu.plugins.api.user.ExtendedUser;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,9 +44,10 @@ public final class GuiPaginator<T> {
     private final List<GuiModel> models;
 
     private final PaginationData<T> data;
-    private final PaginationOptions<T> options;
-    private final PaginationControlOptions controlOptions;
-    private final PaginationFilterOptions filterOptions;
+    private final PaginationDefaultData defaultData;
+    private PaginationOptions<T> options;
+    private PaginationControlOptions controlOptions;
+    private PaginationFilterOptions filterOptions;
 
     /**
      * Initializes the data for the paginator to paginate.
@@ -54,12 +59,14 @@ public final class GuiPaginator<T> {
      * @since 1.2
      */
     public GuiPaginator(final @NotNull PaginationData<T> data, final @NotNull PaginationOptions<T> options,
-                        final @NotNull PaginationControlOptions controlOptions, final @NotNull PaginationFilterOptions filterOptions) {
+                        final @NotNull PaginationControlOptions controlOptions, final @NotNull PaginationFilterOptions filterOptions,
+                        final @NotNull PaginationDefaultData defaultData) {
         this.models = new ArrayList<>();
         this.data = data;
         this.options = options;
         this.controlOptions = controlOptions;
         this.filterOptions = filterOptions;
+        this.defaultData = defaultData;
     }
 
     /**
@@ -206,6 +213,34 @@ public final class GuiPaginator<T> {
         }
     }
 
+    private void applyControlTranslations(final Locale locale) {
+        final ItemStack previousTemplate = this.defaultData.isPreviousButtonTemplateChanged()
+            ? controlOptions.getPreviousButtonTemplate()
+            : ItemCreator.getPreviousButton(locale);
+        final ItemStack nextTemplate = this.defaultData.isNextButtonTemplateChanged()
+            ? controlOptions.getNextButtonTemplate()
+            : ItemCreator.getNextButton(locale);
+
+        this.controlOptions = new PaginationControlOptions(
+            previousTemplate, controlOptions.getPreviousButtonSlots(),
+            nextTemplate, controlOptions.getNextButtonSlots()
+        );
+    }
+
+    private void applyFilterTranslations(final Locale locale) {
+        final ItemStack filterTemplate = this.defaultData.isFilterTemplateChanged()
+            ? filterOptions.getFilterTemplate()
+            : ItemCreator.getFilterButton(locale);
+        this.filterOptions = new PaginationFilterOptions(filterTemplate, filterOptions.getFilterSlots(), filterOptions.getFilterEvent());
+    }
+
+    private void applyOptionTranslations(final Locale locale) {
+        final ItemStack backTemplate = this.defaultData.isBackTemplateChanged()
+            ? options.getBackTemplate()
+            : ItemCreator.getBackButton(locale);
+        this.options = new PaginationOptions<>(backTemplate, options.getBackAction(), options.getBackSlots(), options.getPredicate(), options.getLastTouches());
+    }
+
     /**
      * Builds the GUI and opens it to the specified player.
      *
@@ -215,6 +250,13 @@ public final class GuiPaginator<T> {
      * @since 1.2
      */
     public void build(final @NotNull HumanEntity entity, final int knownPage, final @Nullable String filter) {
+        if(entity instanceof Player) {
+            final ExtendedUser user = UserAdapter.getAdapter().getUser(entity.getUniqueId());
+            applyControlTranslations(user.getLocale());
+            applyFilterTranslations(user.getLocale());
+            applyOptionTranslations(user.getLocale());
+        }
+
         models.clear();
         GuiModel current = data.getModelSupplier().get();
         current.setUnmountOnClose(false);

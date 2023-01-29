@@ -1,5 +1,7 @@
 package dev.hawu.plugins.api.gui.pagination;
 
+import dev.hawu.plugins.api.adapters.PluginAdapter;
+import dev.hawu.plugins.api.adapters.UserAdapter;
 import dev.hawu.plugins.api.gui.GuiComponent;
 import dev.hawu.plugins.api.gui.GuiModel;
 import dev.hawu.plugins.api.gui.templates.CloseInventoryComponent;
@@ -33,6 +35,7 @@ public final class GuiPaginationBuilder<T> {
     private BiFunction<T, Integer, GuiComponent<?>> itemGenerator;
 
     private ItemStack backTemplate;
+    private boolean backTemplateChanged = false;
     private Consumer<InventoryClickEvent> backAction;
     private Set<Integer> backSlots;
 
@@ -40,11 +43,14 @@ public final class GuiPaginationBuilder<T> {
     private Consumer<GuiModel> lastTouches;
 
     private ItemStack previousButtonTemplate;
+    private boolean previousButtonTemplateChanged = false;
     private Set<Integer> previousButtonSlots;
     private ItemStack nextButtonTemplate;
+    private boolean nextButtonTemplateChanged = false;
     private Set<Integer> nextButtonSlots;
 
     private ItemStack filterTemplate;
+    private boolean filterTemplateChanged = false;
     private Set<Integer> filterSlots;
     private Consumer<InventoryClickEvent> filterEvent;
 
@@ -113,6 +119,10 @@ public final class GuiPaginationBuilder<T> {
 
         // Create default value for the filter slots.
         filterSlots = Collections.singleton(50);
+
+        // Create default value for the filter event.
+        filterEvent = event -> UserAdapter.getAdapter().getUserOption(event.getWhoClicked().getUniqueId())
+            .ifPresent(user -> user.sendMessage(PluginAdapter.getModule(), "filter-input"));
     }
 
     /**
@@ -193,6 +203,7 @@ public final class GuiPaginationBuilder<T> {
     @NotNull
     public GuiPaginationBuilder<T> setBackTemplate(final @Nullable ItemStack backTemplate) {
         this.backTemplate = backTemplate;
+        this.backTemplateChanged = true;
         return this;
     }
 
@@ -273,6 +284,7 @@ public final class GuiPaginationBuilder<T> {
     @NotNull
     public GuiPaginationBuilder<T> setPreviousButtonTemplate(final @NotNull ItemStack previousButtonTemplate) {
         this.previousButtonTemplate = previousButtonTemplate;
+        this.previousButtonTemplateChanged = true;
         return this;
     }
 
@@ -305,6 +317,7 @@ public final class GuiPaginationBuilder<T> {
     @NotNull
     public GuiPaginationBuilder<T> setNextButtonTemplate(final @NotNull ItemStack nextButtonTemplate) {
         this.nextButtonTemplate = nextButtonTemplate;
+        this.nextButtonTemplateChanged = true;
         return this;
     }
 
@@ -338,6 +351,7 @@ public final class GuiPaginationBuilder<T> {
     @NotNull
     public GuiPaginationBuilder<T> setFilterTemplate(final @Nullable ItemStack filterTemplate) {
         this.filterTemplate = filterTemplate;
+        this.filterTemplateChanged = true;
         return this;
     }
 
@@ -387,7 +401,10 @@ public final class GuiPaginationBuilder<T> {
         final PaginationControlOptions controlOptions = new PaginationControlOptions(previousButtonTemplate, previousButtonSlots,
             nextButtonTemplate, nextButtonSlots);
         final PaginationFilterOptions filterOptions = new PaginationFilterOptions(filterTemplate, filterSlots, filterEvent);
-        return new GuiPaginator<>(data, options, controlOptions, filterOptions);
+        final PaginationDefaultData defaultData = new PaginationDefaultData(backTemplateChanged,
+            previousButtonTemplateChanged, nextButtonTemplateChanged, filterTemplateChanged);
+
+        return new GuiPaginator<>(data, options, controlOptions, filterOptions, defaultData);
     }
 
     /**

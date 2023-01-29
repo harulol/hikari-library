@@ -4,6 +4,8 @@ import dev.hawu.plugins.api.Strings;
 import dev.hawu.plugins.api.adapters.NBTRegistry;
 import dev.hawu.plugins.api.collections.tuples.Pair;
 import dev.hawu.plugins.api.gui.templates.StaticComponent;
+import dev.hawu.plugins.api.i18n.LanguageModule;
+import dev.hawu.plugins.api.i18n.Locale;
 import dev.hawu.plugins.api.nbt.NBTCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -233,6 +235,23 @@ public final class ItemStackBuilder {
     public ItemStackBuilder disenchant(final @NotNull Enchantment enchantment) {
         this.meta.removeEnchant(enchantment);
         return this;
+    }
+
+    /**
+     * Builds the item and translate via a language module.
+     *
+     * @param module       the module to translate
+     * @param locale       the locale
+     * @param key          the key
+     * @param replacements replacements
+     * @return the translated item
+     */
+    @NotNull
+    public ItemStackBuilder translate(final @NotNull LanguageModule module, final @NotNull Locale locale, final @NotNull String key,
+                                      final @NotNull Pair<?, ?>... replacements) {
+        final ItemStack built = build();
+        final ItemStack translated = module.translateItem(locale, built, key, replacements);
+        return ItemStackBuilder.from(translated);
     }
 
     /**
