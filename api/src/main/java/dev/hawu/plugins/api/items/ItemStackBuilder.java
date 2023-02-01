@@ -342,7 +342,7 @@ public final class ItemStackBuilder {
      */
     @NotNull
     public ItemStack build() {
-        final ItemStack itemStack = new ItemStack(material, amount, durability);
+        final ItemStack itemStack = durability > 0 ? new ItemStack(material, amount, durability) : new ItemStack(material, amount);
         final NBTCompound currentCompound = NBTRegistry.getRegistry().getCompound(itemStack);
         if(currentCompound != null && this.compound != null) currentCompound.putAll(this.compound);
 

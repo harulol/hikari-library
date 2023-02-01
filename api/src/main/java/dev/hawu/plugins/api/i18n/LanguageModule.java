@@ -153,22 +153,14 @@ public final class LanguageModule {
 
                 // This is a SPREAD placeholder. This can be spread out multiple lines.
                 final Collection<?> collection = (Collection<?>) param.getSecond();
-                final String[] sides = line.split("%" + target + "%");
-                final StringBuilder currentLine = new StringBuilder();
-                for(int i = 0; i < sides.length; i++) {
-                    currentLine.append(sides[i]);
-                    if(i != sides.length - 1) {
-                        final String color = ChatColor.getLastColors(Strings.color(sides[i]));
-                        final StringJoiner joiner = new StringJoiner("\n");
-                        collection.stream().map(String::valueOf).map(s -> color + s).forEach(joiner::add);
-                        currentLine.append(joiner);
-                    }
-                }
+                final String color = ChatColor.getLastColors(Strings.color(line));
+                final StringJoiner joiner = new StringJoiner("\n");
+                collection.stream().map(String::valueOf).map(s -> color + s).forEach(joiner::add);
 
-                line = currentLine.toString();
+                line = line.replace("%" + target + "%", joiner.toString());
             }
 
-            Arrays.stream(line.split("\\n"))
+            Arrays.stream(line.split("\n"))
                 .map(String::trim)
                 .map(Strings::color)
                 .forEach(lore::add);
