@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     api("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
+    api("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
 }
 
 val libraryName = "hikari-library"
