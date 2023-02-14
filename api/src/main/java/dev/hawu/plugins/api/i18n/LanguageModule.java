@@ -230,7 +230,7 @@ public final class LanguageModule {
             }
 
             // Comments, skip it.
-            if(line.startsWith("#"))
+            if (line.startsWith("#") || line.isEmpty() || line.trim().isEmpty())
                 continue;
 
             final Matcher matcher = pattern.matcher(line);
