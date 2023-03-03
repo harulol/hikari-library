@@ -1,21 +1,32 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `java-library`
     `maven-publish`
     id("org.jetbrains.dokka") version "1.7.20"
-    kotlin("jvm") version "1.8.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version "1.8.10"
+    id("com.github.johnrengelman.shadow") version "8.1.0"
+    scala
 }
 
-version = "2.0.1-SNAPSHOT"
+version = "2.1-SNAPSHOT"
 
 // Configuring main stuff for all projects.
 allprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
+    apply(plugin = "kotlin")
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    tasks.named<KotlinCompile>("compileKotlin") {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
     }
 
     group = "dev.hawu.plugins"
@@ -47,7 +58,7 @@ dependencies {
     api("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
     subprojects.forEach {
         @Suppress("DEPRECATION")
-        compileClasspath(it)
+        implementation(it)
     }
     testImplementation(project(":api"))
 }

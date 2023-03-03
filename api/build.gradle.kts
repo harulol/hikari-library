@@ -1,11 +1,13 @@
 plugins {
     id("org.jetbrains.dokka")
     kotlin("jvm")
+    scala
 }
 
 dependencies {
     api("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
     api("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
+    api("org.scala-lang:scala3-library_3:3.3.0-RC3")
 }
 
 val libraryName = "hikari-library"
