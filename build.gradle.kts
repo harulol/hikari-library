@@ -2,7 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     id("org.jetbrains.dokka") version "1.8.20"
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
