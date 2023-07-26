@@ -2,8 +2,10 @@ plugins {
     `java-library`
     `maven-publish`
     id("org.jetbrains.dokka") version "1.7.20"
-    kotlin("jvm") version "1.8.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version "1.8.10"
+    id("com.github.johnrengelman.shadow") version "8.0.0"
+    groovy
+    scala
 }
 
 version = "2.0.1-SNAPSHOT"
@@ -31,6 +33,8 @@ allprojects {
         api("org.jetbrains:annotations:23.1.0")
         api("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
         api("com.google.code.gson:gson:2.10")
+        api("org.scala-lang:scala3-library_3:3.2.0")
+        testImplementation("org.scalatest:scalatest_3:3.2.9")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
     }
@@ -47,7 +51,7 @@ dependencies {
     api("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
     subprojects.forEach {
         @Suppress("DEPRECATION")
-        compileClasspath(it)
+        compileOnly(it)
     }
     testImplementation(project(":api"))
 }
