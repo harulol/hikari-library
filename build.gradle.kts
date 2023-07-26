@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
     id("org.jetbrains.dokka") version "1.7.20"
     kotlin("jvm") version "1.8.10"
-    id("com.github.johnrengelman.shadow") version "8.0.0"
+    id("com.github.johnrengelman.shadow") version "8.1.0"
     groovy
     scala
 }
@@ -18,6 +18,12 @@ allprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    tasks.named<KotlinCompile>("compileKotlin") {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
     }
 
     group = "dev.hawu.plugins"
@@ -51,7 +57,7 @@ dependencies {
     api("org.bukkit:bukkit:1.8-R0.1-SNAPSHOT")
     subprojects.forEach {
         @Suppress("DEPRECATION")
-        compileOnly(it)
+        implementation(it)
     }
     testImplementation(project(":api"))
 }
