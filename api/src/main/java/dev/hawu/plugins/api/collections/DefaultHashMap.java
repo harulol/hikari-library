@@ -1,5 +1,6 @@
 package dev.hawu.plugins.api.collections;
 
+import dev.hawu.plugins.api.misc.Functions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,10 +85,11 @@ public final class DefaultHashMap<K, V> extends HashMap<K, V> {
      * @return The value bound to the key, or {@code defaultValue} if not present.
      * @since 1.0
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public V get(@Nullable final Object key) {
-        return this.containsKey(key) ? super.get(key) : defaultValue;
+        return this.containsKey(key) ? super.get(key) : Functions.with(defaultValue, value -> this.put((K) key, value));
     }
 
 }

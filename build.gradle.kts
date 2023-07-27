@@ -20,12 +20,6 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    tasks.named<KotlinCompile>("compileKotlin") {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
-        }
-    }
-
     group = "dev.hawu.plugins"
     setBuildDir("../build/${project.name}")
 
