@@ -20,6 +20,10 @@ public class Property<T> {
     private static final Property<?> EMPTY = new Property<>(null);
     protected T value;
 
+    Property(T value) {
+        this.value = value;
+    }
+
     /**
      * Creates a new property with the given value.
      *
@@ -31,7 +35,7 @@ public class Property<T> {
     @SuppressWarnings("unchecked")
     @NotNull
     public static <T> Property<T> of(@Nullable T value) {
-        if(value == null) return (Property<T>) EMPTY;
+        if (value == null) return (Property<T>) EMPTY;
         else return new Property<>(value);
     }
 
@@ -59,10 +63,6 @@ public class Property<T> {
     @NotNull
     public static <T> Property<T> fromOptional(final @NotNull Optional<T> optional) {
         return optional.map(Property::of).orElse(empty());
-    }
-
-    Property(T value) {
-        this.value = value;
     }
 
     /**
@@ -188,7 +188,7 @@ public class Property<T> {
      */
     @NotNull
     public final <U extends Throwable> T orElseThrow(final @NotNull U throwable) throws U {
-        if(value == null) throw throwable;
+        if (value == null) throw throwable;
         else return value;
     }
 
@@ -221,6 +221,18 @@ public class Property<T> {
     }
 
     /**
+     * Casts the value in this property to the given class, if possible.
+     *
+     * @param cls The class to cast to.
+     * @param <R> The type of the casted property.
+     * @return The casted property.
+     */
+    @SuppressWarnings("unchecked")
+    public final <R> Property<R> cast(Class<R> cls) {
+        return cls.isInstance(value) ? of((R) value) : empty();
+    }
+
+    /**
      * Performs an action on the value in this property
      * if it is present, otherwise does nothing.
      *
@@ -229,7 +241,7 @@ public class Property<T> {
      * @since 1.5
      */
     public final Property<T> ifPresent(final @NotNull Consumer<T> consumer) {
-        if(value != null) {
+        if (value != null) {
             consumer.accept(value);
         }
         return this;
